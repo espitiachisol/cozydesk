@@ -1,0 +1,43 @@
+.AppHeader {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  color: white;
+  grid-area: header;
+  padding-inline: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  nav {
+    flex-grow: 1;
+    margin-inline-start: 0.5rem;
+
+    ul {
+      display: flex;
+
+      li {
+        &:first-child button{
+          font-weight: bold;
+        }
+        button{
+          font-size: 1rem;
+          border-radius: .25rem;
+          border: none;
+          background-color: transparent;
+          color: white;
+          padding-inline: .5rem;
+          padding-block: .25rem;
+          
+          &:hover{
+            background-color: #ffffff28;
+          }
+        }
+      }
+    }
+  }
+
+  .logo {
+    inline-size: 1.675rem;
+  }
+
+}

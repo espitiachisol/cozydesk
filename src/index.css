@@ -1,0 +1,32 @@
+@layer reset{
+  body{
+    margin-inline: 0;
+    margin-block: 0;
+  }
+  ul{
+    margin-inline: 0;
+    margin-block: 0;
+    padding-inline: 0;
+    padding-block: 0;
+  }
+  li{
+    list-style: none;
+  }
+  a, a:visited, a:hover{
+    text-decoration: none;
+  }
+}
+
+:root{
+  --primary-color: rgb(27, 101, 149);
+}
+
+body{
+  display: grid;
+  grid-template-areas: "header"
+              "body";
+  grid-template-rows: 40px calc(100dvh - 40px);
+  font-size: 16px;
+  font-family:Arial, Helvetica, sans-serif;
+}
+

@@ -1,0 +1,5 @@
+.AppBody{
+  background-image: url(background-texture.png);
+  background-color: #fffffb;
+  grid-area: body;
+}

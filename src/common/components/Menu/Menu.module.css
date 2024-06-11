@@ -1,0 +1,44 @@
+.toggleButton{
+  font-size: 1rem;
+  border-radius: .25rem;
+  border: none;
+  background-color: transparent;
+  color: white;
+  padding-inline: .5rem;
+  padding-block: .25rem;
+  block-size: 2rem;
+  display: flex;
+  align-items: center;
+  &:first-of-type{
+    font-weight: bold;
+  }
+  &:hover{
+    background-color: var(--color-white-transparent-high);
+  }
+}
+.menu{
+  position: fixed;
+  z-index: 10;
+  background-color: var(--color-primary-transparent-low);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(.25rem);
+  border-radius: .25rem;
+  padding-inline: .25rem;
+  padding-block: .25rem;
+  min-inline-size: 12rem;
+
+  li button{
+    border-radius: .25rem;
+    border: none;
+    background-color: transparent;
+    color: white;
+    padding-block: .25rem;
+    inline-size: 100%;
+    text-align: start;
+    font-size: 1rem;
+    &:hover{
+      background-color: var(--secondary-color);
+      color: var(--color-primary-800);
+    }
+  }
+}

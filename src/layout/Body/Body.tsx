@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './Body.module.css';
+import { MusicPlayer } from '../../features/MusicPlayer/MusicPlayer';
 
 const Draggable = ({ children, containerRef }) => {
 	const drag = useRef(null);
@@ -65,9 +66,10 @@ function Body() {
 	const containerRef = useRef<HTMLElement | null>(null);
 	return (
 		<main className={styles.AppBody} ref={containerRef}>
-			<Draggable containerRef={containerRef}>
+			{/* <Draggable containerRef={containerRef}>
 				<div style={{ width: '100px', height: '100px', backgroundColor: 'red' }}> item 1</div>
-			</Draggable>
+			</Draggable> */}
+			<MusicPlayer containerRef={containerRef}/>
 		</main>
 	);
 }

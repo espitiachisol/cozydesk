@@ -1,5 +1,10 @@
-export function MusicPlayer() {
+import Window from "../../components/Window/Window";
+
+export function MusicPlayer({containerRef}) {
 	return (
-		<div> music player</div>
+		<Window containerRef={containerRef}>
+			<Window.Header> <h1>this is header</h1></Window.Header>
+			<Window.Body> Music body </Window.Body>
+		</Window>
 	);
 }

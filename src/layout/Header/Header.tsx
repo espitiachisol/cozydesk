@@ -1,4 +1,4 @@
-import Menu from '../../common/components/Menu/Menu';
+import Menu from '../../components/Menu/Menu';
 import CurrentDateTime from './CurrentDateTime';
 import styles from './Header.module.css';
 

@@ -32,6 +32,7 @@
   --color-primary-800: rgb(9, 46, 71);
 
   --color-white-transparent-high: rgba(255, 255, 255, 0.15);
+  --color-white-transparent-low: rgba(255, 255, 255, 0.85);
   
   --secondary-color: #fed996;
 

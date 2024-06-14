@@ -1,0 +1,34 @@
+.header{
+  position: relative;
+
+  .actions{
+    position: absolute;
+    top: 0;
+    display: flex;
+    z-index: 100;
+    gap: .6rem;
+    padding-block: 0.4rem;
+    padding-inline: 0.5rem;
+    button{
+      border: none;
+      inline-size: .8rem;
+      block-size: .8rem;
+      border-radius: 2rem;
+      font-size: .6rem;
+      line-height: .8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-white-transparent-low);
+      &.cross{
+        background-color: rgb(237, 106, 94);
+        color: rgb(81, 31, 27);
+      }
+      &.minus{
+        background-color: rgb(245, 191, 79);
+        color: rgb(76, 52, 4);
+      }
+    }
+
+  }
+}

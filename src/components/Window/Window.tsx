@@ -1,33 +1,34 @@
-import { createContext, useContext, useRef, useState, useEffect, PropsWithChildren} from 'react';
+import { createContext, useContext, useRef, useState, useEffect, PropsWithChildren } from 'react';
+import styles from './Window.module.css';
 interface WindowContextType {
-  handleMouseDown: (e: React.MouseEvent) => void;
+	handleMouseDown: (e: React.MouseEvent) => void;
 }
 interface Position {
-  x: number;
-  y: number;
+	x: number;
+	y: number;
 }
-const WindowContext = createContext<WindowContextType | null>(null)
+const WindowContext = createContext<WindowContextType | null>(null);
 
 function useWindow(): WindowContextType {
-  const context = useContext(WindowContext);
-  if (context === null) throw new Error('WindowContext was used outside the WindowProvider');
-  return context;
+	const context = useContext(WindowContext);
+	if (context === null) throw new Error('WindowContext was used outside the WindowProvider');
+	return context;
 }
-type WindowProps =  PropsWithChildren<{
-  containerRef?: HTMLElement | null;
-}>
+type WindowProps = PropsWithChildren<{
+	containerRef?: HTMLElement | null;
+}>;
 
 function Window({ children, containerRef }: WindowProps) {
 	const dragRef = useRef(null);
 	const [isDragging, setIsDragging] = useState(false);
 	const [position, setPosition] = useState<Position>({ x: 200, y: 200 });
 	const [mouseOffsetWithinDragElement, setMouseOffsetWithinDragElement] = useState<Position>({ x: 0, y: 0 });
-
+  //  TODO: typescript waring
 	useEffect(() => {
 		function handleMouseMove(e: MouseEvent) {
 			if (!isDragging || !dragRef.current) return;
 			const { clientX, clientY } = e;
-			const containerNode = containerRef.current;
+			const containerNode = containerRef?.current;
 			let newX = clientX - mouseOffsetWithinDragElement.x;
 			let newY = clientY - mouseOffsetWithinDragElement.y;
 			if (containerNode) {
@@ -52,8 +53,8 @@ function Window({ children, containerRef }: WindowProps) {
 		function handleMouseUp() {
 			setIsDragging(false);
 		}
-      document.addEventListener('mousemove', handleMouseMove);
-			document.addEventListener('mouseup', handleMouseUp);
+		document.addEventListener('mousemove', handleMouseMove);
+		document.addEventListener('mouseup', handleMouseUp);
 
 		return () => {
 			document.removeEventListener('mousemove', handleMouseMove);
@@ -62,7 +63,7 @@ function Window({ children, containerRef }: WindowProps) {
 	}, [isDragging, mouseOffsetWithinDragElement, containerRef]);
 
 	function handleMouseDown(e: React.MouseEvent<Element, MouseEvent>) {
-    if(!dragRef.current) return;
+		if (!dragRef.current) return;
 		setIsDragging(true);
 		const { clientX, clientY } = e;
 		const dragClientRect = dragRef.current.getBoundingClientRect();
@@ -83,7 +84,23 @@ function Window({ children, containerRef }: WindowProps) {
 
 function Header({ children }: PropsWithChildren) {
 	const { handleMouseDown } = useWindow();
-	return <header onMouseDown={handleMouseDown}>{children}</header>;
+	const handleButtonMouseDown = (e) => {
+		e.stopPropagation();
+	};
+	return (
+		<header className={styles.header} onMouseDown={handleMouseDown}>
+			<ul className={styles.actions}>
+
+        <li>
+					<button className={styles.cross} onMouseDown={handleButtonMouseDown}>x</button>
+				</li>
+				<li>
+					<button className={styles.minus}>&minus;</button>
+				</li>
+			</ul>
+			{children}
+		</header>
+	);
 }
 
 function Body({ children }: PropsWithChildren) {

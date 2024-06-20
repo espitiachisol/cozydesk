@@ -1,3 +1,218 @@
-.MusicPlayerHeader{
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  50% {
+    transform: translateX(-80%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.MusicPlayerHeader {
   margin-block: 0;
+}
+
+.musicPlayer {
+  inline-size: 400px;
+  margin-top: -16px;
+  padding-bottom: 10px;
+  background-color: var(--color-dark--1);
+  min-block-size: 100px;
+  border-radius: 10px;
+
+  padding-inline: 1.5rem;
+  padding-block: 2rem 1.2rem;
+  border: none;
+  display: grid;
+  align-items: center;
+  grid-template-areas:
+    "song song song volumeImage volume"
+    "song song song action action"
+    "progress progress progress progress progress"
+  ;
+  grid-template-columns: repeat(3, 1fr) 25px 125px;
+  gap: .3rem .6rem;
+  outline: solid 2px rgba(0, 0, 0, 0.3);
+  outline-offset: -.6rem;
+  box-shadow: rgba(25, 21, 33, 0.2) 0 4px 5px, rgba(25, 21, 33, .3) 0 7px 9px -3px;
+
+
+  .volumeImage {
+    grid-area: volumeImage;
+    inline-size: 1.2rem;
+    object-fit: cover;
+  }
+
+  .volumeSlider {
+    grid-area: volume;
+    height: .25rem;
+    filter: grayscale(100%);
+    cursor: pointer;
+  }
+
+  .songDetail {
+    overflow: hidden;
+    background-image: radial-gradient(100% 100% at 100% 0, #403f3f 30%, #444242 100%);
+    grid-area: song;
+    box-shadow: rgba(17, 17, 17, 0.9) 0px 0px 4px -1px inset;
+    padding-inline: .5rem;
+    padding-block: .5rem;
+    white-space: nowrap;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    h1 {
+      animation: marquee 15s linear infinite;
+      margin-block: 0;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--color-grey--1);
+    }
+  }
+
+
+  .progress {
+    margin-block-start: .4rem;
+    grid-area: progress;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: row;
+
+    time {
+      color: var(--color-grey--2);
+      font-size: .6rem;
+    }
+
+    progress {
+      inline-size: 100%;
+      block-size: .5rem;
+      background-color: rgb(242, 241, 240);
+      -webkit-appearance: none;
+      /* Remove default styling */
+      appearance: none;
+      margin-block-end: .25rem;
+      cursor: pointer;
+
+      /* Style for WebKit browsers */
+      &::-webkit-progress-bar {
+        border-radius: 0;
+        background-color: #f3f3f3;
+      }
+
+      &::-webkit-progress-value {
+        border-radius: 0;
+        background-color: var(--secondary-color);
+      }
+
+      /* Style for Firefox */
+      &::-moz-progress-bar {
+        border-radius: 0;
+        cursor: pointer;
+        background-color: #f3f3f3;
+      }
+    }
+
+
+  }
+
+}
+
+fieldset.actionButtons {
+  grid-area: action;
+  border-radius: 10px;
+  margin-inline: 0;
+  margin-block: 0;
+  padding-inline: 0;
+  padding-block: 0;
+  border: none;
+  box-shadow: rgba(25, 21, 33, 0.2) 0 4px 5px, rgba(25, 21, 33, .3) 0 7px 9px -3px, rgba(137, 137, 137, 0.2) -4px -3px 7px;
+  display: inline-flex;
+  inline-size: fit-content;
+  block-size: fit-content;
+
+  button {
+    svg {
+      inline-size: 1.4rem;
+      block-size: 1.4rem;
+      path, rect{
+        fill: var(--color-dark--1);
+        
+      }
+      
+    }
+    &:hover{
+      svg path,svg rect{
+        fill: var(   --color-grey--2);
+      }
+    }
+    &:active, &.active{
+      svg path, svg rect{fill: var( --secondary-color);
+      }
+    }
+
+    &:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    &:last-child {
+      border-radius: 0 10px 10px 0;
+
+    }
+
+    img {
+      display: flex;
+      margin-inline: auto;
+    }
+
+    align-items: center;
+    appearance: none;
+    background-image: radial-gradient(100% 100% at 100% 0, #626161 0, #4f4d4c 180%);
+    border: 0;
+    border-radius: 0;
+    box-shadow: rgba(65, 64, 67, 0.4) 0 2px 4px,
+    rgba(65, 64, 67, .3) 0 7px 13px -3px,
+    rgba(138, 138, 138, 0.5) 1.5px 1.5px 0 inset;
+
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono",
+    monospace;
+    /* block-size: 1.8rem; */
+    inline-size: 2rem;
+    justify-content: center;
+
+    /* overflow: hidden; */
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s,
+    transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow,
+    transform;
+
+    &:hover {
+      /* box-shadow: rgba(25, 21, 33, 0.2) 0 4px 5px, rgba(25, 21, 33, .3) 0 7px 9px -3px, rgba(137, 137, 140, 0.5) 1px 1px 0 inset;
+      transform: translateY(-1px) */
+    }
+
+    &:active,
+    &.active {
+
+      box-shadow: rgba(35, 34, 35, 0.9) 0 2px 5px inset;
+      /* transform: translateY(1px); */
+    }
+
+  }
+
 }

@@ -24,10 +24,12 @@
   overflow: hidden;
   border-radius: 10px;
   position: relative;
-  -webkit-filter: drop-shadow(0px 0px 4px #0a0a0a67);
-  filter: drop-shadow(0px 0px 4px #0a0a0a67);
+  box-shadow: rgba(25, 21, 33, 0.2) 0 4px 5px, rgba(25, 21, 33, .3) 0 7px 9px -3px;
   margin-inline: 0;
   margin-block: 0;
+  &.playing .reel{
+    animation-play-state: running;
+  }
 
   .reel {
     inline-size: 160px;
@@ -42,8 +44,7 @@
     background-repeat: no-repeat;
     background-position: center;
     animation: rotate 3s linear infinite;
-    /* animation-play-state: paused; */
-    animation-play-state: running;
+    animation-play-state: paused;
 
     &.left {
       left: 35px;
@@ -55,10 +56,11 @@
   }
 
   .tapeCoverImage {
-    top: 0;
-    left: -0.5px;
+    top: -2px;
+    left: -2px;
     position: absolute;
-    inline-size: 100%;
+    inline-size: 101%;
+    block-size: 101%;
     transition: all 0.3s ease-in-out;
     opacity: 0.9;
 
@@ -131,7 +133,6 @@
 
     button {
       color: rgb(139, 139, 139);
-      /* border: solid 1px rgb(139, 139, 139); */
       border: none;
       margin-inline: auto;
       margin-block: 2px;
@@ -171,11 +172,11 @@
 
   .tapeShell path {
     &:first-child {
-      fill: #99aaa1;
+      fill: var(--color-white-transparent-high);
     }
 
     &:last-child {
-      fill: #4f4d4c;
+      fill: var(--color-dark--2);
     }
   }
 

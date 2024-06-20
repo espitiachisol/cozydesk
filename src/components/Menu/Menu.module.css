@@ -30,6 +30,7 @@
     background-color: transparent;
     color: white;
     padding-block: .25rem;
+    padding-inline: .25rem;
     inline-size: 100%;
     text-align: start;
     font-size: 1rem;

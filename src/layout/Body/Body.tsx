@@ -7,7 +7,25 @@ function Body() {
 
 	return (
 		<main className={styles.AppBody} ref={containerRef}>
-			<MusicPlayer containerRef={containerRef}/>
+			<MusicPlayer containerRef={containerRef} />
+			<fieldset className={styles.AppIconsLayout}>
+				<button>
+					<img src="/icons/desktop-folder.png" />
+					Folder
+				</button>
+				<button>
+					<img src="/icons/desktop-musicPlayer.png" />
+					Music Player
+				</button>
+				<button>
+					<img src="/icons/desktop-todo.png" />
+					Todo
+				</button>
+				<button>
+					<img src="/icons/desktop-pomodoro.png" />
+					Pomodoro
+				</button>
+			</fieldset>
 		</main>
 	);
 }

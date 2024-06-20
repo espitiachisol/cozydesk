@@ -27,7 +27,8 @@
   box-shadow: rgba(25, 21, 33, 0.2) 0 4px 5px, rgba(25, 21, 33, .3) 0 7px 9px -3px;
   margin-inline: 0;
   margin-block: 0;
-  &.playing .reel{
+
+  &.playing .reel {
     animation-play-state: running;
   }
 
@@ -170,13 +171,18 @@
 
   }
 
-  .tapeShell path {
-    &:first-child {
-      fill: var(--color-white-transparent-high);
-    }
+  .tapeShell {
+    backdrop-filter: blur(.1rem);
 
-    &:last-child {
-      fill: var(--color-dark--2);
+    path {
+      &:first-child {
+
+        fill: var(--color-white-transparent-high);
+      }
+
+      &:last-child {
+        fill: var(--color-dark--2);
+      }
     }
   }
 

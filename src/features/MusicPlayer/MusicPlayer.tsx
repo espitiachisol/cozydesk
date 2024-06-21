@@ -1,6 +1,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Window from '../../components/Window/Window';
+import Window from '../Window/Window';
 import CassetteTape from './CassetteTape';
 import { defaultSongs } from './data';
 import { formatTime } from '../../utils/time';
@@ -70,7 +70,6 @@ export function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	}, [loopOneSong]);
 
 	const handleProgress = (e: React.MouseEvent<HTMLProgressElement>) => {
-		console.log('e.nativeEvent', e.nativeEvent)
 		if(!(control.current && duration && e.target)) return;
 		const target = e.target as HTMLProgressElement;
 		const currentTime = (e.nativeEvent.offsetX / target.getBoundingClientRect().width) * duration;
@@ -79,7 +78,7 @@ export function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	};
 
 	return (
-		<Window containerRef={containerRef}>
+		<Window containerRef={containerRef} id="musicPlayer">
 			<Window.Header>
 				<CassetteTape
 					isPlaying={isPlaying}
@@ -93,7 +92,6 @@ export function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					src={songs[songIndex]?.src}
 					onCanPlay={(e) => {
 						const { currentTime, duration } = e.target as HTMLAudioElement;
-						console.log('currentTime, duration',currentTime, duration)
 						setProgress(currentTime);
 						setDuration(duration)
 					}}

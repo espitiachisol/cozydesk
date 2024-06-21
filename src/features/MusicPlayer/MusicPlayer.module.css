@@ -138,8 +138,9 @@ fieldset.actionButtons {
 
   button {
     svg {
-      inline-size: 1.4rem;
-      block-size: 1.4rem;
+      inline-size: 1.5rem;
+      block-size: 1.5rem;
+      padding: .1rem;
       path, rect{
         fill: var(--color-dark--1);
         
@@ -200,11 +201,11 @@ fieldset.actionButtons {
     white-space: nowrap;
     will-change: box-shadow,
     transform;
-
+/* 
     &:hover {
-      /* box-shadow: rgba(25, 21, 33, 0.2) 0 4px 5px, rgba(25, 21, 33, .3) 0 7px 9px -3px, rgba(137, 137, 140, 0.5) 1px 1px 0 inset;
-      transform: translateY(-1px) */
-    }
+      box-shadow: rgba(25, 21, 33, 0.2) 0 4px 5px, rgba(25, 21, 33, .3) 0 7px 9px -3px, rgba(137, 137, 140, 0.5) 1px 1px 0 inset;
+      transform: translateY(-1px)
+    } */
 
     &:active,
     &.active {

@@ -6,7 +6,7 @@
   "sidebar folder";
   grid-template-columns: 160px 520px;
   grid-template-rows: 40px 400px;
-  border: 1px var(--color-grey--1) solid;
+  border: 1px var(--color-grey--100) solid;
   box-shadow: rgba(25, 21, 33, 0.05) 2px 4px 15px, rgba(25, 21, 33, .2) 0px 5px 9px -3px;
 
   .folderDraggable{
@@ -27,7 +27,7 @@
     padding-inline: 1rem;
     padding-block-start: 2.2rem;
     backdrop-filter: blur(.5rem);
-    border-inline-end: 1px var(--color-grey--1) solid;
+    border-inline-end: 1px var(--color-grey--100) solid;
     .title{
       font-size: .8rem;
       font-weight: 600;
@@ -38,7 +38,7 @@
 
     }
     .sidebarItem{
-      font-size: 1rem;
+      font-size: .875rem;
       color: var(--color-dark--2);
       border-radius: .25rem;
       border: none;
@@ -57,7 +57,7 @@
     grid-area: toolbar;
     border-radius: 0 .625rem 0 0;
     background-color: var(--color-white--100);
-    border-block-end: 1px var(--color-grey--1) solid;
+    border-block-end: 1px var(--color-grey--100) solid;
   }
   .folder{
     grid-area: folder;
@@ -70,31 +70,5 @@
     gap: 1.5rem 2rem;
     align-content: flex-start;
     overflow: auto;
-
-    .folderItem{
-      border: none;
-      background-color: transparent;
-      inline-size: 5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      p{
-        display: inline-block;
-        margin-block: 0;
-        max-width: 100%;
-        overflow: hidden;
-        word-break: break-word;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        font-size: .8rem;
-        font-weight: 500;
-        color: var(--color-dark--1);
-      }
-      img{
-        inline-size: 90%;
-      }
-  
-    }
   }
 }

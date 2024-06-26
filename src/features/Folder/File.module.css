@@ -1,0 +1,33 @@
+.file{
+  border: none;
+  background-color: transparent;
+  inline-size: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &.selected{
+    img{
+      background-color: var(--color-grey-transparent-medium);
+    }
+    p {
+      background-color: var(--color-primary-transparent-high);
+    }
+  }
+  p{
+    margin-block: 0;
+    margin-block-start: .15rem;
+    overflow: hidden;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--color-dark--2);
+  }
+  img{
+    inline-size: 90%;
+    border-radius: .625rem;
+  }
+
+}

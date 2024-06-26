@@ -1,19 +1,4 @@
-.toggleButton{
-  font-size: 1rem;
-  border-radius: .25rem;
-  border: none;
-  background-color: transparent;
-  color: white;
-  padding-inline: .5rem;
-  padding-block: .25rem;
-  block-size: 2rem;
-  display: flex;
-  align-items: center;
-  &:hover{
-    background-color: var(--color-white-transparent-high);
-  }
-}
-.menu{
+.contextMenu{
   position: fixed;
   z-index: 100000000;
   background-color: var(--color-primary-transparent-low);

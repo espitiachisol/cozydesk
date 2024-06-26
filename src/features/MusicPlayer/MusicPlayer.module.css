@@ -71,7 +71,7 @@
       margin-block: 0;
       font-size: 1rem;
       font-weight: 500;
-      color: var(--color-grey--1);
+      color: var(--color-grey--100);
     }
   }
 
@@ -85,7 +85,7 @@
     flex-direction: row;
 
     time {
-      color: var(--color-grey--2);
+      color: var(--color-grey--200);
       font-size: .6rem;
     }
 
@@ -149,7 +149,7 @@ fieldset.actionButtons {
     }
     &:hover{
       svg path,svg rect{
-        fill: var(   --color-grey--2);
+        fill: var(   --color-grey--200);
       }
     }
     &:active, &.active{

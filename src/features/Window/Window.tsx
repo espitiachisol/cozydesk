@@ -1,6 +1,6 @@
 import { createContext, useContext, useRef, useState, useEffect, PropsWithChildren } from 'react';
 import styles from './Window.module.css';
-import { closeWindow, getWindowById, moveWindow } from './windowSlice';
+import { bringToFront, closeWindow, getWindowById, moveWindow } from './windowSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 interface WindowContextType {
 	handleMouseDown: (e: React.MouseEvent) => void;
@@ -20,9 +20,10 @@ function useWindow(): WindowContextType {
 type WindowProps = PropsWithChildren<{
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
 	id: string;
+	className: string;
 }>;
 
-function Window({ id, children, containerRef }: WindowProps) {
+function Window({ id, children, className, containerRef }: WindowProps) {
 	const dragRef = useRef<HTMLElement>(null);
 	const [isDragging, setIsDragging] = useState(false);
 	const dispatch = useAppDispatch()
@@ -31,9 +32,10 @@ function Window({ id, children, containerRef }: WindowProps) {
 
 	useEffect(()=>{
 		if(!dragRef.current || !window) return;
-		const { x, y } = window. position
+		const { x, y } = window.position
 		dragRef.current.style.left = `${x}px`;
 		dragRef.current.style.top = `${y}px`;
+		dragRef.current.style.zIndex = `${window.zIndex}`;
 	},[window])
 
 	const [mouseOffsetWithinDragElement, setMouseOffsetWithinDragElement] = useState<Position>({ x: 0, y: 0 });
@@ -72,7 +74,7 @@ function Window({ id, children, containerRef }: WindowProps) {
 
 	useEffect(() => {
 		function handleMouseUp() {
-			if(!dragRef.current) return;
+			if(!dragRef.current || !isDragging) return;
 			setIsDragging(false);
 
 			dispatch(moveWindow({ id, position:{
@@ -84,7 +86,7 @@ function Window({ id, children, containerRef }: WindowProps) {
 		return () => {
 			document.removeEventListener('mouseup', handleMouseUp);
 		};
-	},[id, dispatch])
+	},[id, dispatch, isDragging])
 	
 
 	function handleMouseDown(e: React.MouseEvent<Element, MouseEvent>) {
@@ -97,17 +99,25 @@ function Window({ id, children, containerRef }: WindowProps) {
 			y: clientY - dragClientRect.y
 		});
 	}
+	
+	function handleBringToFront() {
+		if (!dragRef.current) return;
+		dispatch(bringToFront({id}))
+	}
 
 	return (
 		<WindowContext.Provider value={{ handleMouseDown, id }}>
-			<article ref={dragRef} style={{ position: 'absolute' }}>
+			<article className={className} ref={dragRef} onMouseDown={handleBringToFront} style={{ position: 'absolute' }}>
 				{children}
 			</article>
 		</WindowContext.Provider>
 	);
 }
 
-function Header({ children }: PropsWithChildren) {
+type HeaderProps = PropsWithChildren<{
+	className?: string;
+}>;
+function Header({ children, className }: HeaderProps) {
 	const { handleMouseDown, id } = useWindow();
 	const dispatch = useAppDispatch()
 	const handleButtonMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
@@ -115,7 +125,7 @@ function Header({ children }: PropsWithChildren) {
 		dispatch(closeWindow({id}))
 	};
 	return (
-		<header className={styles.header} onMouseDown={handleMouseDown}>
+		<header className={`${styles.header} ${className}`} onMouseDown={handleMouseDown}>
 			<ul className={styles.actions}>
 
         <li>

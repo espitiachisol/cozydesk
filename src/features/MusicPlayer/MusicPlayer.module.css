@@ -19,10 +19,10 @@
 .musicPlayer {
   inline-size: 400px;
   margin-top: -16px;
-  padding-bottom: 10px;
+  padding-bottom: .625rem;
   background-color: var(--color-dark--1);
   min-block-size: 100px;
-  border-radius: 10px;
+  border-radius: .625rem;
 
   padding-inline: 1.5rem;
   padding-block: 2rem 1.2rem;
@@ -107,7 +107,7 @@
 
       &::-webkit-progress-value {
         border-radius: 0;
-        background-color: var(--secondary-color);
+        background-color: var(--color-secondary);
       }
 
       /* Style for Firefox */
@@ -125,7 +125,7 @@
 
 fieldset.actionButtons {
   grid-area: action;
-  border-radius: 10px;
+  border-radius: .625rem;
   margin-inline: 0;
   margin-block: 0;
   padding-inline: 0;
@@ -153,16 +153,16 @@ fieldset.actionButtons {
       }
     }
     &:active, &.active{
-      svg path, svg rect{fill: var( --secondary-color);
+      svg path, svg rect{fill: var( --color-secondary);
       }
     }
 
     &:first-child {
-      border-radius: 10px 0 0 10px;
+      border-radius: .625rem 0 0 .625rem;
     }
 
     &:last-child {
-      border-radius: 0 10px 10px 0;
+      border-radius: 0 .625rem .625rem 0;
 
     }
 

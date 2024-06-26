@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Window from '../Window/Window';
 import CassetteTape from './CassetteTape';
-import { defaultSongs } from './data';
+import { systemMusics } from '../../data/music';
 import { formatTime } from '../../utils/time';
 import IconPre from '../../assets/icons/icon-pre.svg?react';
 import IconStop from '../../assets/icons/icon-stop.svg?react';
@@ -18,11 +18,11 @@ type MusicPlayerProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>
 }
 
-export function MusicPlayer({ containerRef }: MusicPlayerProps) {
+export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	const control = useRef<HTMLAudioElement>(null);
 	const [progress, setProgress] = useState(0);
 	const [duration, setDuration] = useState(0);
-	const [songs, setSongs] = useState(defaultSongs);
+	const [songs, setSongs] = useState(systemMusics);
 	const [songIndex, setSongIndex] = useState(0);
 	const [loopOneSong, setLoopOneSong] = useState(false);
 	const [isPlaying, setIsPlaying] = useState(false);

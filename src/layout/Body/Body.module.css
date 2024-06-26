@@ -1,13 +1,14 @@
 .AppBody{
   background-image: url(background-texture.png);
-  background-color: #fffffb;
+  background-color: white;
   grid-area: body;
+
   .AppIconsLayout{
     display: grid;
     justify-items: end;
     padding-inline: 1rem;
     padding-block: 1rem;
-    gap: .8rem;
+    gap: 1.6rem 2rem;
 
 
     button{

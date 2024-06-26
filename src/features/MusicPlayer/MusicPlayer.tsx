@@ -69,15 +69,8 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	};
 
 	return (
-		<Window containerRef={containerRef} id="musicPlayer">
-			<Window.Header>
-				<CassetteTape
-					isPlaying={isPlaying}
-					progress={(progress * 100) / duration}
-					image={playlist[currentSongIndex].img}
-				/>
-			</Window.Header>
-			<section className={styles.musicPlayer}>
+		<Window containerRef={containerRef} className={styles.musicPlayer} id="musicPlayer">
+			<section className={styles.musicControlSection}>
 				<audio
 				
 					ref={control}
@@ -154,6 +147,13 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					}}
 				/>
 			</section>
+			<Window.Header className={styles.MusicPlayerHeader}>
+				<CassetteTape
+					isPlaying={isPlaying}
+					progress={(progress * 100) / duration}
+					image={playlist[currentSongIndex].img}
+				/>
+			</Window.Header>
 		</Window>
 	);
 }

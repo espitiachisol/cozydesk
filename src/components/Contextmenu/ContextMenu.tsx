@@ -54,14 +54,12 @@ function Toggle({ id, children, onClickToggle, className, onClickContextMenu}: T
 		e.stopPropagation();
 		e.preventDefault();
 		
-		console.log('handleClick')
 		onClickToggle(e)
 		close();
 	}
 
 	function handleContextMenu(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
-		console.log('handleContextMenu')
 		setPosition({ x: e.clientX, y: e.clientY });
 		openId === "" || openId !== id ? open(id) : close();
 		if(onClickContextMenu) onClickContextMenu(e)

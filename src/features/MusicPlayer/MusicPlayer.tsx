@@ -1,8 +1,9 @@
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hook';
+import { getCurrentSongIndex, getPlayList, nextSong, previousSong } from './musicSlice';
 import Window from '../Window/Window';
 import CassetteTape from './CassetteTape';
-import { systemMusics } from '../../data/music';
 import { formatTime } from '../../utils/time';
 import IconPre from '../../assets/icons/icon-pre.svg?react';
 import IconStop from '../../assets/icons/icon-stop.svg?react';
@@ -19,55 +20,45 @@ type MusicPlayerProps = {
 }
 
 export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
+	const dispatch = useAppDispatch()
+	const currentSongIndex = useAppSelector(getCurrentSongIndex)
+	const playlist = useAppSelector(getPlayList)
 	const control = useRef<HTMLAudioElement>(null);
+
 	const [progress, setProgress] = useState(0);
 	const [duration, setDuration] = useState(0);
-	const [songs, setSongs] = useState(systemMusics);
-	const [songIndex, setSongIndex] = useState(0);
 	const [loopOneSong, setLoopOneSong] = useState(false);
-	const [isPlaying, setIsPlaying] = useState(false);
+	const [isPlaying, setIsPlaying] = useState(true);
 	const [volume, setVolume] = useState(1);
-
-	useEffect(() => {
-		if (!(isPlaying && songs.length > 0 && control.current)) return;
-		setIsPlaying(true);
-		control.current.play();
-	}, [songIndex, isPlaying, songs]);
 
 	useEffect(() => {
 		if(!control.current) return;
 		control.current.volume = volume;
 	}, [volume]);
 
-	const handlePlaySong = useCallback(() => {
+	function handlePlaySong() {
 		if(!control.current) return;
-		// control.current.load();
 		setIsPlaying(true);
 		control.current.play();
-	}, []);
-	const handleStopSong = useCallback(() => {
+	}
+
+	function handleStopSong() {
 		if(!control.current) return;
 		setIsPlaying(false);
 		control.current.pause();
-	}, []);
+	}
 
-	const handlePrevSong = useCallback(() => {
-		songIndex === 0 ? setSongIndex(songs.length - 1) : setSongIndex(songIndex - 1);
-	}, [songIndex, songs]);
+	function handlePreviousSong() {
+		dispatch(previousSong())
+	}
 
-	const handleNextSong = () => {
-		// FIXME:當在播放後面的音樂，刪除前面的index的話會出錯誤，目前先以?.去做處理但會有問題！
-		// 當歌單只有一首歌的時候setSongIndex(0)會沒有改變所以上面的useEffect不會被觸法
-		if (songs.length === 1) {
-			handlePlaySong();
-		} else {
-			songIndex === songs.length - 1 ? setSongIndex(0) : setSongIndex(songIndex + 1);
-		}
-	};
+	function handleNextSong() {
+		dispatch(nextSong())
+	}
 
-	const handleLoopSong = useCallback(() => {
-		setLoopOneSong(!loopOneSong);
-	}, [loopOneSong]);
+	function handleLoopSong() {
+		setLoopOneSong((pre) => !pre);
+	}
 
 	const handleProgress = (e: React.MouseEvent<HTMLProgressElement>) => {
 		if(!(control.current && duration && e.target)) return;
@@ -83,33 +74,32 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 				<CassetteTape
 					isPlaying={isPlaying}
 					progress={(progress * 100) / duration}
-					image={songs[songIndex].img}
+					image={playlist[currentSongIndex].img}
 				/>
 			</Window.Header>
 			<section className={styles.musicPlayer}>
 				<audio
+				
 					ref={control}
-					src={songs[songIndex]?.src}
+					src={playlist[currentSongIndex]?.src}
 					onCanPlay={(e) => {
 						const { currentTime, duration } = e.target as HTMLAudioElement;
 						setProgress(currentTime);
 						setDuration(duration)
+						handlePlaySong();
+					}}
+					onEnded={()=>{
+						if (loopOneSong && control.current) {
+							control.current.load();
+						} else {
+							handleNextSong();
+						}
 					}}
 					onTimeUpdate={(e) => {
 						const { currentTime, duration } = e.target as HTMLAudioElement;
-						if (currentTime === duration) {
-							// 若有單曲循環的話
-							if (loopOneSong && control.current) {
-								control.current.load();
-								handlePlaySong();
-							} else {
-								// 沒有自動播放下一首
-								handleNextSong();
-							}
-						} else {
-							setProgress(currentTime);
-							setDuration(duration);
-						}
+						if(!duration) return;
+						setProgress(currentTime);
+						setDuration(duration);
 					}}
 				/>
 				<section className={styles.progress}>
@@ -120,10 +110,10 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					<time dateTime={formatTime(duration, 'Hh Mm Ss')}>{formatTime(duration, 'HH:MM:SS')}</time>
 				</section>
 				<article className={styles.songDetail}>
-					<h1>{songs[songIndex]?.title}</h1>
+					<h1>{playlist[currentSongIndex]?.title}</h1>
 				</article>
 				<fieldset className={styles.actionButtons}>
-					<button onClick={handlePrevSong}>
+					<button onClick={handlePreviousSong}>
 						<IconPre />
 					</button>
 					{isPlaying && (

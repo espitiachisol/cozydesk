@@ -20,7 +20,7 @@ function useWindow(): WindowContextType {
 type WindowProps = PropsWithChildren<{
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
 	id: string;
-	className: string;
+	className?: string;
 }>;
 
 function Window({ id, children, className, containerRef }: WindowProps) {
@@ -100,7 +100,7 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 		});
 	}
 	
-	function handleBringToFront() {
+	function handleBringToFront(e) {
 		if (!dragRef.current) return;
 		dispatch(bringToFront({id}))
 	}

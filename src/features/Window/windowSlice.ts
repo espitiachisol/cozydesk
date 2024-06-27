@@ -17,7 +17,7 @@ interface WindowsState {
 const initialState: WindowsState = {
 	windows: [
     {
-      id: 'login',
+      id: 'signIn',
       zIndex: 2,
       position: { x: 100, y: 100 },
       isOpen: true,

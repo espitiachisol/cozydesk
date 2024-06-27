@@ -90,7 +90,6 @@ function List({ id, children }: ListProps) {
 	useEffect(() => {
 		function handleClick(e:MouseEvent) {
 			if (ref.current && !ref.current.contains(e.target as Node)) {
-				console.log('close')
 				close();
 			}
 		}

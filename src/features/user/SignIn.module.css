@@ -1,11 +1,11 @@
-.LoginLayout{
+.SignInLayout {
   position: relative;
   display: grid;
   border-radius: .625rem;
-  grid-template-areas:"title image"
-  "subtitle image"
-  "form image"
-  "aside image";
+  grid-template-areas: "title image"
+    "subtitle image"
+    "form image"
+    "aside image";
   align-items: center;
   padding-inline: 1rem;
   padding-block: 1rem;
@@ -16,36 +16,42 @@
   border: 1px var(--color-grey--100) solid;
   background-color: var(--color-white--100-transparent-low);
   box-shadow: rgba(25, 21, 33, 0.05) 2px 4px 15px, rgba(25, 21, 33, .2) 0px 5px 9px -3px;
-  .title{
+
+  .title {
     grid-area: title;
     margin-block: 0;
     color: var(--color-primary-800);
     font-size: 1.6rem;
     /* margin-block: auto 0; */
   }
-  .subtitle{
+
+  .subtitle {
     grid-area: subtitle;
     margin-block: 0;
     color: var(--color-primary-800);
     font-size: 1.2rem;
   }
-  .form{
+
+  .form {
     grid-area: form;
     display: flex;
     flex-direction: column;
     align-self: flex-start;
     gap: .5rem;
-    input{
+
+    input {
       block-size: 2rem;
       border-radius: .25rem;
       border: 1px white solid;
       padding-inline: .5rem;
       background-color: white;
-      &:focus{
+
+      &:focus {
         outline-color: var(--color-primary);
       }
     }
-    button{
+
+    button {
       border-radius: .25rem;
       padding-inline: .5rem;
       padding-block: .25rem;
@@ -57,28 +63,32 @@
       color: white;
     }
   }
-  .aside{
+
+  .aside {
     grid-area: aside;
     font-size: .8rem;
     color: var(--color-dark--4);
-    p{
+
+    p {
       margin-block: 0;
-      button{
+
+      button {
         border: none;
         font-weight: 600;
         color: var(--color-primary-800);
       }
     }
-    
+
   }
-  .image{
+
+  .image {
     grid-area: image;
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
   }
 
-  .folderDraggable{
+  .folderDraggable {
     inline-size: 100%;
     block-size: 40px;
     background-color: transparent;

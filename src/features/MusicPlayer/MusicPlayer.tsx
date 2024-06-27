@@ -14,6 +14,7 @@ import IconFolder from '../../assets/icons/icon-folder.svg?react';
 import IconMute from '../../assets/icons/icon-mute.svg?react';
 import IconSound from '../../assets/icons/icon-sound.svg?react';
 import styles from './MusicPlayer.module.css';
+import { openWindow } from '../Window/windowSlice';
 
 type MusicPlayerProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>
@@ -95,17 +96,17 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 						setDuration(duration);
 					}}
 				/>
-				<section className={styles.progress}>
+				<section className={styles.progress} onMouseDown={(e)=>e.stopPropagation()}>
 					<progress onClick={handleProgress} value={progress} max={duration} />
 					<time dateTime={formatTime(progress, 'Hh Mm Ss')}>
 						{formatTime(progress, 'HH:MM:SS')}
 					</time>
 					<time dateTime={formatTime(duration, 'Hh Mm Ss')}>{formatTime(duration, 'HH:MM:SS')}</time>
 				</section>
-				<article className={styles.songDetail}>
+				<article className={styles.songDetail} onMouseDown={(e)=>e.stopPropagation()}>
 					<h1>{playlist[currentSongIndex]?.title}</h1>
 				</article>
-				<fieldset className={styles.actionButtons}>
+				<fieldset className={styles.actionButtons} onMouseDown={(e)=>e.stopPropagation()}>
 					<button onClick={handlePreviousSong}>
 						<IconPre />
 					</button>
@@ -125,7 +126,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					<button onClick={handleLoopSong} className={loopOneSong ? styles.active : ''}>
 						<IconLoop />
 					</button>
-					<button onClick={()=>{}} >
+					<button onClick={()=>{dispatch(openWindow({id: 'musicPlayer'}))}} >
 						<IconFolder />
 					</button>
 				</fieldset>
@@ -136,6 +137,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					<IconSound className={styles.volumeImage} />
 				)}
 				<input
+					onMouseDown={(e)=>e.stopPropagation()}
 					className={styles.volumeSlider}
 					type="range"
 					min="0"

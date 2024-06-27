@@ -46,11 +46,16 @@ export const musicSlice = createSlice({
         state.currentSongIndex = state.playlist.length - 1; // Loop to the end
       }
 
+    },
+    setSong(state, action: PayloadAction<string>){
+      const id = action.payload;
+      const index = state.playlist.findIndex((song)=>song.id === id)
+      if(index!==state.currentSongIndex) state.currentSongIndex = index;
     }
 	}
 });
 
-export const { setPlaylist, nextSong, previousSong } = musicSlice.actions;
+export const { setPlaylist, nextSong, previousSong, setSong } = musicSlice.actions;
 
 export const getCurrentSongIndex= (state: RootState) => state.music.currentSongIndex;
 export const getPlayList= (state: RootState) => state.music.playlist;

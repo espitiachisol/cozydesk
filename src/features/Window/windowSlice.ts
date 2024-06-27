@@ -16,18 +16,18 @@ interface WindowsState {
 // Define the initial state using that type
 const initialState: WindowsState = {
 	windows: [
-    // {
-    //   id: 'musicPlayer',
-    //   zIndex: 0,
-    //   position: { x: 100, y: 100 },
-    //   isOpen: false,
-    // },
-    // {
-    //   id: 'folder',
-    //   zIndex: 0,
-    //   position: { x: 200, y: 200 },
-    //   isOpen: false,
-    // }
+    {
+      id: 'musicPlayer',
+      zIndex: 1,
+      position: { x: 100, y: 100 },
+      isOpen: false,
+    },
+    {
+      id: 'folder',
+      zIndex: 0,
+      position: { x: 200, y: 200 },
+      isOpen: false,
+    }
   ]
 };
 
@@ -36,15 +36,13 @@ export const windowSlice = createSlice({
 	initialState,
 	reducers: {
 		openWindow: (state, action: PayloadAction<{ id: string }>) => {
-			const existingWindow = state.windows.find((window) => window.id === action.payload.id);
+			const currentWindow = state.windows.find((window) => window.id === action.payload.id);
+      if(!currentWindow) return;
 			const windowsIndex = state.windows.map((w) => w.zIndex);
 			const maxZIndex = windowsIndex.length > 0 ? Math.max(...windowsIndex): 0;
-			if (!existingWindow) {
-				state.windows.push({ ...action.payload, zIndex: maxZIndex + 1, position: { x: 100, y: 100 }, isOpen: true });
-			} else {
-				existingWindow.isOpen = true;
-				existingWindow.zIndex = maxZIndex + 1;
-			}
+      
+			if (!currentWindow.isOpen) currentWindow.isOpen = true;
+      if (currentWindow.zIndex < maxZIndex) currentWindow.zIndex = maxZIndex + 1;
 		},
 		closeWindow: (state, action: PayloadAction<{ id: string }>) => {
 			const existingWindow = state.windows.find((window) => window.id === action.payload.id);
@@ -59,11 +57,11 @@ export const windowSlice = createSlice({
       }
     },
     bringToFront: (state, action: PayloadAction<{ id: string }>) => {
-			const window = state.windows.find(window => window.id === action.payload.id);
-      if(!window) return;
+			const currentWindow = state.windows.find(window => window.id === action.payload.id);
+      if(!currentWindow) return;
       const maxZIndex = Math.max(...state.windows.map((w) => w.zIndex));
-      if (window.zIndex < maxZIndex) {
-        window.zIndex = maxZIndex + 1;
+      if (currentWindow.zIndex < maxZIndex) {
+        currentWindow.zIndex = maxZIndex + 1;
       }
 		}
 	}

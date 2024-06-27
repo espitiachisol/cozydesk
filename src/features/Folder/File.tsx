@@ -1,7 +1,7 @@
 import { useAppDispatch } from '../../app/hook';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
-import { setSong } from '../MusicPlayer/musicSlice';
-import { openWindow } from '../Window/windowSlice';
+import { setSong } from '../musicPlayer/musicSlice';
+import { openWindow } from '../window/windowSlice';
 import styles from './File.module.css';
 type FileProps = {
 	id: string;

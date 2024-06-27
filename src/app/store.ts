@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import windowReducer from '../features/Window/windowSlice'
-import musicReducer from '../features/MusicPlayer/musicSlice';
+import windowReducer from '../features/window/windowSlice'
+import musicReducer from '../features/musicPlayer/musicSlice';
 
 
 export const store = configureStore({

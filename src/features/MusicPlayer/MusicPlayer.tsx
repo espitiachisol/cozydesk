@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import { getCurrentSongIndex, getPlayList, nextSong, previousSong } from './musicSlice';
-import Window from '../Window/Window';
+import Window from '../window/Window';
 import CassetteTape from './CassetteTape';
 import { formatTime } from '../../utils/time';
 import IconPre from '../../assets/icons/icon-pre.svg?react';
@@ -14,7 +14,7 @@ import IconFolder from '../../assets/icons/icon-folder.svg?react';
 import IconMute from '../../assets/icons/icon-mute.svg?react';
 import IconSound from '../../assets/icons/icon-sound.svg?react';
 import styles from './MusicPlayer.module.css';
-import { openWindow } from '../Window/windowSlice';
+import { openWindow } from '../window/windowSlice';
 
 type MusicPlayerProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>

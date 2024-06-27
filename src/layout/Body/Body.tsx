@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import styles from './Body.module.css';
 import { useAppSelector, useAppDispatch } from '../../app/hook'
-import { openWindow, getWindows } from '../../features/Window/windowSlice';
-import MusicPlayer from '../../features/MusicPlayer/MusicPlayer';
-import Folder from '../../features/Folder/Folder';
+import { openWindow, getWindows } from '../../features/window/windowSlice';
+import MusicPlayer from '../../features/musicPlayer/MusicPlayer';
+import Folder from '../../features/folder/Folder';
 
 function Body() {
 	const containerRef = useRef<HTMLElement | null>(null);

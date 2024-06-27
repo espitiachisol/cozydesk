@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Window from '../Window/Window';
+import Window from '../window/Window';
 import { systemMusics } from '../../data/music';
 import File from './File';
 import styles from './Folder.module.css';
@@ -10,8 +10,7 @@ type FolderProps = {
 export default function Folder({ containerRef }: FolderProps) {
 	const [tab, setTab] = useState('systemMusic');
 	const [selectedItems, setSelectedItems] = useState<string[]>([]);
-	function handleClickFile (e){
-		console.log(e.metaKey)
+	function handleClickFile (e: React.MouseEvent<HTMLButtonElement>){
 		e.preventDefault()
 		const selectId = e.currentTarget.id
 		if(e.metaKey){
@@ -28,18 +27,24 @@ export default function Folder({ containerRef }: FolderProps) {
 		const selectId = e.currentTarget.id
 		setSelectedItems([selectId])
 	}
+
+	function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+		const tabId = e.currentTarget.id;
+		if(tab === tabId) return;
+		setTab(tabId);
+	}
 	return (
 		<Window containerRef={containerRef} id="folder" className={styles.folderLayout}>
 			<nav className={styles.sidebar}>
 				<h2 className={styles.title}>Music</h2>
 				<ul onMouseDown={(e)=>e.stopPropagation()}>
 					<li>
-						<button className={`${styles.sidebarItem} ${tab === 'systemMusic' ? styles.active : ''}`}>
+						<button id="systemMusic" onClick={handleClick} className={`${styles.sidebarItem} ${tab === 'systemMusic' ? styles.active : ''}`}>
 							System Music
 						</button>
 					</li>
 					<li>
-						<button className={`${styles.sidebarItem} ${tab === 'myMusic' ? styles.active : ''}`}>My Music</button>
+						<button id="myMusic" onClick={handleClick} className={`${styles.sidebarItem} ${tab === 'myMusic' ? styles.active : ''}`}>My Music</button>
 					</li>
 				</ul>
 			</nav>
@@ -50,6 +55,8 @@ export default function Folder({ containerRef }: FolderProps) {
 						systemMusics.map((music) => (
 							<File id={music.id} onClickContextMenu={handleClickContextMenu} onClickToggle={handleClickFile} selected={selectedItems.includes(music.id)} key={music.id} icon={music.icon} title={music.title} />
 						))}
+					{tab === 'myMusic' &&<div>hi</div>}
+
 						</Contextmenu>
 				</section>
 				

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './SignIn.module.css';
-import { signUp } from './UserSlice';
+import { signUp } from './userSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 type SignUpFormProps = {
 	onSwitch: () => void;

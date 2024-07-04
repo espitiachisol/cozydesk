@@ -1,31 +1,48 @@
 import { useState } from 'react';
 import styles from './SignIn.module.css';
-import { signIn } from './userSlice';
-import { useAppDispatch } from '../../app/hook';
+import { clearError, getAppAuth, signIn } from './authSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hook';
 type SignInFormProps = {
 	onSwitch: () => void;
 };
 export default function SignInForm({ onSwitch }: SignInFormProps) {
 	const dispatch = useAppDispatch();
+	const { error } = useAppSelector(getAppAuth);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	async function handleSubmit(e) {
+	async function handleSubmit(e: React.SyntheticEvent) {
 		e.preventDefault();
 		await dispatch(signIn({ email, password }));
+	}
+
+	function handleInputChange(setState: React.Dispatch<React.SetStateAction<string>>) {
+		return (e: React.ChangeEvent<HTMLInputElement>) => {
+			setState(e.target.value);
+			if (error) dispatch(clearError());
+		};
 	}
 	return (
 		<>
 			<h2 className={styles.subtitle}>Sign In</h2>
 			<form className={styles.form} onSubmit={handleSubmit}>
-				<input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
 				<input
+					className={error ? styles.error : ''}
+					type="email"
+					placeholder="Email"
+					required
+					value={email}
+					onChange={handleInputChange(setEmail)}
+				/>
+				<input
+					className={error ? styles.error : ''}
 					type="password"
 					placeholder="Password"
 					required
 					value={password}
-					onChange={(e) => setPassword(e.target.value)}
+					onChange={handleInputChange(setPassword)}
 				/>
 				<button type="submit">Sign In</button>
+				{error && <p className={styles.errorMessage}>{error}</p>}
 			</form>
 			<aside className={styles.aside}>
 				<p>

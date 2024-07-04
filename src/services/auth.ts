@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { User } from '../type/user';
 import { auth } from './core';
 
@@ -58,7 +58,22 @@ export async function signIn(email: string, password: string): Promise<User> {
 			case 'auth/wrong-password':
 				errorMessage = 'Incorrect password.';
 				break;
+			case 'auth/invalid-credential':
+				errorMessage = 'The credential is malformed or has expired.';
+				break;
 		}
 		throw Error(errorMessage);
+	}
+}
+
+export function subscribeAuthStateChanged(callback) {
+	return onAuthStateChanged(auth, callback);
+}
+
+export async function signOutUser(){
+	try {
+		return await signOut(auth)
+	}catch (error) {
+		throw Error(error.message);
 	}
 }

@@ -1,14 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import windowReducer from '../features/window/windowSlice'
 import musicReducer from '../features/musicPlayer/musicSlice';
-import userReducer from '../features/user/userSlice';
+import authReducer from '../features/auth/authSlice';
 
 
 export const store = configureStore({
   reducer: {
     window: windowReducer,
     music: musicReducer,
-    user: userReducer
+    auth: authReducer
   }
 })
 

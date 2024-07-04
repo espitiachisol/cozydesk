@@ -20,7 +20,7 @@
       justify-content: center;
       background-color: var(--color-white-transparent-low);
       &.cross{
-        background-color: rgb(237, 106, 94);
+        background-color: var(--color-red);
         color: rgb(81, 31, 27);
       }
       &.minus{

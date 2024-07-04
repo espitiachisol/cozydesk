@@ -109,7 +109,16 @@ type ButtonProps = PropsWithChildren<{
   onClick: () => void;
 }>
 function Button({ children, onClick }: ButtonProps) {
-  return <li><button onClick={onClick}>{children}</button></li>;
+	const context = useMenu();
+  if (!context) {
+    throw new Error('Toggle must be used within a Menu');
+  }
+	const { close } = context;
+	function handleClick(){
+		onClick()
+		close()
+	}
+  return <li><button onClick={handleClick}>{children}</button></li>;
 }
 Menu.Toggle = Toggle;
 Menu.List = List;

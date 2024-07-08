@@ -3,17 +3,15 @@ import Body from './layout/Body/Body'
 import Header from './layout/Header/Header'
 import { subscribeAuthStateChanged } from './services/auth'
 import { useAppDispatch } from './app/hook'
-import { setUser } from './features/auth/authSlice'
+import { userSignedIn } from './features/auth/authSlice'
+import { User } from './type/user'
 function App(): JSX.Element {
   const dispatch = useAppDispatch()
   
   useEffect(() => {
-    const unsubscribe = subscribeAuthStateChanged((user)=>{
+    const unsubscribe = subscribeAuthStateChanged((user:User | null)=>{
       if (user) {
-        dispatch(setUser({
-          uid: user.uid,
-          email: user.email
-        }))
+        dispatch(userSignedIn(user))
       }else{
         console.log('Not Sign In')
       }

@@ -61,9 +61,8 @@ const authSlice = createSlice({
 		clearError(state) {
 			state.error = null;
 		},
-		setUser(state, action: PayloadAction<User>) {
+		userSignedIn(state, action: PayloadAction<User>) {
 			state.user = action.payload;
-			state.loading = false;
 		}
 	},
 	extraReducers: (builder) => {
@@ -72,9 +71,8 @@ const authSlice = createSlice({
 				state.loading = true;
 				state.error = null;
 			})
-			.addCase(signUp.fulfilled, (state, action) => {
+			.addCase(signUp.fulfilled, (state) => {
 				state.loading = false;
-				state.user = action.payload;
 			})
 			.addCase(signUp.rejected, (state, action) => {
 				state.loading = false;
@@ -84,9 +82,8 @@ const authSlice = createSlice({
 				state.loading = true;
 				state.error = null;
 			})
-			.addCase(signIn.fulfilled, (state, action) => {
+			.addCase(signIn.fulfilled, (state) => {
 				state.loading = false;
-				state.user = action.payload;
 			})
 			.addCase(signIn.rejected, (state, action) => {
 				state.loading = false;
@@ -109,6 +106,6 @@ const authSlice = createSlice({
 
 export const getUser = (state: RootState) => state.auth.user;
 export const getAppAuth = (state: RootState) => state.auth;
-export const { clearError, setUser, clearUser } = authSlice.actions;
+export const { clearError, userSignedIn } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,16 +1,39 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User as FirebaseUser } from 'firebase/auth';
 import { User } from '../type/user';
-import { auth } from './core';
+import { auth, db } from './core';
+import { doc, setDoc } from 'firebase/firestore';
+
+// Function to transform FirebaseUser to your User type
+function transformUser(user: FirebaseUser): User {
+  return {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName,
+    photoURL: user.photoURL,
+    emailVerified: user.emailVerified,
+    phoneNumber: user.phoneNumber,
+    providerData: user.providerData,
+    createdAt: user.metadata.creationTime || '',
+    lastLoginAt: user.metadata.lastSignInTime || '',
+  };
+}
+
+export async function createUserInFirestore(user: FirebaseUser): Promise<User> {
+
+  try {
+		const userData = transformUser(user)
+		await setDoc(doc(db, "users", user.uid), userData);
+		return userData;
+  } catch (error) {
+    throw Error("Failed to create user in Firestore.");
+  }
+}
 
 export async function signUp(email: string, password: string): Promise<User> {
 	try {
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-		const user = userCredential.user;
-
-		return {
-			uid: user.uid,
-			email: user.email
-		};
+		const user = await createUserInFirestore(userCredential.user);
+		return user
 	} catch (error) {
 		const errorCode = error.code;
 		let errorMessage = error.message;
@@ -36,11 +59,9 @@ export async function signIn(email: string, password: string): Promise<User> {
 	try {
 		const userCredential = await signInWithEmailAndPassword(auth, email, password);
 		const user = userCredential.user;
+		const userData = transformUser(user)
 
-		return {
-			uid: user.uid,
-			email: user.email
-		};
+		return userData
 	} catch (error) {
 		const errorCode = error.code;
 		let errorMessage = error.message;
@@ -66,8 +87,15 @@ export async function signIn(email: string, password: string): Promise<User> {
 	}
 }
 
-export function subscribeAuthStateChanged(callback) {
-	return onAuthStateChanged(auth, callback);
+export function subscribeAuthStateChanged(callback: (user: User | null) => void) {
+	return onAuthStateChanged(auth, (user: FirebaseUser | null) => {
+		if(!user) {
+			callback(null);
+			return;
+		}
+		const userData = transformUser(user)
+		callback(userData)
+	});
 }
 
 export async function signOutUser(){

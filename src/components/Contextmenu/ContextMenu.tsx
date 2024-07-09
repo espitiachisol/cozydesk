@@ -102,7 +102,7 @@ function List({ id, children }: ListProps) {
 
 	if (id !== openId) return null;
 	return (
-		<menu ref={ref} className={styles.contextMenu} style={{ left: position?.x, top: position?.y }}>
+		<menu onMouseDown={(e) => e.stopPropagation()} ref={ref} className={styles.contextMenu} style={{ left: position?.x, top: position?.y }}>
 			{children}
 		</menu>
 	);

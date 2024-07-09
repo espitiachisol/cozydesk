@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
-import { getCurrentSongIndex, getPlayList, nextSong, previousSong } from './musicSlice';
+import { selectCurrentSongIndex, selectActivePlaylist, playNextSong, playPreviousSong } from './musicSlice';
 import Window from '../window/Window';
 import CassetteTape from './CassetteTape';
 import { formatTime } from '../../utils/time';
@@ -22,8 +22,8 @@ type MusicPlayerProps = {
 
 export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	const dispatch = useAppDispatch()
-	const currentSongIndex = useAppSelector(getCurrentSongIndex)
-	const playlist = useAppSelector(getPlayList)
+	const currentSongIndex = useAppSelector(selectCurrentSongIndex)
+	const playlist = useAppSelector(selectActivePlaylist)
 	const control = useRef<HTMLAudioElement>(null);
 
 	const [progress, setProgress] = useState(0);
@@ -50,11 +50,11 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	}
 
 	function handlePreviousSong() {
-		dispatch(previousSong())
+		dispatch(playPreviousSong())
 	}
 
 	function handleNextSong() {
-		dispatch(nextSong())
+		dispatch(playNextSong())
 	}
 
 	function handleLoopSong() {
@@ -75,7 +75,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 				<audio
 				
 					ref={control}
-					src={playlist[currentSongIndex]?.src}
+					src={playlist[currentSongIndex]?.downloadURL}
 					onCanPlay={(e) => {
 						const { currentTime, duration } = e.target as HTMLAudioElement;
 						setProgress(currentTime);
@@ -104,7 +104,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					<time dateTime={formatTime(duration, 'Hh Mm Ss')}>{formatTime(duration, 'HH:MM:SS')}</time>
 				</section>
 				<article className={styles.songDetail} onMouseDown={(e)=>e.stopPropagation()}>
-					<h1>{playlist[currentSongIndex]?.title}</h1>
+					<h1>{playlist[currentSongIndex]?.name}</h1>
 				</article>
 				<fieldset className={styles.actionButtons} onMouseDown={(e)=>e.stopPropagation()}>
 					<button onClick={handlePreviousSong}>
@@ -153,7 +153,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 				<CassetteTape
 					isPlaying={isPlaying}
 					progress={(progress * 100) / duration}
-					image={playlist[currentSongIndex].img}
+					image={playlist[currentSongIndex].imageURL}
 				/>
 			</Window.Header>
 		</Window>

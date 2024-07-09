@@ -1,15 +1,15 @@
-.folderLayout{
+.folderLayout {
   position: relative;
   display: grid;
   border-radius: .625rem;
-  grid-template-areas:"sidebar toolbar"
-  "sidebar folder";
+  grid-template-areas: "sidebar toolbar"
+    "sidebar folder";
   grid-template-columns: 160px 520px;
   grid-template-rows: 40px 400px;
   border: 1px var(--color-grey--100) solid;
   box-shadow: rgba(25, 21, 33, 0.05) 2px 4px 15px, rgba(25, 21, 33, .2) 0px 5px 9px -3px;
 
-  .folderDraggable{
+  .folderDraggable {
     /* grid-area: header; */
     background-color: transparent;
     border-radius: .625rem .625rem 0 0;
@@ -19,16 +19,18 @@
     top: 0;
     left: 0;
   }
-  .sidebar{
+
+  .sidebar {
     grid-area: sidebar;
     background-color: var(--color-white--100-transparent-low);
-    
-    border-radius: .625rem  0 0 .625rem;
+
+    border-radius: .625rem 0 0 .625rem;
     padding-inline: 1rem;
     padding-block-start: 2.2rem;
     backdrop-filter: blur(.5rem);
     border-inline-end: 1px var(--color-grey--100) solid;
-    .title{
+
+    .title {
       font-size: .8rem;
       font-weight: 600;
       margin-block: 0;
@@ -37,7 +39,8 @@
       color: var(--color-dark--4);
 
     }
-    .sidebarItem{
+
+    .sidebarItem {
       font-size: .875rem;
       color: var(--color-dark--2);
       border-radius: .25rem;
@@ -47,19 +50,22 @@
       padding-inline: .25rem;
       inline-size: 100%;
       text-align: start;
-      &.active{
+
+      &.active {
         background-color: var(--color-secondary);
       }
     }
-  
+
   }
-  .toolbar{
+
+  .toolbar {
     grid-area: toolbar;
     border-radius: 0 .625rem 0 0;
     background-color: var(--color-white--100);
     border-block-end: 1px var(--color-grey--100) solid;
   }
-  .folder{
+
+  .folder {
     grid-area: folder;
     background-color: var(--color-white--100);
     border-radius: 0 0 .625rem 0;
@@ -70,5 +76,14 @@
     gap: 1.5rem 2rem;
     align-content: flex-start;
     overflow: auto;
+    position: relative;
+
+    &.cannot {
+      cursor: not-allowed;
+    }
+
+    &.can {
+      box-shadow: inset 0 0 0 0.1rem var(--color-secondary);
+    }
   }
 }

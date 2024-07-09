@@ -1,65 +1,128 @@
-import { useState } from 'react';
+import { useEffect, useState, MouseEvent, DragEvent } from 'react';
 import Window from '../window/Window';
-import { systemMusics } from '../../data/music';
-import File from './File';
 import styles from './Folder.module.css';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
+import { useAppDispatch } from '../../app/hook';
+import { fetchUserPlaylist, uploadSong } from '../musicPlayer/musicSlice';
+import Playlist from './Playlist';
+import { PlaylistType } from '../../type/music';
+
 type FolderProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
 };
 export default function Folder({ containerRef }: FolderProps) {
-	const [tab, setTab] = useState('systemMusic');
+	const dispatch = useAppDispatch();
+	const [tab, setTab] = useState<PlaylistType>('system');
 	const [selectedItems, setSelectedItems] = useState<string[]>([]);
-	function handleClickFile (e: React.MouseEvent<HTMLButtonElement>){
-		e.preventDefault()
-		const selectId = e.currentTarget.id
-		if(e.metaKey){
-			setSelectedItems((selectedItems) => selectedItems.includes(selectId)?selectedItems.filter(id=>id!==selectId):[...selectedItems,selectId])
-		} else if (e.shiftKey){
+	const [canDrop, setCanDrop] = useState<'idle' | 'cannot' | 'can'>('idle');
+
+	useEffect(() => {
+		dispatch(fetchUserPlaylist());
+	}, [dispatch]);
+
+	function handleClickFile(e: MouseEvent<HTMLButtonElement>) {
+		e.preventDefault();
+		const selectId = e.currentTarget.id;
+		if (e.metaKey) {
+			setSelectedItems((selectedItems) =>
+				selectedItems.includes(selectId) ? selectedItems.filter((id) => id !== selectId) : [...selectedItems, selectId]
+			);
+		} else if (e.shiftKey) {
 			// setSelectedItems((selectedItems) => {
 			// 	selectedItems.includes(selectId)?selectedItems.filter(id=>id!==selectId):[...selectedItems,selectId]
 			// })
-		} else{
-			setSelectedItems((selectedItems) => selectedItems.includes(selectId)?[]:[selectId])
+		} else {
+			setSelectedItems((selectedItems) => (selectedItems.includes(selectId) ? [] : [selectId]));
 		}
 	}
-	function handleClickContextMenu (e){
-		const selectId = e.currentTarget.id
-		setSelectedItems([selectId])
+	function handleClickContextMenu(e: MouseEvent<HTMLButtonElement>) {
+		const selectId = e.currentTarget.id;
+		setSelectedItems([selectId]);
 	}
 
-	function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
-		const tabId = e.currentTarget.id;
-		if(tab === tabId) return;
+	function handleClick(e: MouseEvent<HTMLButtonElement>) {
+		const tabId = e.currentTarget.id as PlaylistType;
+		if (tab === tabId) return;
 		setTab(tabId);
+		setCanDrop('idle');
 	}
+
+	function handleDragOver(event: DragEvent<HTMLElement>) {
+		console.log('handleDragOver');
+		event.preventDefault();
+		if (tab === 'system') setCanDrop('cannot');
+		else if (canDrop !== 'can') setCanDrop('can');
+	}
+
+	function handleDragLeave(event: DragEvent<HTMLElement>) {
+		console.log('handleDragLeave');
+		event.preventDefault();
+		if (canDrop !== 'idle') setCanDrop('idle');
+	}
+
+	async function handleDrop(event: DragEvent<HTMLElement>) {
+		console.log('droppedFile');
+		event.preventDefault();
+		setCanDrop('idle');
+		if (canDrop === 'cannot') {
+			return;
+		}
+		console.log('handleDrop');
+		const droppedFile = event.dataTransfer.files;
+		dispatch(uploadSong({ file: droppedFile[0] }));
+	}
+
 	return (
 		<Window containerRef={containerRef} id="folder" className={styles.folderLayout}>
 			<nav className={styles.sidebar}>
 				<h2 className={styles.title}>Music</h2>
-				<ul onMouseDown={(e)=>e.stopPropagation()}>
+				<ul onMouseDown={(e) => e.stopPropagation()}>
 					<li>
-						<button id="systemMusic" onClick={handleClick} className={`${styles.sidebarItem} ${tab === 'systemMusic' ? styles.active : ''}`}>
-							System Music
+						<button
+							id="system"
+							onClick={handleClick}
+							className={`${styles.sidebarItem} ${tab === 'system' ? styles.active : ''}`}>
+							System Playlist
 						</button>
 					</li>
 					<li>
-						<button id="myMusic" onClick={handleClick} className={`${styles.sidebarItem} ${tab === 'myMusic' ? styles.active : ''}`}>My Music</button>
+						<button
+							id="user"
+							onClick={handleClick}
+							className={`${styles.sidebarItem} ${tab === 'user' ? styles.active : ''}`}>
+							My Playlist
+						</button>
 					</li>
 				</ul>
 			</nav>
 			<nav className={styles.toolbar}></nav>
-			<section className={styles.folder}>
+			<section
+				className={`${styles.folder} ${canDrop === 'cannot' ? styles.cannot : ''} ${
+					canDrop === 'can' ? styles.can : ''
+				}`}
+				onDragOver={handleDragOver}
+				onDrop={handleDrop}
+				onDragLeave={handleDragLeave}>
 				<Contextmenu>
-					{tab === 'systemMusic' &&
-						systemMusics.map((music) => (
-							<File id={music.id} onClickContextMenu={handleClickContextMenu} onClickToggle={handleClickFile} selected={selectedItems.includes(music.id)} key={music.id} icon={music.icon} title={music.title} />
-						))}
-					{tab === 'myMusic' &&<div>hi</div>}
+					{tab === 'system' && (
+						<Playlist
+							playlistType="system"
+							selectedItems={selectedItems}
+							handleClickContextMenu={handleClickContextMenu}
+							handleClickFile={handleClickFile}
+						/>
+					)}
+					{tab === 'user' && (
+						<Playlist
+							playlistType="user"
+							selectedItems={selectedItems}
+							handleClickContextMenu={handleClickContextMenu}
+							handleClickFile={handleClickFile}
+						/>
+					)}
+				</Contextmenu>
+			</section>
 
-						</Contextmenu>
-				</section>
-				
 			<Window.Header className={styles.folderDraggable} />
 		</Window>
 	);

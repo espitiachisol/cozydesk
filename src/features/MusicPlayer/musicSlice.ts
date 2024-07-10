@@ -39,7 +39,7 @@ export const uploadSong = createAsyncThunk('music/uploadSong', async ({ file }, 
 	try {
 		const { downloadURL, metadata } = await uploadSongToStorage(file);
 
-		const imageId = `${Math.floor(Math.random() * 6 + 1)}`;
+		const imageId = `${Math.floor(Math.random() * 5 + 1)}`;
 		const song: Song = {
 			bucket: metadata.bucket,
 			fullPath: metadata.fullPath,

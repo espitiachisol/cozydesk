@@ -2,6 +2,8 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndP
 import { User } from '../type/user';
 import { auth, db } from './core';
 import { doc, setDoc } from 'firebase/firestore';
+import { handleError } from '../utils/errorHandler';
+import { ApiResponse } from '../type/common';
 
 // Function to transform FirebaseUser to your User type
 function transformUser(user: FirebaseUser): User {
@@ -18,72 +20,24 @@ function transformUser(user: FirebaseUser): User {
   };
 }
 
-export async function createUserInFirestore(user: FirebaseUser): Promise<User> {
-
-  try {
-		const userData = transformUser(user)
-		await setDoc(doc(db, "users", user.uid), userData);
-		return userData;
-  } catch (error) {
-    throw Error("Failed to create user in Firestore.");
-  }
-}
-
-export async function signUp(email: string, password: string): Promise<User> {
+export async function signUpService(email: string, password: string): Promise<ApiResponse<User>> {
 	try {
 		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-		const user = await createUserInFirestore(userCredential.user);
-		return user
+		const user = transformUser(userCredential.user)
+		await setDoc(doc(db, "users", user.uid), user);
+		return { response: user }
 	} catch (error) {
-		const errorCode = error.code;
-		let errorMessage = error.message;
-		switch (errorCode) {
-			case 'auth/email-already-in-use':
-				errorMessage = 'This email address is already in use.';
-				break;
-			case 'auth/invalid-email':
-				errorMessage = 'The email address is not valid.';
-				break;
-			case 'auth/operation-not-allowed':
-				errorMessage = 'Operation not allowed. Please contact support.';
-				break;
-			case 'auth/weak-password':
-				errorMessage = 'The password is too weak.';
-				break;
-		}
-		throw Error(errorMessage);
+		return { error: handleError(error) }
 	}
 }
 
-export async function signIn(email: string, password: string): Promise<User> {
+export async function signInService(email: string, password: string): Promise<ApiResponse<User>> {
 	try {
 		const userCredential = await signInWithEmailAndPassword(auth, email, password);
-		const user = userCredential.user;
-		const userData = transformUser(user)
-
-		return userData
+		const user = transformUser(userCredential.user)
+		return { response: user }
 	} catch (error) {
-		const errorCode = error.code;
-		let errorMessage = error.message;
-		switch (errorCode) {
-			case 'auth/invalid-email':
-				errorMessage = 'The email address is not valid.';
-				break;
-			case 'auth/user-disabled':
-				errorMessage = 'The user account has been disabled.';
-
-				break;
-			case 'auth/user-not-found':
-				errorMessage = 'No user found with this email address.';
-				break;
-			case 'auth/wrong-password':
-				errorMessage = 'Incorrect password.';
-				break;
-			case 'auth/invalid-credential':
-				errorMessage = 'The credential is malformed or has expired.';
-				break;
-		}
-		throw Error(errorMessage);
+		return { error: handleError(error) }
 	}
 }
 
@@ -98,10 +52,11 @@ export function subscribeAuthStateChanged(callback: (user: User | null) => void)
 	});
 }
 
-export async function signOutUser(){
+export async function signOutService(): Promise<ApiResponse<string>> {
 	try {
-		return await signOut(auth)
+		await signOut(auth)
+		return { response: 'Sign out successful' }
 	}catch (error) {
-		throw Error(error.message);
+		return { error: handleError(error) }
 	}
 }

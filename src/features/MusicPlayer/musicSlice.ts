@@ -27,36 +27,32 @@ const initialState: MusicState = {
 };
 
 export const fetchUserPlaylist = createAsyncThunk('music/fetchUserPlaylist', async (_, { rejectWithValue }) => {
-	try {
-		const userPlaylist = await getUserPlaylist();
-		return userPlaylist;
-	} catch (error) {
-		return rejectWithValue(error.message);
-	}
+	const result = await getUserPlaylist();
+	if('error' in result) return rejectWithValue(result.error);
+	return result.response;
 });
 
-export const uploadSong = createAsyncThunk('music/uploadSong', async ({ file }, { rejectWithValue }) => {
-	try {
-		const { downloadURL, metadata } = await uploadSongToStorage(file);
+export const uploadSong = createAsyncThunk('music/uploadSong', async ({ file }:{ file: File }, { rejectWithValue }) => {
+	const result = await uploadSongToStorage(file);
+	if('error' in result) return rejectWithValue(result.error);
+	const { downloadURL, metadata } = result.response;
 
-		const imageId = `${Math.floor(Math.random() * 5 + 1)}`;
-		const song: Song = {
-			bucket: metadata.bucket,
-			fullPath: metadata.fullPath,
-			name: metadata.name,
-			contentType: metadata.contentType || '',
-			size: metadata.size,
-			md5Hash: metadata.md5Hash || '',
-			timeCreated: metadata.timeCreated,
-			downloadURL: downloadURL,
-			imageURL: `/images/music-cover-${imageId}.png`,
-			iconURL: `/icons/music-cover-${imageId}.png`
-		};
-		const savedSong = await saveSongToFirestore(song);
-		return savedSong;
-	} catch (error) {
-		return rejectWithValue(error.message);
-	}
+	const imageId = `${Math.floor(Math.random() * 5 + 1)}`;
+	const song: Song = {
+		bucket: metadata.bucket,
+		fullPath: metadata.fullPath,
+		name: metadata.name,
+		contentType: metadata.contentType || '',
+		size: metadata.size,
+		md5Hash: metadata.md5Hash || '',
+		timeCreated: metadata.timeCreated,
+		downloadURL: downloadURL,
+		imageURL: `/images/music-cover-${imageId}.png`,
+		iconURL: `/icons/music-cover-${imageId}.png`
+	};
+	const saveSongResult = await saveSongToFirestore(song);
+	if('error' in saveSongResult) return rejectWithValue(saveSongResult.error);
+	return saveSongResult.response;
 });
 
 interface PlaySongPayload {
@@ -137,7 +133,7 @@ export const selectUploadStatus = (state: RootState) => state.music.uploadStatus
 export const selectFetchStatus = (state: RootState) => state.music.fetchStatus;
 export const selectSongById =
 	(playlistType: 'system' | 'user', songId: string) =>
-	(state: RootState): Song | undefined => {
+	(state: RootState): Song | SystemSong |undefined => {
 		const playlist = playlistType === 'system' ? state.music.systemPlaylist : state.music.userPlaylist;
 		return playlist.find((song) => song.id === songId);
 	};

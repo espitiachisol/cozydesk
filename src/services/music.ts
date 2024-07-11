@@ -1,39 +1,41 @@
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { FullMetadata, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { auth, db, storage } from './core';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { Song } from '../type/music';
+import { handleError } from '../utils/errorHandler';
+import { ApiResponse } from '../type/common';
 
-export async function uploadSongToStorage(file) {
+export async function uploadSongToStorage(file: File): Promise<ApiResponse<{ downloadURL: string; metadata: FullMetadata }>> {
 	try {
 		const user = auth.currentUser;
-		if (!user) throw Error('User not signed in');
+		if (!user) throw new Error('User not signed in');
 		const storageRef = ref(storage, `${user.uid}/musics/${file.name}`);
 		const snapshot = await uploadBytes(storageRef, file);
 		const downloadURL = await getDownloadURL(storageRef);
-		return { downloadURL, metadata: snapshot.metadata };
+		return { response: { downloadURL, metadata: snapshot.metadata } };
 	} catch (error) {
-		throw Error(error.message);
+		return { error: handleError(error) };
 	}
 }
 
-export async function saveSongToFirestore(song: Song) {
+export async function saveSongToFirestore(song: Song): Promise<ApiResponse<Song>>  {
 	try {
 		const user = auth.currentUser;
 		if (!user) throw new Error('User not signed in');
 		const songsCollectionRef = collection(db, 'users', user.uid, 'songs');
-		// Add the song document with an auto-generated ID
 		const songDocRef = await addDoc(songsCollectionRef, song);
 		return {
-			id: songDocRef.id,
-			...song
+			response: {
+				id: songDocRef.id,
+				...song
+			}
 		};
 	} catch (error) {
-		throw Error(error.message);
+		return { error: handleError(error) };
 	}
-	return song;
 }
 
-export async function getUserPlaylist(): Promise<Song[]> {
+export async function getUserPlaylist(): Promise<ApiResponse<Song[]>>{
 	try {
 		const user = auth.currentUser;
 		if (!user) throw new Error('User not signed in');
@@ -49,8 +51,8 @@ export async function getUserPlaylist(): Promise<Song[]> {
 			} as Song);
 		});
 
-		return songs;
+		return { response: songs };
 	} catch (error) {
-		throw new Error(error.message);
+		return { error: handleError(error) };
 	}
 }

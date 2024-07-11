@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../type/user';
-import { signUp as signUpService, signIn as signInService, signOutUser as signOutService } from '../../services/auth';
+import { signUpService, signInService, signOutService } from '../../services/auth';
 import { RootState } from '../../app/store';
 
 interface UserState {
@@ -24,12 +24,9 @@ interface Arguments {
 export const signUp = createAsyncThunk<User, Arguments, { rejectValue: string }>(
 	'user/signUp',
 	async ({ email, password }, { rejectWithValue }) => {
-		try {
-			const user = await signUpService(email, password);
-			return user;
-		} catch (error) {
-			return rejectWithValue(error.message);
-		}
+		const result = await signUpService(email, password);
+		if('error' in result) return rejectWithValue(result.error);
+		return result.response;
 	}
 );
 
@@ -37,21 +34,16 @@ export const signUp = createAsyncThunk<User, Arguments, { rejectValue: string }>
 export const signIn = createAsyncThunk<User, Arguments, { rejectValue: string }>(
 	'user/signIn',
 	async ({ email, password }, { rejectWithValue }) => {
-		try {
-			const user = await signInService(email, password);
-			return user;
-		} catch (error) {
-			return rejectWithValue(error.message);
-		}
+		const result  = await signInService(email, password);
+		if('error' in result) return rejectWithValue(result.error);
+		return result.response;
 	}
 );
 
 export const signOut = createAsyncThunk('user/signOut', async (res, { rejectWithValue }) => {
-	try {
-		await signOutService();
-	} catch (error) {
-		return rejectWithValue(error.message);
-	}
+		const result = await signOutService();
+		if('error' in result) return  rejectWithValue(result.error);
+		return result.response;
 });
 
 const authSlice = createSlice({

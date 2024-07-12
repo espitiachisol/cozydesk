@@ -8,6 +8,7 @@ interface Toast {
   type: 'success' | 'error' | 'info';
   duration?: number;
   visible?: boolean;
+  showClose?: boolean;
 }
 
 interface ToasterState {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import styles from  './Toaster.module.css';
 import { dismissToast, removeToast, selectToastById } from './toasterSlice';
@@ -21,10 +21,12 @@ export default function Toast({ id }) {
   return (
     <section className={`${styles.toast} ${styles[toast.type]} ${toast.visible ? styles['toast-enter'] : styles['toast-exit']}`}>
     <p>{toast.message}</p>
-    <button onClick={() => {
+    {toast.showClose && <button
+      className={styles.close}
+      onClick={() => {
       dispatch(dismissToast(toast.id));
       setTimeout(() => dispatch(removeToast(toast.id)), 300);
-    }}>x</button>
+    }}>Close</button>}
   </section>
   )
 }

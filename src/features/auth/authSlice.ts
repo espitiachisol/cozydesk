@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../type/user';
 import { signUpService, signInService, signOutService } from '../../services/auth';
 import { RootState } from '../../app/store';
+import { addToast } from '../toaster/toasterSlice';
 
 interface UserState {
 	user: User | null;
@@ -23,9 +24,13 @@ interface Arguments {
 // Async thunk for user creation
 export const signUp = createAsyncThunk<User, Arguments, { rejectValue: string }>(
 	'user/signUp',
-	async ({ email, password }, { rejectWithValue }) => {
+	async ({ email, password }, { rejectWithValue, dispatch }) => {
 		const result = await signUpService(email, password);
-		if('error' in result) return rejectWithValue(result.error);
+		if('error' in result) {
+			dispatch(addToast({ message: result.error, type: 'error' }));
+			return rejectWithValue(result.error);
+		}
+		dispatch(addToast({ message: 'Sign up successful', type: 'success', duration: 3000 }));
 		return result.response;
 	}
 );
@@ -33,16 +38,24 @@ export const signUp = createAsyncThunk<User, Arguments, { rejectValue: string }>
 // Async thunk for user sign-in
 export const signIn = createAsyncThunk<User, Arguments, { rejectValue: string }>(
 	'user/signIn',
-	async ({ email, password }, { rejectWithValue }) => {
+	async ({ email, password }, { rejectWithValue, dispatch}) => {
 		const result  = await signInService(email, password);
-		if('error' in result) return rejectWithValue(result.error);
+		if('error' in result) {
+			dispatch(addToast({ message: result.error, type: 'error' }));
+			return rejectWithValue(result.error);
+		}
+		dispatch(addToast({ message: 'Sign in successful', type: 'success', duration: 3000 }));
 		return result.response;
 	}
 );
 
-export const signOut = createAsyncThunk('user/signOut', async (res, { rejectWithValue }) => {
+export const signOut = createAsyncThunk('user/signOut', async (res, { rejectWithValue, dispatch }) => {
 		const result = await signOutService();
-		if('error' in result) return  rejectWithValue(result.error);
+		if('error' in result) {
+			dispatch(addToast({ message: result.error, type: 'error' }));
+			return rejectWithValue(result.error);
+		}
+		dispatch(addToast({ message: 'Sign out successful', type: 'success', duration: 3000 }));
 		return result.response;
 });
 

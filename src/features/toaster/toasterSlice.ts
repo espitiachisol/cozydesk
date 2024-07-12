@@ -11,6 +11,14 @@ interface Toast {
   showClose?: boolean;
 }
 
+interface AddToast {
+  message: string;
+  type: 'success' | 'error' | 'info';
+  duration?: number;
+  visible?: boolean;
+  showClose?: boolean;
+}
+
 interface ToasterState {
   toasts: Toast[];
 }
@@ -23,7 +31,7 @@ const toasterSlice = createSlice({
   name: 'toaster',
   initialState,
   reducers: {
-    addToast: (state, action: PayloadAction<Toast>) => {
+    addToast: (state, action: PayloadAction<AddToast>) => {
       state.toasts.push({...action.payload, visible: true, id: Date.now().toString()});
     },
     removeToast: (state, action: PayloadAction<string>) => {

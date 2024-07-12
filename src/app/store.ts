@@ -2,13 +2,15 @@ import { configureStore } from '@reduxjs/toolkit'
 import windowReducer from '../features/window/windowSlice'
 import musicReducer from '../features/musicPlayer/musicSlice';
 import authReducer from '../features/auth/authSlice';
+import toasterReducer from '../features/toaster/toasterSlice';
 
 
 export const store = configureStore({
   reducer: {
     window: windowReducer,
     music: musicReducer,
-    auth: authReducer
+    auth: authReducer,
+    toaster: toasterReducer,
   }
 })
 

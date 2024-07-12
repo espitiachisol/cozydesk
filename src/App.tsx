@@ -5,6 +5,7 @@ import { subscribeAuthStateChanged } from './services/auth'
 import { useAppDispatch } from './app/hook'
 import { userSignedIn } from './features/auth/authSlice'
 import { User } from './type/user'
+import Toaster from './features/toaster/Toaster'
 function App(): JSX.Element {
   const dispatch = useAppDispatch()
   
@@ -27,6 +28,7 @@ function App(): JSX.Element {
     <>
       <Header />
       <Body/>
+      <Toaster />
     </>
   )
 }

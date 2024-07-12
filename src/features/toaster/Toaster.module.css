@@ -24,7 +24,7 @@
     gap: 1rem;
     transition: transform 0.4s ease, opacity 0.4s ease;
 
-    .close{
+    .close {
       flex-shrink: 0;
       background-color: transparent;
       border: none;
@@ -37,7 +37,7 @@
       opacity: 1;
       transform: translateY(0);
     }
-    
+
     &.toast-exit {
       opacity: 0;
       transform: translateY(-1rem);
@@ -45,33 +45,34 @@
 
     &.success {
       border-left: 5px solid var(--color-success);
-      &::before{
+
+      &::before {
         content: '✅';
         left: 0;
         top: 0;
       }
     }
-    
+
     &.error {
       border-left: 5px solid var(--color-red);
-      &::before{
+
+      &::before {
         content: '⛔️';
         left: 0;
         top: 0;
       }
     }
-    
+
     &.info {
-      &::before{
+      &::before {
         content: '💡';
         left: 0;
         top: 0;
       }
+
       border-left: 5px solid var(--color-secondary);
     }
   }
-  
-  
+
+
 }
-
-

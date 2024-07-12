@@ -1,12 +1,13 @@
 /* src/components/Toaster.css */
 .toaster {
   position: fixed;
-  top: 1rem;
+  top: 3.2rem;
   right: 1rem;
   display: flex;
   flex-direction: column;
   gap: .625rem;
   z-index: 999999;
+  align-items: flex-end;
 
   .toast {
     backdrop-filter: blur(.1rem);
@@ -15,10 +16,23 @@
     padding-block: .25rem;
     border-radius: .25rem;
     max-inline-size: 18rem;
+    inline-size: fit-content;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+
+    &.toast-enter {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    &.toast-exit {
+      opacity: 0;
+      transform: translateY(-1rem);
+    }
+
     &.success {
       border-left: 5px solid var(--color-primary);
     }

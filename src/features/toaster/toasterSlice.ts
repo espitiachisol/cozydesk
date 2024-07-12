@@ -6,7 +6,8 @@ interface Toast {
   id: string;
   message: string;
   type: 'success' | 'error' | 'info';
-  duration: number;
+  duration?: number;
+  visible?: boolean;
 }
 
 interface ToasterState {
@@ -22,11 +23,17 @@ const toasterSlice = createSlice({
   initialState,
   reducers: {
     addToast: (state, action: PayloadAction<Toast>) => {
-      state.toasts.push(action.payload);
+      state.toasts.push({...action.payload, visible: true, id: Date.now().toString()});
     },
     removeToast: (state, action: PayloadAction<string>) => {
       state.toasts = state.toasts.filter(toast => toast.id !== action.payload);
     },
+    dismissToast: (state, action: PayloadAction<string>) => {
+      const toast = state.toasts.find(toast => toast.id === action.payload);
+      if (toast) {
+        toast.visible = false;
+      }
+    }
   },
 });
 const selectToasts = (state: RootState) => state.toaster.toasts;
@@ -37,5 +44,5 @@ export const selectToasterIds = createSelector(selectToasts, (toasts) => {
 export const selectToastById = (toastId: string) => (state: RootState) => state.toaster.toasts.find((toast) => toast.id === toastId);
 
 
-export const { addToast, removeToast } = toasterSlice.actions;
+export const { addToast, removeToast, dismissToast } = toasterSlice.actions;
 export default toasterSlice.reducer;

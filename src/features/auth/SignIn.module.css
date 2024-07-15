@@ -9,7 +9,7 @@
   align-items: center;
   padding-inline: 1rem;
   padding-block: 1rem;
-  grid-template-columns: 200px 300px;
+  grid-template-columns: 200px 280px;
   grid-template-rows: 100px 30px 130px 40px;
   gap: 1rem;
   backdrop-filter: blur(.25rem);

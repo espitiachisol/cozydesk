@@ -19,7 +19,7 @@ const initialState: WindowsState = {
     {
       id: 'signIn',
       zIndex: 2,
-      position: { x: 100, y: 100 },
+      position: { x: window.innerWidth / 2 - 265, y: window.innerHeight / 2 - 300},
       isOpen: true,
     },
     {

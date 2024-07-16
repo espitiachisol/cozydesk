@@ -4,6 +4,7 @@ import { systemPlaylist } from '../../data/music';
 import { getUserPlaylist, saveSongToFirestore, uploadSongToStorage } from '../../services/music';
 import { Status } from '../../type/common';
 import { PlaylistItem, PlaylistType, Song, SystemSong } from '../../type/music';
+import { addToast, updateToastMessage } from '../toaster/toasterSlice';
 
 interface MusicState {
 	systemPlaylist: SystemSong[];
@@ -32,9 +33,14 @@ export const fetchUserPlaylist = createAsyncThunk('music/fetchUserPlaylist', asy
 	return result.response;
 });
 
-export const uploadSong = createAsyncThunk('music/uploadSong', async ({ file }:{ file: File }, { rejectWithValue }) => {
+export const uploadSong = createAsyncThunk('music/uploadSong', async ({ file }:{ file: File }, { rejectWithValue, dispatch }) => {
+	const toastId = Date.now().toString();
+	dispatch(addToast({id: toastId,message: 'Uploading music...', type: 'loading'}))
 	const result = await uploadSongToStorage(file);
-	if('error' in result) return rejectWithValue(result.error);
+	if('error' in result) {
+		dispatch(updateToastMessage({id:toastId,message:result.error, type: 'error'}))
+		return rejectWithValue(result.error);
+	}
 	const { downloadURL, metadata } = result.response;
 
 	const imageId = `${Math.floor(Math.random() * 5 + 1)}`;
@@ -51,7 +57,11 @@ export const uploadSong = createAsyncThunk('music/uploadSong', async ({ file }:{
 		iconURL: `/icons/music-cover-${imageId}.png`
 	};
 	const saveSongResult = await saveSongToFirestore(song);
-	if('error' in saveSongResult) return rejectWithValue(saveSongResult.error);
+	if('error' in saveSongResult) {
+		dispatch(updateToastMessage({id:toastId,message:saveSongResult.error, type: 'error'}))
+		return rejectWithValue(saveSongResult.error);
+	}
+	dispatch(updateToastMessage({id:toastId,message:'Upload successful', type:'success'}))
 	return saveSongResult.response;
 });
 

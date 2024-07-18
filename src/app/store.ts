@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import windowReducer from '../features/window/windowSlice'
-import musicReducer from '../features/musicPlayer/musicSlice';
+import musicReducer from '../features/music/musicSlice';
 import authReducer from '../features/auth/authSlice';
 import toasterReducer from '../features/toaster/toasterSlice';
 

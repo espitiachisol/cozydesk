@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
-import { palySong, selectSongById } from '../musicPlayer/musicSlice';
+import { palySong, selectSongById } from '../music/musicSlice';
 import { openWindow } from '../window/windowSlice';
 import styles from './Song.module.css';
 type FileProps = {

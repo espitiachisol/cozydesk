@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import styles from './Body.module.css';
 import { useAppSelector, useAppDispatch } from '../../app/hook'
 import { openWindow, getWindows } from '../../features/window/windowSlice';
-import MusicPlayer from '../../features/musicPlayer/MusicPlayer';
+import MusicPlayer from '../../features/music/MusicPlayer';
 import Folder from '../../features/folder/Folder';
 import SignIn from '../../features/auth/SignIn';
 

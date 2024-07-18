@@ -1,6 +1,6 @@
 import { useAppSelector } from '../../app/hook';
 import { PlaylistType } from '../../type/music';
-import { selectFetchStatus, selectPlaylistIdsByType } from '../musicPlayer/musicSlice';
+import { selectFetchStatus, selectPlaylistIdsByType } from '../music/musicSlice';
 import Song from './Song';
 
 type PlaylistProps = {

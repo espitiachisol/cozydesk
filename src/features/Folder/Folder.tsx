@@ -3,7 +3,7 @@ import Window from '../window/Window';
 import styles from './Folder.module.css';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
 import { useAppDispatch } from '../../app/hook';
-import { fetchUserPlaylist, uploadSong } from '../musicPlayer/musicSlice';
+import { fetchUserPlaylist, uploadSong } from '../music/musicSlice';
 import Playlist from './Playlist';
 import { PlaylistType } from '../../type/music';
 

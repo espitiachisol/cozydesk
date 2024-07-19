@@ -19,11 +19,11 @@ export default function Playlist({
 	const fetchStatus = useAppSelector(selectFetchStatus);
 	const playlistIds = useAppSelector(selectPlaylistIdsByType(playlistType));
 
-	if (fetchStatus === 'loading') {
+	if (playlistType!== 'system' && fetchStatus === 'loading') {
 		return <div>Loading...</div>;
 	}
 
-	if (fetchStatus === 'failed') {
+	if (playlistType!== 'system' && fetchStatus === 'failed') {
 		return <div>Error</div>;
 	}
 

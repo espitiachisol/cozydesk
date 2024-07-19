@@ -4,7 +4,7 @@ import Header from './layout/Header/Header'
 import { subscribeAuthStateChanged } from './services/auth'
 import { useAppDispatch } from './app/hook'
 import { userSignedIn } from './features/auth/authSlice'
-import { User } from './type/user'
+import { User } from './features/auth/type'
 import Toaster from './features/toaster/Toaster'
 function App(): JSX.Element {
   const dispatch = useAppDispatch()

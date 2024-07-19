@@ -1,9 +1,9 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User as FirebaseUser } from 'firebase/auth';
-import { User } from '../type/user';
+import { User } from '../features/auth/type';
 import { auth, db } from './core';
 import { doc, setDoc } from 'firebase/firestore';
 import { handleError } from '../utils/errorHandler';
-import { ApiResponse } from '../type/common';
+import { ApiResponse } from '../common/type/type';
 
 // Function to transform FirebaseUser to your User type
 function transformUser(user: FirebaseUser): User {

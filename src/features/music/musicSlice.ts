@@ -2,8 +2,8 @@ import { createSlice, PayloadAction, createAsyncThunk, createSelector } from '@r
 import type { RootState } from '../../app/store';
 import { systemPlaylist } from '../../data/music';
 import { getUserPlaylist, saveSongToFirestore, uploadSongToStorage } from '../../services/music';
-import { Status } from '../../type/common';
-import { PlaylistItem, PlaylistType, Song, SystemSong } from '../../type/music';
+import { Status } from '../../common/type/type';
+import { PlaylistItem, PlaylistType, Song, SystemSong } from './type';
 import { addToast, updateToastMessage } from '../toaster/toasterSlice';
 
 interface MusicState {

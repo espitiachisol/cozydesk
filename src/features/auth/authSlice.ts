@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '../../type/user';
+import { User } from './type';
 import { signUpService, signInService, signOutService } from '../../services/auth';
 import { RootState } from '../../app/store';
 import { addToast } from '../toaster/toasterSlice';

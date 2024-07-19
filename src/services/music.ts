@@ -1,9 +1,9 @@
 import { FullMetadata, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { auth, db, storage } from './core';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
-import { Song } from '../type/music';
+import { Song } from '../features/music/type';
 import { handleError } from '../utils/errorHandler';
-import { ApiResponse } from '../type/common';
+import { ApiResponse } from '../common/type/type';
 
 export async function uploadSongToStorage(file: File): Promise<ApiResponse<{ downloadURL: string; metadata: FullMetadata }>> {
 	try {

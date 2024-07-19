@@ -5,7 +5,7 @@ import Contextmenu from '../../components/Contextmenu/ContextMenu';
 import { useAppDispatch } from '../../app/hook';
 import { fetchUserPlaylist, uploadSong } from '../music/musicSlice';
 import Playlist from './Playlist';
-import { PlaylistType } from '../../type/music';
+import { PlaylistType } from '../music/type';
 
 type FolderProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;

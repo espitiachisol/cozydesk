@@ -14,7 +14,7 @@ interface WindowsState {
 }
 
 // Define the initial state using that type
-const initialState: WindowsState = {
+export const initialState: WindowsState = {
 	windows: [
     {
       id: 'signIn',
@@ -69,11 +69,14 @@ export const windowSlice = createSlice({
       if (currentWindow.zIndex < maxZIndex) {
         currentWindow.zIndex = maxZIndex + 1;
       }
+		},
+    resetWindowSlice:() => {
+			return initialState
 		}
 	}
 });
 
-export const { openWindow, closeWindow, moveWindow, bringToFront } = windowSlice.actions;
+export const { openWindow, closeWindow, moveWindow, bringToFront, resetWindowSlice } = windowSlice.actions;
 
 export const getWindowById = (id: string) => (state: RootState) => state.window.windows.find((w)=> w.id === id);
 export const getWindows= (state: RootState) => state.window.windows;

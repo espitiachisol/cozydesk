@@ -10,7 +10,7 @@ interface UserState {
 	error: string | null;
 }
 
-const initialState: UserState = {
+export const initialState: UserState = {
 	user: null,
 	loading: true,
 	error: null
@@ -23,7 +23,7 @@ interface Arguments {
 
 // Async thunk for user creation
 export const signUp = createAsyncThunk<User, Arguments, { rejectValue: string }>(
-	'user/signUp',
+	'auth/signUp',
 	async ({ email, password }, { rejectWithValue, dispatch }) => {
 		const result = await signUpService(email, password);
 		if('error' in result) {
@@ -37,7 +37,7 @@ export const signUp = createAsyncThunk<User, Arguments, { rejectValue: string }>
 
 // Async thunk for user sign-in
 export const signIn = createAsyncThunk<User, Arguments, { rejectValue: string }>(
-	'user/signIn',
+	'auth/signIn',
 	async ({ email, password }, { rejectWithValue, dispatch}) => {
 		const result  = await signInService(email, password);
 		if('error' in result) {
@@ -49,7 +49,7 @@ export const signIn = createAsyncThunk<User, Arguments, { rejectValue: string }>
 	}
 );
 
-export const signOut = createAsyncThunk('user/signOut', async (res, { rejectWithValue, dispatch }) => {
+export const signOut = createAsyncThunk('auth/signOut', async (res, { rejectWithValue, dispatch }) => {
 		const result = await signOutService();
 		if('error' in result) {
 			dispatch(addToast({ message: result.error, type: 'error' }));
@@ -98,9 +98,8 @@ const authSlice = createSlice({
 				state.loading = true;
 				state.error = null;
 			})
-			.addCase(signOut.fulfilled, (state) => {
-				state.loading = false;
-				state.user = null;
+			.addCase(signOut.fulfilled, () => {
+				// This case can be deleted since rootReducer handles the reset
 			})
 			.addCase(signOut.rejected, (state, action) => {
 				state.loading = false;

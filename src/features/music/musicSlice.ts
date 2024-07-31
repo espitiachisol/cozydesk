@@ -17,7 +17,7 @@ interface MusicState {
 }
 
 // Define the initial state using that type
-const initialState: MusicState = {
+export const initialState: MusicState = {
 	systemPlaylist: systemPlaylist,
 	userPlaylist: [],
 	activePlaylist: 'system',
@@ -96,6 +96,9 @@ export const musicSlice = createSlice({
 			const playlist = state.activePlaylist === 'system' ? state.systemPlaylist : state.userPlaylist;
 			const songIndex = playlist.findIndex((song) => song.id === songId);
 			if (songIndex !== -1) state.currentSongIndex = songIndex;
+		},
+		resetMusicSlice:() => {
+			return initialState
 		}
 	},
 	extraReducers: (builder) => {
@@ -127,7 +130,7 @@ export const musicSlice = createSlice({
 	}
 });
 
-export const { playNextSong, playPreviousSong, palySong } = musicSlice.actions;
+export const { playNextSong, playPreviousSong, palySong, resetMusicSlice } = musicSlice.actions;
 
 export const selectCurrentSongIndex = (state: RootState) => state.music.currentSongIndex;
 export const selectActivePlaylist = (state: RootState) =>

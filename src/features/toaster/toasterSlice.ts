@@ -25,7 +25,7 @@ interface ToasterState {
 	toasts: Toast[];
 }
 
-const initialState: ToasterState = {
+export const initialState: ToasterState = {
 	toasts: []
 };
 

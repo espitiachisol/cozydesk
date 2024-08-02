@@ -27,18 +27,18 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 	const dragRef = useRef<HTMLElement>(null);
 	const [isDragging, setIsDragging] = useState(false);
 	const dispatch = useAppDispatch()
-	const window = useAppSelector(getWindowById(id))
-	// const [position, setPosition] = useState<Position>(window.position);
+	const currentWindow = useAppSelector(getWindowById(id))
+	const previousPositionRef = useRef<Position>({ x: -1, y: -1});
+	const [mouseOffsetWithinDragElement, setMouseOffsetWithinDragElement] = useState<Position>({ x: 0, y: 0 });
 
 	useEffect(()=>{
-		if(!dragRef.current || !window) return;
-		const { x, y } = window.position
+		if(!dragRef.current || !currentWindow) return;
+		const { x, y } = currentWindow.position
 		dragRef.current.style.left = `${x}px`;
 		dragRef.current.style.top = `${y}px`;
-		dragRef.current.style.zIndex = `${window.zIndex}`;
-	},[window])
+		dragRef.current.style.zIndex = `${currentWindow.zIndex}`;
+	},[currentWindow])
 
-	const [mouseOffsetWithinDragElement, setMouseOffsetWithinDragElement] = useState<Position>({ x: 0, y: 0 });
 	useEffect(() => {
 		function handleMouseMove(e: MouseEvent) {
 			if (!isDragging || !dragRef.current) return;
@@ -62,8 +62,7 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 				}
 			}
 			dragRef.current.style.left = `${newX}px`;
-      dragRef.current.style.top = `${newY}px`;
-			// setPosition({ x: newX, y: newY });
+			dragRef.current.style.top = `${newY}px`;
 		}
 		document.addEventListener('mousemove', handleMouseMove);
 
@@ -76,17 +75,19 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 		function handleMouseUp() {
 			if(!dragRef.current || !isDragging) return;
 			setIsDragging(false);
-
-			dispatch(moveWindow({ id, position:{
-				x: parseFloat(dragRef.current.style.left),
-				y: parseFloat(dragRef.current.style.top),
-			}}))
+			const newX = parseFloat(dragRef.current.style.left);
+			const newY = parseFloat(dragRef.current.style.top);
+			if(previousPositionRef.current.x !== newX || previousPositionRef.current.y !== newY) {
+				previousPositionRef.current.x = newX;
+				previousPositionRef.current.y = newY;
+				dispatch(moveWindow({ id, position: { x: newX, y: newY} }));
+			}
 		}
 		document.addEventListener('mouseup', handleMouseUp);
 		return () => {
 			document.removeEventListener('mouseup', handleMouseUp);
 		};
-	},[id, dispatch, isDragging])
+	},[id, dispatch, isDragging, previousPositionRef])
 	
 
 	function handleMouseDown(e: React.MouseEvent<Element, MouseEvent>) {
@@ -100,7 +101,7 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 		});
 	}
 	
-	function handleBringToFront(e) {
+	function handleBringToFront() {
 		if (!dragRef.current) return;
 		dispatch(bringToFront({id}))
 	}

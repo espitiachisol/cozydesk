@@ -6,6 +6,7 @@ import { useAppDispatch } from '../../app/hook';
 import { fetchUserPlaylist, uploadSong } from '../music/musicSlice';
 import Playlist from './Playlist';
 import { PlaylistType } from '../music/type';
+import { SYSTEM_WINDOW_FOLDER } from '../window/constants';
 
 type FolderProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
@@ -73,7 +74,7 @@ export default function Folder({ containerRef }: FolderProps) {
 	}
 
 	return (
-		<Window containerRef={containerRef} id="folder" className={styles.folderLayout}>
+		<Window containerRef={containerRef} id={SYSTEM_WINDOW_FOLDER} className={styles.folderLayout}>
 			<nav className={styles.sidebar}>
 				<h2 className={styles.title}>Music</h2>
 				<ul onMouseDown={(e) => e.stopPropagation()}>

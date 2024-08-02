@@ -4,20 +4,21 @@ import styles from './SignIn.module.css';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import { useAppSelector } from '../../app/hook';
-import { getAppAuth } from './authSlice';
+import { selectUser } from './authSlice';
+import { SYSTEM_WINDOW_ENTRY } from '../window/constants';
 type SignInProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
 };
 
 export default function SignIn({ containerRef }: SignInProps) {
 	const [isSignIn, setIsSignIn] = useState(true);
-	const { user, loading } = useAppSelector(getAppAuth);
+	const user = useAppSelector(selectUser);
 	function handleSwitch() {
 		setIsSignIn((pre) => !pre);
 	}
 
 	return (
-		<Window containerRef={containerRef} id="signIn" className={styles.SignInLayout}>
+		<Window containerRef={containerRef} id={SYSTEM_WINDOW_ENTRY} className={styles.SignInLayout}>
 			<h1 className={styles.title}>Welcome to CozyDesk</h1>
 			{user && (
 				<>

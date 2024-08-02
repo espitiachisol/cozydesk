@@ -3,17 +3,19 @@ import { User } from './type';
 import { signUpService, signInService, signOutService } from '../../services/auth';
 import { RootState } from '../../app/store';
 import { addToast } from '../toaster/toasterSlice';
+import { Status } from '../../common/type/type';
+import { fetchUserWindows } from '../window/windowSlice';
 
 interface UserState {
 	user: User | null;
-	loading: boolean;
-	error: string | null;
+	status: Status;
+	errorMessage: string | null;
 }
 
 export const initialState: UserState = {
 	user: null,
-	loading: true,
-	error: null
+	status: 'idle',
+	errorMessage: null
 };
 
 interface Arguments {
@@ -45,6 +47,7 @@ export const signIn = createAsyncThunk<User, Arguments, { rejectValue: string }>
 			return rejectWithValue(result.error);
 		}
 		dispatch(addToast({ message: 'Sign in successful', type: 'success', duration: 3000 }));
+		dispatch(fetchUserWindows());
 		return result.response;
 	}
 );
@@ -64,7 +67,7 @@ const authSlice = createSlice({
 	initialState,
 	reducers: {
 		clearError(state) {
-			state.error = null;
+			state.errorMessage = null;
 		},
 		userSignedIn(state, action: PayloadAction<User>) {
 			state.user = action.payload;
@@ -73,43 +76,44 @@ const authSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(signUp.pending, (state) => {
-				state.loading = true;
-				state.error = null;
+				state.status = 'loading';
+				state.errorMessage = null;
 			})
 			.addCase(signUp.fulfilled, (state) => {
-				state.loading = false;
+				state.status = 'succeeded';
 			})
 			.addCase(signUp.rejected, (state, action) => {
-				state.loading = false;
-				state.error = action.payload;
+				state.status = 'failed';
+				state.errorMessage = action.payload || '';
 			})
 			.addCase(signIn.pending, (state) => {
-				state.loading = true;
-				state.error = null;
+				state.status ='loading';
+				state.errorMessage = null;
 			})
 			.addCase(signIn.fulfilled, (state) => {
-				state.loading = false;
+				state.status = 'succeeded';
 			})
 			.addCase(signIn.rejected, (state, action) => {
-				state.loading = false;
-				state.error = action.payload;
+				state.status = 'failed';
+				state.errorMessage = action.payload || '';
 			})
 			.addCase(signOut.pending, (state) => {
-				state.loading = true;
-				state.error = null;
+				state.status = 'loading';
+				state.errorMessage = null;
 			})
 			.addCase(signOut.fulfilled, () => {
 				// This case can be deleted since rootReducer handles the reset
 			})
 			.addCase(signOut.rejected, (state, action) => {
-				state.loading = false;
-				state.error = action.payload;
+				state.status = 'failed';
+				state.errorMessage = action.payload || '';
 			});
 	}
 });
 
-export const getUser = (state: RootState) => state.auth.user;
-export const getAppAuth = (state: RootState) => state.auth;
+
+export const selectUser = (state: RootState) => state.auth.user;
+export const selectAuthErrorMessage = (state: RootState) => state.auth.errorMessage;
 export const { clearError, userSignedIn } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import styles from './SignIn.module.css';
-import { clearError, getAppAuth, signUp } from './authSlice';
+import { clearError, selectAuthErrorMessage, signUp } from './authSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 type SignUpFormProps = {
 	onSwitch: () => void;
 };
 export default function SignUpForm({ onSwitch }: SignUpFormProps) {
 	const dispatch = useAppDispatch();
-	const { error } = useAppSelector(getAppAuth);
+	const error = useAppSelector(selectAuthErrorMessage);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	async function handleSubmit(e: React.SyntheticEvent) {

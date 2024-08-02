@@ -15,6 +15,7 @@ import IconMute from '../../assets/icons/icon-mute.svg?react';
 import IconSound from '../../assets/icons/icon-sound.svg?react';
 import styles from './MusicPlayer.module.css';
 import { openWindow } from '../window/windowSlice';
+import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window/constants';
 
 type MusicPlayerProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>
@@ -70,7 +71,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	};
 
 	return (
-		<Window containerRef={containerRef} className={styles.musicPlayer} id="musicPlayer">
+		<Window containerRef={containerRef} className={styles.musicPlayer} id={SYSTEM_WINDOW_MUSIC_PLAYER}>
 			<section className={styles.musicControlSection}>
 				<audio
 				

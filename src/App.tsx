@@ -6,6 +6,7 @@ import { useAppDispatch } from './app/hook'
 import { userSignedIn } from './features/auth/authSlice'
 import { User } from './features/auth/type'
 import Toaster from './features/toaster/Toaster'
+import { fetchUserWindows } from './features/window/windowSlice'
 function App(): JSX.Element {
   const dispatch = useAppDispatch()
   
@@ -13,6 +14,7 @@ function App(): JSX.Element {
     const unsubscribe = subscribeAuthStateChanged((user:User | null)=>{
       if (user) {
         dispatch(userSignedIn(user))
+        dispatch(fetchUserWindows());
       }else{
         console.log('Not Sign In')
       }

@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import Menu from '../../components/Menu/Menu';
-import { getUser, signOut } from '../../features/auth/authSlice';
+import { selectUser, signOut } from '../../features/auth/authSlice';
+import { SYSTEM_WINDOW_ENTRY } from '../../features/window/constants';
 import { openWindow } from '../../features/window/windowSlice';
 
 import CurrentDateTime from './CurrentDateTime';
@@ -8,7 +9,7 @@ import styles from './Header.module.css';
 
 function Header(): JSX.Element {
 	const dispatch = useAppDispatch()
-	const user = useAppSelector(getUser)
+	const user = useAppSelector(selectUser)
 	return (
 		<header className={styles.AppHeader}>
 			<Menu>
@@ -21,7 +22,7 @@ function Header(): JSX.Element {
 					Cozydesk
 				</Menu.Toggle>
 				<Menu.List id='cozydesk'>
-					{!user && <Menu.Button onClick={() => dispatch(openWindow({id:'signIn'}))}>Sign In</Menu.Button>}
+					{!user && <Menu.Button onClick={() => dispatch(openWindow({id:SYSTEM_WINDOW_ENTRY}))}>Sign In</Menu.Button>}
 					{user && <Menu.Button onClick={() => {
 						dispatch(signOut())
 					}}>Sign out</Menu.Button>}

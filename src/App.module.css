@@ -1,0 +1,25 @@
+.AppLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+  z-index: 100000;
+  flex-direction: column;
+
+  svg {
+    inline-size: 6rem;
+    block-size: 6rem;
+  }
+
+  .loading {
+    display: flex;
+    font-size: 1rem;
+    color: var(--color-dark--1);
+    font-weight: 600;
+  }
+}

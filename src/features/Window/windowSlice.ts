@@ -3,8 +3,10 @@ import type { RootState } from '../../app/store';
 import { WindowInfo } from './type';
 import { SYSTEM_WINDOW_ENTRY, SYSTEM_WINDOW_FOLDER, SYSTEM_WINDOW_MUSIC_PLAYER } from './constants';
 import { getUserWindows, saveWindowInfoToFirestore } from '../../services/window';
+import { Status } from '../../common/type/type';
 interface WindowsState {
 	windows: WindowInfo[];
+  status: Status;
 }
 
 // Define the initial state using that type
@@ -28,7 +30,8 @@ export const initialState: WindowsState = {
 			position: { x: 200, y: 200 },
 			isOpen: false
 		}
-	]
+	],
+  status: 'idle'
 };
 
 export const fetchUserWindows = createAsyncThunk('windows/fetchUserWindows', async (_, { rejectWithValue }) => {
@@ -99,8 +102,12 @@ export const windowSlice = createSlice({
 		}
 	},
 	extraReducers: (builder) => {
+		builder.addCase(fetchUserWindows.pending, (state, action) => {
+			state.status = 'loading';
+		}),
 		builder.addCase(fetchUserWindows.fulfilled, (state, action) => {
 			state.windows = action.payload;
+      state.status = 'succeeded';
 		});
 	}
 });
@@ -109,5 +116,6 @@ export const { openWindow, closeWindow, bringToFront, resetWindowSlice, updateWi
 
 export const getWindowById = (id: string) => (state: RootState) => state.window.windows.find((w) => w.id === id);
 export const getWindows = (state: RootState) => state.window.windows;
+export const selectWindowsStatus = (state: RootState) => state.window.status;
 
 export default windowSlice.reducer;

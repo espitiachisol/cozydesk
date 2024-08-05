@@ -1,6 +1,18 @@
-import { createContext, useContext, useRef, useState, useEffect, PropsWithChildren } from 'react';
+import {
+	createContext,
+	useContext,
+	useRef,
+	useState,
+	useEffect,
+	PropsWithChildren,
+} from 'react';
 import styles from './Window.module.css';
-import { bringToFront, closeWindow, getWindowById, moveWindow } from './windowSlice';
+import {
+	bringToFront,
+	closeWindow,
+	getWindowById,
+	moveWindow,
+} from './windowSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 interface WindowContextType {
 	handleMouseDown: (e: React.MouseEvent) => void;
@@ -14,7 +26,8 @@ const WindowContext = createContext<WindowContextType | null>(null);
 
 function useWindow(): WindowContextType {
 	const context = useContext(WindowContext);
-	if (context === null) throw new Error('WindowContext was used outside the WindowProvider');
+	if (context === null)
+		throw new Error('WindowContext was used outside the WindowProvider');
 	return context;
 }
 type WindowProps = PropsWithChildren<{
@@ -26,18 +39,19 @@ type WindowProps = PropsWithChildren<{
 function Window({ id, children, className, containerRef }: WindowProps) {
 	const dragRef = useRef<HTMLElement>(null);
 	const [isDragging, setIsDragging] = useState(false);
-	const dispatch = useAppDispatch()
-	const currentWindow = useAppSelector(getWindowById(id))
-	const previousPositionRef = useRef<Position>({ x: -1, y: -1});
-	const [mouseOffsetWithinDragElement, setMouseOffsetWithinDragElement] = useState<Position>({ x: 0, y: 0 });
+	const dispatch = useAppDispatch();
+	const currentWindow = useAppSelector(getWindowById(id));
+	const previousPositionRef = useRef<Position>({ x: -1, y: -1 });
+	const [mouseOffsetWithinDragElement, setMouseOffsetWithinDragElement] =
+		useState<Position>({ x: 0, y: 0 });
 
-	useEffect(()=>{
-		if(!dragRef.current || !currentWindow) return;
-		const { x, y } = currentWindow.position
+	useEffect(() => {
+		if (!dragRef.current || !currentWindow) return;
+		const { x, y } = currentWindow.position;
 		dragRef.current.style.left = `${x}px`;
 		dragRef.current.style.top = `${y}px`;
 		dragRef.current.style.zIndex = `${currentWindow.zIndex}`;
-	},[currentWindow])
+	}, [currentWindow]);
 
 	useEffect(() => {
 		function handleMouseMove(e: MouseEvent) {
@@ -47,7 +61,8 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 			let newY = clientY - mouseOffsetWithinDragElement.y;
 			if (containerRef?.current) {
 				const dragClientRect = dragRef?.current.getBoundingClientRect();
-				const containerClientRect = containerRef.current.getBoundingClientRect();
+				const containerClientRect =
+					containerRef.current.getBoundingClientRect();
 				if (newX < containerClientRect.left) {
 					newX = containerClientRect.left;
 				}
@@ -73,22 +88,24 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 
 	useEffect(() => {
 		function handleMouseUp() {
-			if(!dragRef.current || !isDragging) return;
+			if (!dragRef.current || !isDragging) return;
 			setIsDragging(false);
 			const newX = parseFloat(dragRef.current.style.left);
 			const newY = parseFloat(dragRef.current.style.top);
-			if(previousPositionRef.current.x !== newX || previousPositionRef.current.y !== newY) {
+			if (
+				previousPositionRef.current.x !== newX ||
+				previousPositionRef.current.y !== newY
+			) {
 				previousPositionRef.current.x = newX;
 				previousPositionRef.current.y = newY;
-				dispatch(moveWindow({ id, position: { x: newX, y: newY} }));
+				dispatch(moveWindow({ id, position: { x: newX, y: newY } }));
 			}
 		}
 		document.addEventListener('mouseup', handleMouseUp);
 		return () => {
 			document.removeEventListener('mouseup', handleMouseUp);
 		};
-	},[id, dispatch, isDragging, previousPositionRef])
-	
+	}, [id, dispatch, isDragging, previousPositionRef]);
 
 	function handleMouseDown(e: React.MouseEvent<Element, MouseEvent>) {
 		if (!dragRef.current) return;
@@ -97,18 +114,23 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 		const dragClientRect = dragRef.current.getBoundingClientRect();
 		setMouseOffsetWithinDragElement({
 			x: clientX - dragClientRect.x,
-			y: clientY - dragClientRect.y
+			y: clientY - dragClientRect.y,
 		});
 	}
-	
+
 	function handleBringToFront() {
 		if (!dragRef.current) return;
-		dispatch(bringToFront({id}))
+		dispatch(bringToFront({ id }));
 	}
 
 	return (
 		<WindowContext.Provider value={{ handleMouseDown, id }}>
-			<article className={className} ref={dragRef} onMouseDown={handleBringToFront} style={{ position: 'absolute' }}>
+			<article
+				className={className}
+				ref={dragRef}
+				onMouseDown={handleBringToFront}
+				style={{ position: 'absolute' }}
+			>
 				{children}
 			</article>
 		</WindowContext.Provider>
@@ -120,17 +142,21 @@ type HeaderProps = PropsWithChildren<{
 }>;
 function Header({ children, className }: HeaderProps) {
 	const { handleMouseDown, id } = useWindow();
-	const dispatch = useAppDispatch()
+	const dispatch = useAppDispatch();
 	const handleButtonMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
 		e.stopPropagation();
-		dispatch(closeWindow({id}))
+		dispatch(closeWindow({ id }));
 	};
 	return (
-		<header className={`${styles.header} ${className}`} onMouseDown={handleMouseDown}>
+		<header
+			className={`${styles.header} ${className}`}
+			onMouseDown={handleMouseDown}
+		>
 			<ul className={styles.actions}>
-
-        <li>
-					<button className={styles.cross} onMouseDown={handleButtonMouseDown}>x</button>
+				<li>
+					<button className={styles.cross} onMouseDown={handleButtonMouseDown}>
+						x
+					</button>
 				</li>
 				<li>
 					<button className={styles.minus}>&minus;</button>

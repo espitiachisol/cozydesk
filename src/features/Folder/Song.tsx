@@ -10,7 +10,13 @@ type FileProps = {
 	onClickToggle(event: React.MouseEvent<HTMLButtonElement>): void;
 	onClickContextMenu(event: React.MouseEvent<HTMLButtonElement>): void;
 };
-export default function Song({ playlistType, songId, selected, onClickToggle, onClickContextMenu }: FileProps) {
+export default function Song({
+	playlistType,
+	songId,
+	selected,
+	onClickToggle,
+	onClickContextMenu,
+}: FileProps) {
 	const dispatch = useAppDispatch();
 	const song = useAppSelector(selectSongById(playlistType, songId));
 	if (!song) return null;
@@ -22,7 +28,8 @@ export default function Song({ playlistType, songId, selected, onClickToggle, on
 				onClickContextMenu={onClickContextMenu}
 				id={songId}
 				onClickToggle={onClickToggle}
-				className={`${styles.song} ${selected ? styles.selected : ''}`}>
+				className={`${styles.song} ${selected ? styles.selected : ''}`}
+			>
 				<img src={iconURL} draggable={false} alt={name} />
 				<p>{name}</p>
 			</Contextmenu.Toggle>
@@ -31,7 +38,8 @@ export default function Song({ playlistType, songId, selected, onClickToggle, on
 					onClick={() => {
 						dispatch(palySong({ playlistType, songId }));
 						dispatch(openWindow({ id: 'musicPlayer' }));
-					}}>
+					}}
+				>
 					Play
 				</Contextmenu.Button>
 				<Contextmenu.Button onClick={() => {}}>Stop</Contextmenu.Button>

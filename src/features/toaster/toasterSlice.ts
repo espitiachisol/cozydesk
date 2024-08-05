@@ -26,7 +26,7 @@ interface ToasterState {
 }
 
 export const initialState: ToasterState = {
-	toasts: []
+	toasts: [],
 };
 
 interface UpdateToastMessage {
@@ -43,7 +43,7 @@ const toasterSlice = createSlice({
 			const newToast = {
 				...action.payload,
 				id: Date.now().toString(),
-				visible: true
+				visible: true,
 			};
 			if (action.payload.id) {
 				newToast.id = action.payload.id;
@@ -51,7 +51,9 @@ const toasterSlice = createSlice({
 			state.toasts.push(newToast);
 		},
 		removeToast: (state, action: PayloadAction<string>) => {
-			state.toasts = state.toasts.filter((toast) => toast.id !== action.payload);
+			state.toasts = state.toasts.filter(
+				(toast) => toast.id !== action.payload
+			);
 		},
 		dismissToast: (state, action: PayloadAction<string>) => {
 			const toast = state.toasts.find((toast) => toast.id === action.payload);
@@ -60,15 +62,17 @@ const toasterSlice = createSlice({
 			}
 		},
 		updateToastMessage: (state, action: PayloadAction<UpdateToastMessage>) => {
-			const toast = state.toasts.find((toast) => toast.id === action.payload.id);
+			const toast = state.toasts.find(
+				(toast) => toast.id === action.payload.id
+			);
 			if (toast) {
 				toast.message = action.payload.message;
 				if (action.payload.type) {
 					toast.type = action.payload.type;
 				}
 			}
-		}
-	}
+		},
+	},
 });
 const selectToasts = (state: RootState) => state.toaster.toasts;
 export const selectToasterIds = createSelector(selectToasts, (toasts) => {
@@ -78,5 +82,6 @@ export const selectToasterIds = createSelector(selectToasts, (toasts) => {
 export const selectToastById = (toastId: string) => (state: RootState) =>
 	state.toaster.toasts.find((toast) => toast.id === toastId);
 
-export const { addToast, removeToast, dismissToast, updateToastMessage } = toasterSlice.actions;
+export const { addToast, removeToast, dismissToast, updateToastMessage } =
+	toasterSlice.actions;
 export default toasterSlice.reducer;

@@ -8,7 +8,7 @@ const toastIcons = {
 	success: '✅',
 	error: '⛔️',
 	info: '💡',
-	loading: <Spinner />
+	loading: <Spinner />,
 };
 
 export default function Toast({ id }) {
@@ -31,7 +31,8 @@ export default function Toast({ id }) {
 		<section
 			className={`${styles.toast} ${styles[toast.type]} ${
 				toast.visible ? styles['toast-enter'] : styles['toast-exit']
-			}`}>
+			}`}
+		>
 			<i>{toastIcons[toast.type]}</i>
 			<p>{toast.message}</p>
 			{toast.showClose && (
@@ -40,7 +41,8 @@ export default function Toast({ id }) {
 					onClick={() => {
 						dispatch(dismissToast(toast.id));
 						setTimeout(() => dispatch(removeToast(toast.id)), 300);
-					}}>
+					}}
+				>
 					Close
 				</button>
 			)}

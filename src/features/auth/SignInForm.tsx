@@ -15,7 +15,9 @@ export default function SignInForm({ onSwitch }: SignInFormProps) {
 		await dispatch(signIn({ email, password }));
 	}
 
-	function handleInputChange(setState: React.Dispatch<React.SetStateAction<string>>) {
+	function handleInputChange(
+		setState: React.Dispatch<React.SetStateAction<string>>
+	) {
 		return (e: React.ChangeEvent<HTMLInputElement>) => {
 			setState(e.target.value);
 			if (error) dispatch(clearError());
@@ -46,7 +48,8 @@ export default function SignInForm({ onSwitch }: SignInFormProps) {
 			</form>
 			<aside className={styles.aside}>
 				<p>
-					Don't have an account? &nbsp;<button onClick={onSwitch}> Sign up </button>
+					Don't have an account? &nbsp;
+					<button onClick={onSwitch}> Sign up </button>
 				</p>
 			</aside>
 		</>

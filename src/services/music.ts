@@ -1,11 +1,18 @@
-import { FullMetadata, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import {
+	FullMetadata,
+	getDownloadURL,
+	ref,
+	uploadBytes,
+} from 'firebase/storage';
 import { auth, db, storage } from './core';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { Song } from '../features/music/type';
 import { handleError } from '../utils/errorHandler';
 import { ApiResponse } from '../common/type/type';
 
-export async function uploadSongToStorage(file: File): Promise<ApiResponse<{ downloadURL: string; metadata: FullMetadata }>> {
+export async function uploadSongToStorage(
+	file: File
+): Promise<ApiResponse<{ downloadURL: string; metadata: FullMetadata }>> {
 	try {
 		const user = auth.currentUser;
 		if (!user) throw new Error('User not signed in');
@@ -18,7 +25,9 @@ export async function uploadSongToStorage(file: File): Promise<ApiResponse<{ dow
 	}
 }
 
-export async function saveSongToFirestore(song: Song): Promise<ApiResponse<Song>>  {
+export async function saveSongToFirestore(
+	song: Song
+): Promise<ApiResponse<Song>> {
 	try {
 		const user = auth.currentUser;
 		if (!user) throw new Error('User not signed in');
@@ -27,15 +36,15 @@ export async function saveSongToFirestore(song: Song): Promise<ApiResponse<Song>
 		return {
 			response: {
 				id: songDocRef.id,
-				...song
-			}
+				...song,
+			},
 		};
 	} catch (error) {
 		return { error: handleError(error) };
 	}
 }
 
-export async function getUserPlaylist(): Promise<ApiResponse<Song[]>>{
+export async function getUserPlaylist(): Promise<ApiResponse<Song[]>> {
 	try {
 		const user = auth.currentUser;
 		if (!user) throw new Error('User not signed in');
@@ -47,7 +56,7 @@ export async function getUserPlaylist(): Promise<ApiResponse<Song[]>>{
 		querySnapshot.forEach((doc) => {
 			songs.push({
 				id: doc.id,
-				...doc.data()
+				...doc.data(),
 			} as Song);
 		});
 

@@ -1,5 +1,13 @@
 import styles from './ContextMenu.module.css';
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import {
+	createContext,
+	PropsWithChildren,
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 
 interface Position {
 	x: number;
@@ -18,7 +26,10 @@ const ContextMenuContext = createContext<ContextMenuContextType | null>(null);
 
 function useContextMenu() {
 	const context = useContext(ContextMenuContext);
-	if (context === undefined) throw new Error('ContextMenuContext was used outside the ContextMenuProvider');
+	if (context === undefined)
+		throw new Error(
+			'ContextMenuContext was used outside the ContextMenuProvider'
+		);
 	return context;
 }
 
@@ -30,7 +41,9 @@ function Contextmenu({ children }: PropsWithChildren) {
 	const open = setOpenId;
 
 	return (
-		<ContextMenuContext.Provider value={{ openId, open, close, position, setPosition }}>
+		<ContextMenuContext.Provider
+			value={{ openId, open, close, position, setPosition }}
+		>
 			{children}
 		</ContextMenuContext.Provider>
 	);
@@ -42,7 +55,13 @@ type ToggleProps = PropsWithChildren<{
 	onClickToggle(event: React.MouseEvent<HTMLButtonElement>): void;
 	onClickContextMenu?(event: React.MouseEvent<HTMLButtonElement>): void;
 }>;
-function Toggle({ id, children, onClickToggle, className, onClickContextMenu }: ToggleProps) {
+function Toggle({
+	id,
+	children,
+	onClickToggle,
+	className,
+	onClickContextMenu,
+}: ToggleProps) {
 	const context = useContextMenu();
 	if (!context) {
 		throw new Error('Toggle must be used within a ContextMenu');
@@ -70,7 +89,8 @@ function Toggle({ id, children, onClickToggle, className, onClickContextMenu }: 
 			id={id}
 			className={className}
 			onClick={handleClick}
-			onMouseDown={(e) => e.stopPropagation()}>
+			onMouseDown={(e) => e.stopPropagation()}
+		>
 			{children}
 		</button>
 	);
@@ -102,7 +122,12 @@ function List({ id, children }: ListProps) {
 
 	if (id !== openId) return null;
 	return (
-		<menu onMouseDown={(e) => e.stopPropagation()} ref={ref} className={styles.contextMenu} style={{ left: position?.x, top: position?.y }}>
+		<menu
+			onMouseDown={(e) => e.stopPropagation()}
+			ref={ref}
+			className={styles.contextMenu}
+			style={{ left: position?.x, top: position?.y }}
+		>
 			{children}
 		</menu>
 	);

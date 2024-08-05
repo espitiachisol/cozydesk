@@ -26,14 +26,18 @@ export default function Folder({ containerRef }: FolderProps) {
 		const selectId = e.currentTarget.id;
 		if (e.metaKey) {
 			setSelectedItems((selectedItems) =>
-				selectedItems.includes(selectId) ? selectedItems.filter((id) => id !== selectId) : [...selectedItems, selectId]
+				selectedItems.includes(selectId)
+					? selectedItems.filter((id) => id !== selectId)
+					: [...selectedItems, selectId]
 			);
 		} else if (e.shiftKey) {
 			// setSelectedItems((selectedItems) => {
 			// 	selectedItems.includes(selectId)?selectedItems.filter(id=>id!==selectId):[...selectedItems,selectId]
 			// })
 		} else {
-			setSelectedItems((selectedItems) => (selectedItems.includes(selectId) ? [] : [selectId]));
+			setSelectedItems((selectedItems) =>
+				selectedItems.includes(selectId) ? [] : [selectId]
+			);
 		}
 	}
 	function handleClickContextMenu(e: MouseEvent<HTMLButtonElement>) {
@@ -74,7 +78,11 @@ export default function Folder({ containerRef }: FolderProps) {
 	}
 
 	return (
-		<Window containerRef={containerRef} id={SYSTEM_WINDOW_FOLDER} className={styles.folderLayout}>
+		<Window
+			containerRef={containerRef}
+			id={SYSTEM_WINDOW_FOLDER}
+			className={styles.folderLayout}
+		>
 			<nav className={styles.sidebar}>
 				<h2 className={styles.title}>Music</h2>
 				<ul onMouseDown={(e) => e.stopPropagation()}>
@@ -82,7 +90,8 @@ export default function Folder({ containerRef }: FolderProps) {
 						<button
 							id="system"
 							onClick={handleClick}
-							className={`${styles.sidebarItem} ${tab === 'system' ? styles.active : ''}`}>
+							className={`${styles.sidebarItem} ${tab === 'system' ? styles.active : ''}`}
+						>
 							System Playlist
 						</button>
 					</li>
@@ -90,7 +99,8 @@ export default function Folder({ containerRef }: FolderProps) {
 						<button
 							id="user"
 							onClick={handleClick}
-							className={`${styles.sidebarItem} ${tab === 'user' ? styles.active : ''}`}>
+							className={`${styles.sidebarItem} ${tab === 'user' ? styles.active : ''}`}
+						>
 							My Playlist
 						</button>
 					</li>
@@ -103,7 +113,8 @@ export default function Folder({ containerRef }: FolderProps) {
 				}`}
 				onDragOver={handleDragOver}
 				onDrop={handleDrop}
-				onDragLeave={handleDragLeave}>
+				onDragLeave={handleDragLeave}
+			>
 				<Contextmenu>
 					{tab === 'system' && (
 						<Playlist

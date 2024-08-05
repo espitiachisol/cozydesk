@@ -20,7 +20,7 @@ const CurrentDateTime = (): JSX.Element => {
 				weekday: 'long',
 				hour: 'numeric',
 				minute: 'numeric',
-				hour12: true
+				hour12: true,
 			})}
 		</time>
 	);

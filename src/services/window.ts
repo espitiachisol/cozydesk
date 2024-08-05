@@ -4,16 +4,17 @@ import { auth, db } from './core';
 import { handleError } from '../utils/errorHandler';
 import { WindowInfo } from '../features/window/type';
 
-export async function saveWindowInfoToFirestore(windowInfo: WindowInfo): Promise<ApiResponse<WindowInfo>> {
+export async function saveWindowInfoToFirestore(
+	windowInfo: WindowInfo
+): Promise<ApiResponse<WindowInfo>> {
 	try {
 		const user = auth.currentUser;
 		if (!user) throw new Error('User not signed in');
 		const windowsCollectionRef = collection(db, 'users', user.uid, 'windows');
 		const windowDocRef = doc(windowsCollectionRef, windowInfo.id);
-		const res = await setDoc(windowDocRef, windowInfo);
-		console.log('res', res);
+		await setDoc(windowDocRef, windowInfo);
 		return {
-			response: windowInfo
+			response: windowInfo,
 		};
 	} catch (error) {
 		return { error: handleError(error) };
@@ -30,7 +31,7 @@ export async function getUserWindows(): Promise<ApiResponse<WindowInfo[]>> {
 		querySnapshot.forEach((doc) => {
 			windows.push({
 				id: doc.id,
-				...doc.data()
+				...doc.data(),
 			} as WindowInfo);
 		});
 		return { response: windows };

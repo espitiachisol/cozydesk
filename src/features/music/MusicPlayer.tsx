@@ -1,7 +1,11 @@
-
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
-import { selectCurrentSongIndex, selectActivePlaylist, playNextSong, playPreviousSong } from './musicSlice';
+import {
+	selectCurrentSongIndex,
+	selectActivePlaylist,
+	playNextSong,
+	playPreviousSong,
+} from './musicSlice';
 import Window from '../window/Window';
 import CassetteTape from './CassetteTape';
 import { formatTime } from '../../utils/time';
@@ -18,13 +22,13 @@ import { openWindow } from '../window/windowSlice';
 import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window/constants';
 
 type MusicPlayerProps = {
-	containerRef?: React.MutableRefObject<HTMLElement | null>
-}
+	containerRef?: React.MutableRefObject<HTMLElement | null>;
+};
 
 export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
-	const dispatch = useAppDispatch()
-	const currentSongIndex = useAppSelector(selectCurrentSongIndex)
-	const playlist = useAppSelector(selectActivePlaylist)
+	const dispatch = useAppDispatch();
+	const currentSongIndex = useAppSelector(selectCurrentSongIndex);
+	const playlist = useAppSelector(selectActivePlaylist);
 	const control = useRef<HTMLAudioElement>(null);
 
 	const [progress, setProgress] = useState(0);
@@ -34,28 +38,28 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	const [volume, setVolume] = useState(1);
 
 	useEffect(() => {
-		if(!control.current) return;
+		if (!control.current) return;
 		control.current.volume = volume;
 	}, [volume]);
 
 	function handlePlaySong() {
-		if(!control.current) return;
+		if (!control.current) return;
 		setIsPlaying(true);
 		control.current.play();
 	}
 
 	function handleStopSong() {
-		if(!control.current) return;
+		if (!control.current) return;
 		setIsPlaying(false);
 		control.current.pause();
 	}
 
 	function handlePreviousSong() {
-		dispatch(playPreviousSong())
+		dispatch(playPreviousSong());
 	}
 
 	function handleNextSong() {
-		dispatch(playNextSong())
+		dispatch(playNextSong());
 	}
 
 	function handleLoopSong() {
@@ -63,27 +67,31 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	}
 
 	const handleProgress = (e: React.MouseEvent<HTMLProgressElement>) => {
-		if(!(control.current && duration && e.target)) return;
+		if (!(control.current && duration && e.target)) return;
 		const target = e.target as HTMLProgressElement;
-		const currentTime = (e.nativeEvent.offsetX / target.getBoundingClientRect().width) * duration;
+		const currentTime =
+			(e.nativeEvent.offsetX / target.getBoundingClientRect().width) * duration;
 		setProgress(currentTime);
 		control.current.currentTime = currentTime;
 	};
 
 	return (
-		<Window containerRef={containerRef} className={styles.musicPlayer} id={SYSTEM_WINDOW_MUSIC_PLAYER}>
+		<Window
+			containerRef={containerRef}
+			className={styles.musicPlayer}
+			id={SYSTEM_WINDOW_MUSIC_PLAYER}
+		>
 			<section className={styles.musicControlSection}>
 				<audio
-				
 					ref={control}
 					src={playlist[currentSongIndex]?.downloadURL}
 					onCanPlay={(e) => {
 						const { currentTime, duration } = e.target as HTMLAudioElement;
 						setProgress(currentTime);
-						setDuration(duration)
+						setDuration(duration);
 						handlePlaySong();
 					}}
-					onEnded={()=>{
+					onEnded={() => {
 						if (loopOneSong && control.current) {
 							control.current.load();
 						} else {
@@ -92,28 +100,39 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					}}
 					onTimeUpdate={(e) => {
 						const { currentTime, duration } = e.target as HTMLAudioElement;
-						if(!duration) return;
+						if (!duration) return;
 						setProgress(currentTime);
 						setDuration(duration);
 					}}
 				/>
-				<section className={styles.progress} onMouseDown={(e)=>e.stopPropagation()}>
+				<section
+					className={styles.progress}
+					onMouseDown={(e) => e.stopPropagation()}
+				>
 					<progress onClick={handleProgress} value={progress} max={duration} />
 					<time dateTime={formatTime(progress, 'Hh Mm Ss')}>
 						{formatTime(progress, 'HH:MM:SS')}
 					</time>
-					<time dateTime={formatTime(duration, 'Hh Mm Ss')}>{formatTime(duration, 'HH:MM:SS')}</time>
+					<time dateTime={formatTime(duration, 'Hh Mm Ss')}>
+						{formatTime(duration, 'HH:MM:SS')}
+					</time>
 				</section>
-				<article className={styles.songDetail} onMouseDown={(e)=>e.stopPropagation()}>
+				<article
+					className={styles.songDetail}
+					onMouseDown={(e) => e.stopPropagation()}
+				>
 					<h1>{playlist[currentSongIndex]?.name}</h1>
 				</article>
-				<fieldset className={styles.actionButtons} onMouseDown={(e)=>e.stopPropagation()}>
+				<fieldset
+					className={styles.actionButtons}
+					onMouseDown={(e) => e.stopPropagation()}
+				>
 					<button onClick={handlePreviousSong}>
 						<IconPre />
 					</button>
 					{isPlaying && (
 						<button onClick={handleStopSong}>
-							<IconStop/>
+							<IconStop />
 						</button>
 					)}
 					{!isPlaying && (
@@ -124,21 +143,24 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					<button onClick={handleNextSong}>
 						<IconNext />
 					</button>
-					<button onClick={handleLoopSong} className={loopOneSong ? styles.active : ''}>
+					<button
+						onClick={handleLoopSong}
+						className={loopOneSong ? styles.active : ''}
+					>
 						<IconLoop />
 					</button>
-					<button onClick={()=>{dispatch(openWindow({id: 'musicPlayer'}))}} >
+					<button
+						onClick={() => {
+							dispatch(openWindow({ id: 'musicPlayer' }));
+						}}
+					>
 						<IconFolder />
 					</button>
 				</fieldset>
-				{volume === 0 && (
-					<IconMute className={styles.volumeImage} />
-				)}
-				{volume !== 0 && (
-					<IconSound className={styles.volumeImage} />
-				)}
+				{volume === 0 && <IconMute className={styles.volumeImage} />}
+				{volume !== 0 && <IconSound className={styles.volumeImage} />}
 				<input
-					onMouseDown={(e)=>e.stopPropagation()}
+					onMouseDown={(e) => e.stopPropagation()}
 					className={styles.volumeSlider}
 					type="range"
 					min="0"

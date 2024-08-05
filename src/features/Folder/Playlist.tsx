@@ -1,6 +1,9 @@
 import { useAppSelector } from '../../app/hook';
 import { PlaylistType } from '../music/type';
-import { selectFetchStatus, selectPlaylistIdsByType } from '../music/musicSlice';
+import {
+	selectFetchStatus,
+	selectPlaylistIdsByType,
+} from '../music/musicSlice';
 import Song from './Song';
 
 type PlaylistProps = {
@@ -14,16 +17,16 @@ export default function Playlist({
 	playlistType,
 	selectedItems,
 	handleClickContextMenu,
-	handleClickFile
+	handleClickFile,
 }: PlaylistProps) {
 	const fetchStatus = useAppSelector(selectFetchStatus);
 	const playlistIds = useAppSelector(selectPlaylistIdsByType(playlistType));
 
-	if (playlistType!== 'system' && fetchStatus === 'loading') {
+	if (playlistType !== 'system' && fetchStatus === 'loading') {
 		return <div>Loading...</div>;
 	}
 
-	if (playlistType!== 'system' && fetchStatus === 'failed') {
+	if (playlistType !== 'system' && fetchStatus === 'failed') {
 		return <div>Error</div>;
 	}
 

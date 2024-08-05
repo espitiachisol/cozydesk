@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { User } from './type';
-import { signUpService, signInService, signOutService } from '../../services/auth';
+import {
+	signUpService,
+	signInService,
+	signOutService,
+} from '../../services/auth';
 import { RootState } from '../../app/store';
 import { addToast } from '../toaster/toasterSlice';
 import { Status } from '../../common/type/type';
@@ -15,7 +19,7 @@ interface UserState {
 export const initialState: UserState = {
 	user: null,
 	status: 'idle',
-	errorMessage: null
+	errorMessage: null,
 };
 
 interface Arguments {
@@ -24,43 +28,58 @@ interface Arguments {
 }
 
 // Async thunk for user creation
-export const signUp = createAsyncThunk<User, Arguments, { rejectValue: string }>(
-	'auth/signUp',
-	async ({ email, password }, { rejectWithValue, dispatch }) => {
-		const result = await signUpService(email, password);
-		if('error' in result) {
-			dispatch(addToast({ message: result.error, type: 'error' }));
-			return rejectWithValue(result.error);
-		}
-		dispatch(addToast({ message: 'Sign up successful', type: 'success', duration: 3000 }));
-		return result.response;
+export const signUp = createAsyncThunk<
+	User,
+	Arguments,
+	{ rejectValue: string }
+>('auth/signUp', async ({ email, password }, { rejectWithValue, dispatch }) => {
+	const result = await signUpService(email, password);
+	if ('error' in result) {
+		dispatch(addToast({ message: result.error, type: 'error' }));
+		return rejectWithValue(result.error);
 	}
-);
+	dispatch(
+		addToast({ message: 'Sign up successful', type: 'success', duration: 3000 })
+	);
+	return result.response;
+});
 
 // Async thunk for user sign-in
-export const signIn = createAsyncThunk<User, Arguments, { rejectValue: string }>(
-	'auth/signIn',
-	async ({ email, password }, { rejectWithValue, dispatch}) => {
-		const result  = await signInService(email, password);
-		if('error' in result) {
+export const signIn = createAsyncThunk<
+	User,
+	Arguments,
+	{ rejectValue: string }
+>('auth/signIn', async ({ email, password }, { rejectWithValue, dispatch }) => {
+	const result = await signInService(email, password);
+	if ('error' in result) {
+		dispatch(addToast({ message: result.error, type: 'error' }));
+		return rejectWithValue(result.error);
+	}
+	dispatch(
+		addToast({ message: 'Sign in successful', type: 'success', duration: 3000 })
+	);
+	dispatch(fetchUserWindows());
+	return result.response;
+});
+
+export const signOut = createAsyncThunk(
+	'auth/signOut',
+	async (res, { rejectWithValue, dispatch }) => {
+		const result = await signOutService();
+		if ('error' in result) {
 			dispatch(addToast({ message: result.error, type: 'error' }));
 			return rejectWithValue(result.error);
 		}
-		dispatch(addToast({ message: 'Sign in successful', type: 'success', duration: 3000 }));
-		dispatch(fetchUserWindows());
+		dispatch(
+			addToast({
+				message: 'Sign out successful',
+				type: 'success',
+				duration: 3000,
+			})
+		);
 		return result.response;
 	}
 );
-
-export const signOut = createAsyncThunk('auth/signOut', async (res, { rejectWithValue, dispatch }) => {
-		const result = await signOutService();
-		if('error' in result) {
-			dispatch(addToast({ message: result.error, type: 'error' }));
-			return rejectWithValue(result.error);
-		}
-		dispatch(addToast({ message: 'Sign out successful', type: 'success', duration: 3000 }));
-		return result.response;
-});
 
 const authSlice = createSlice({
 	name: 'auth',
@@ -71,7 +90,7 @@ const authSlice = createSlice({
 		},
 		userSignedIn(state, action: PayloadAction<User>) {
 			state.user = action.payload;
-		}
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -87,7 +106,7 @@ const authSlice = createSlice({
 				state.errorMessage = action.payload || '';
 			})
 			.addCase(signIn.pending, (state) => {
-				state.status ='loading';
+				state.status = 'loading';
 				state.errorMessage = null;
 			})
 			.addCase(signIn.fulfilled, (state) => {
@@ -108,12 +127,12 @@ const authSlice = createSlice({
 				state.status = 'failed';
 				state.errorMessage = action.payload || '';
 			});
-	}
+	},
 });
 
-
 export const selectUser = (state: RootState) => state.auth.user;
-export const selectAuthErrorMessage = (state: RootState) => state.auth.errorMessage;
+export const selectAuthErrorMessage = (state: RootState) =>
+	state.auth.errorMessage;
 export const { clearError, userSignedIn } = authSlice.actions;
 
 export default authSlice.reducer;

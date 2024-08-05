@@ -4,6 +4,7 @@ import { WindowInfo } from './type';
 import { SYSTEM_WINDOW_ENTRY, SYSTEM_WINDOW_FOLDER, SYSTEM_WINDOW_MUSIC_PLAYER } from './constants';
 import { getUserWindows, saveWindowInfoToFirestore } from '../../services/window';
 import { Status } from '../../common/type/type';
+import debounce from '../../utils/debounce';
 interface WindowsState {
 	windows: WindowInfo[];
   status: Status;
@@ -40,6 +41,10 @@ export const fetchUserWindows = createAsyncThunk('windows/fetchUserWindows', asy
 	return result.response;
 });
 
+const debounceSaveWindowInfo = debounce( async function (windowInfo: WindowInfo) {
+	return await saveWindowInfoToFirestore(windowInfo)
+}, 3000);
+
 export const moveWindow = createAsyncThunk(
 	'window/moveWindow',
 	async (payload: { id: string; position: { x: number; y: number } }, { dispatch, getState, rejectWithValue }) => {
@@ -48,7 +53,8 @@ export const moveWindow = createAsyncThunk(
 		const windowInfo = state.window.windows.find((window) => window.id === payload.id);
 		if (!windowInfo) return rejectWithValue('Window not found');
 		const updatedWindowInfo = { ...windowInfo, position: payload.position };
-		const response = await saveWindowInfoToFirestore(updatedWindowInfo);
+		
+		const response = await debounceSaveWindowInfo(updatedWindowInfo)
 		if (response.error) {
 			return rejectWithValue(response.error);
 		}

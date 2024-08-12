@@ -1,11 +1,18 @@
 import {
+	deleteObject,
 	FullMetadata,
 	getDownloadURL,
 	ref,
 	uploadBytes,
 } from 'firebase/storage';
 import { auth, db, storage } from './core';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	deleteDoc,
+	doc,
+	getDocs,
+} from 'firebase/firestore';
 import { Song } from '../features/music/type';
 import { handleError } from '../utils/errorHandler';
 import { ApiResponse } from '../common/type/type';
@@ -61,6 +68,32 @@ export async function getUserPlaylist(): Promise<ApiResponse<Song[]>> {
 		});
 
 		return { response: songs };
+	} catch (error) {
+		return { error: handleError(error) };
+	}
+}
+
+export async function deleteSongFromStorage(
+	songPath: string
+): Promise<ApiResponse<void>> {
+	try {
+		const songRef = ref(storage, songPath);
+		await deleteObject(songRef);
+		return { response: undefined };
+	} catch (error) {
+		return { error: handleError(error) };
+	}
+}
+
+export async function deleteSongFromFirestore(
+	songId: string
+): Promise<ApiResponse<void>> {
+	try {
+		const user = auth.currentUser;
+		if (!user) throw new Error('User not signed in');
+		const songDocRef = doc(db, 'users', user.uid, 'songs', songId);
+		await deleteDoc(songDocRef);
+		return { response: undefined };
 	} catch (error) {
 		return { error: handleError(error) };
 	}

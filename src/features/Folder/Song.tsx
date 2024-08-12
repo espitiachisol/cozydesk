@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
-import { palySong, selectSongById } from '../music/musicSlice';
+import { deleteSong, palySong, selectSongById } from '../music/musicSlice';
 import { openWindow } from '../window/windowSlice';
 import styles from './Song.module.css';
 type FileProps = {
@@ -21,28 +21,37 @@ export default function Song({
 	const song = useAppSelector(selectSongById(playlistType, songId));
 	if (!song) return null;
 
-	const { iconURL, name } = song;
+	const { iconURL, name, id, fullPath } = song;
+
 	return (
 		<>
 			<Contextmenu.Toggle
 				onClickContextMenu={onClickContextMenu}
-				id={songId}
+				id={id}
 				onClickToggle={onClickToggle}
 				className={`${styles.song} ${selected ? styles.selected : ''}`}
 			>
 				<img src={iconURL} draggable={false} alt={name} />
 				<p>{name}</p>
 			</Contextmenu.Toggle>
-			<Contextmenu.List id={songId}>
+			<Contextmenu.List id={id}>
 				<Contextmenu.Button
 					onClick={() => {
-						dispatch(palySong({ playlistType, songId }));
+						dispatch(palySong({ playlistType, songId: id }));
 						dispatch(openWindow({ id: 'musicPlayer' }));
 					}}
 				>
 					Play
 				</Contextmenu.Button>
-				<Contextmenu.Button onClick={() => {}}>Stop</Contextmenu.Button>
+				{playlistType === 'user' && (
+					<Contextmenu.Button
+						onClick={() => {
+							dispatch(deleteSong({ songId: id, songPath: fullPath }));
+						}}
+					>
+						Delete
+					</Contextmenu.Button>
+				)}
 			</Contextmenu.List>
 		</>
 	);

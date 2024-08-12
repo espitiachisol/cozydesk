@@ -7,6 +7,8 @@ import {
 import type { RootState } from '../../app/store';
 import { systemPlaylist } from '../../data/music';
 import {
+	deleteSongFromFirestore,
+	deleteSongFromStorage,
 	getUserPlaylist,
 	saveSongToFirestore,
 	uploadSongToStorage,
@@ -14,6 +16,7 @@ import {
 import { Status } from '../../common/type/type';
 import { PlaylistItem, PlaylistType, Song, SystemSong } from './type';
 import { addToast, updateToastMessage } from '../toaster/toasterSlice';
+import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window/constants';
 
 interface MusicState {
 	systemPlaylist: SystemSong[];
@@ -22,6 +25,7 @@ interface MusicState {
 	currentSongIndex: number;
 	uploadStatus: Status;
 	fetchStatus: Status;
+	deleteStatus: Status;
 	errorMessage: string | null;
 }
 
@@ -33,6 +37,7 @@ export const initialState: MusicState = {
 	currentSongIndex: 0,
 	uploadStatus: Status.Idle,
 	fetchStatus: Status.Idle,
+	deleteStatus: Status.Idle,
 	errorMessage: null,
 };
 
@@ -42,6 +47,76 @@ export const fetchUserPlaylist = createAsyncThunk(
 		const result = await getUserPlaylist();
 		if ('error' in result) return rejectWithValue(result.error);
 		return result.response;
+	}
+);
+
+export const deleteSong = createAsyncThunk(
+	'music/deleteSong',
+	async (
+		{ songId, songPath }: { songId: string; songPath: string },
+		{ rejectWithValue, dispatch, getState }
+	) => {
+		const toastId = Date.now().toString();
+		const { window, music } = getState() as RootState;
+		const isMusicPlayerOpen = window.windows.find(
+			(w) => w.id === SYSTEM_WINDOW_MUSIC_PLAYER
+		)?.isOpen;
+
+		const isCurrentSongOnMusicPayer =
+			music.activePlaylist === 'user' &&
+			music.userPlaylist[music.currentSongIndex]?.id === songId;
+
+		if (isMusicPlayerOpen && isCurrentSongOnMusicPayer) {
+			const rejectMessage = 'Cannot delete the song that is currently playing.';
+			dispatch(
+				addToast({
+					id: toastId,
+					message: rejectMessage,
+					type: 'info',
+				})
+			);
+			return rejectWithValue(rejectMessage);
+		}
+
+		dispatch(
+			addToast({ id: toastId, message: 'Deleting song...', type: 'loading' })
+		);
+
+		// Delete from storage
+		const deleteStorageResult = await deleteSongFromStorage(songPath);
+		if ('error' in deleteStorageResult) {
+			dispatch(
+				updateToastMessage({
+					id: toastId,
+					message: deleteStorageResult.error,
+					type: 'error',
+				})
+			);
+			return rejectWithValue(deleteStorageResult.error);
+		}
+
+		// Delete from Firestore
+		const deleteFirestoreResult = await deleteSongFromFirestore(songId);
+		if ('error' in deleteFirestoreResult) {
+			dispatch(
+				updateToastMessage({
+					id: toastId,
+					message: deleteFirestoreResult.error,
+					type: 'error',
+				})
+			);
+			return rejectWithValue(deleteFirestoreResult.error);
+		}
+
+		dispatch(
+			updateToastMessage({
+				id: toastId,
+				message: 'Song deleted successfully',
+				type: 'success',
+			})
+		);
+
+		return songId;
 	}
 );
 
@@ -194,11 +269,25 @@ export const musicSlice = createSlice({
 				fetchUserPlaylist.fulfilled,
 				(state, action: PayloadAction<Song[]>) => {
 					state.userPlaylist = action.payload;
-					state.fetchStatus = 'succeeded';
+					state.fetchStatus = Status.Succeeded;
 				}
 			)
 			.addCase(fetchUserPlaylist.rejected, (state, action) => {
-				state.fetchStatus = 'failed';
+				state.fetchStatus = Status.Failed;
+				state.errorMessage = action.payload as string;
+			})
+			.addCase(deleteSong.pending, (state) => {
+				state.deleteStatus = Status.Loading;
+				state.errorMessage = null;
+			})
+			.addCase(deleteSong.fulfilled, (state, action: PayloadAction<string>) => {
+				state.userPlaylist = state.userPlaylist.filter(
+					(song) => song.id !== action.payload
+				);
+				state.deleteStatus = Status.Succeeded;
+			})
+			.addCase(deleteSong.rejected, (state, action) => {
+				state.deleteStatus = Status.Failed;
 				state.errorMessage = action.payload as string;
 			});
 	},

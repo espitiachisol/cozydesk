@@ -55,11 +55,7 @@ export const fetchUserWindows = createAsyncThunk(
 	}
 );
 
-const debounceSaveWindowInfo = debounce(async function (
-	windowInfo: WindowInfo
-) {
-	return await saveWindowInfoToFirestore(windowInfo);
-}, 3000);
+const debounceSaveWindowInfo = debounce(saveWindowInfoToFirestore, 3000);
 
 export const closeWindowAsync = createAsyncThunk(
 	'window/closeWindow',
@@ -85,12 +81,7 @@ export const moveWindow = createAsyncThunk(
 		);
 		if (!windowInfo) return rejectWithValue('Window not found');
 		const updatedWindowInfo = { ...windowInfo, position: payload.position };
-
-		const response = await debounceSaveWindowInfo(updatedWindowInfo);
-		if (response.error) {
-			return rejectWithValue(response.error);
-		}
-		return updatedWindowInfo;
+		debounceSaveWindowInfo(updatedWindowInfo);
 	}
 );
 

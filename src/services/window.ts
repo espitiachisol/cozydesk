@@ -29,15 +29,15 @@ export async function updateWindowIsOpenStatus(
 
 export async function saveWindowInfoToFirestore(
 	windowInfo: WindowInfo
-): Promise<ApiResponse<WindowInfo>> {
+): Promise<ApiResponse<void>> {
 	try {
 		const user = auth.currentUser;
+		console.log('Save!');
 		if (!user) throw new Error('User not signed in');
-		const windowsCollectionRef = collection(db, 'users', user.uid, 'windows');
-		const windowDocRef = doc(windowsCollectionRef, windowInfo.id);
+		const windowDocRef = doc(db, 'users', user.uid, 'windows', windowInfo.id);
 		await setDoc(windowDocRef, windowInfo);
 		return {
-			response: windowInfo,
+			response: undefined,
 		};
 	} catch (error) {
 		return { error: handleError(error) };

@@ -18,7 +18,7 @@ interface UserState {
 
 export const initialState: UserState = {
 	user: null,
-	status: 'idle',
+	status: Status.Idle,
 	errorMessage: null,
 };
 
@@ -95,36 +95,36 @@ const authSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(signUp.pending, (state) => {
-				state.status = 'loading';
+				state.status = Status.Loading;
 				state.errorMessage = null;
 			})
 			.addCase(signUp.fulfilled, (state) => {
-				state.status = 'succeeded';
+				state.status = Status.Succeeded;
 			})
 			.addCase(signUp.rejected, (state, action) => {
-				state.status = 'failed';
+				state.status = Status.Failed;
 				state.errorMessage = action.payload || '';
 			})
 			.addCase(signIn.pending, (state) => {
-				state.status = 'loading';
+				state.status = Status.Loading;
 				state.errorMessage = null;
 			})
 			.addCase(signIn.fulfilled, (state) => {
-				state.status = 'succeeded';
+				state.status = Status.Succeeded;
 			})
 			.addCase(signIn.rejected, (state, action) => {
-				state.status = 'failed';
+				state.status = Status.Failed;
 				state.errorMessage = action.payload || '';
 			})
 			.addCase(signOut.pending, (state) => {
-				state.status = 'loading';
+				state.status = Status.Loading;
 				state.errorMessage = null;
 			})
 			.addCase(signOut.fulfilled, () => {
 				// This case can be deleted since rootReducer handles the reset
 			})
 			.addCase(signOut.rejected, (state, action) => {
-				state.status = 'failed';
+				state.status = Status.Failed;
 				state.errorMessage = action.payload || '';
 			});
 	},

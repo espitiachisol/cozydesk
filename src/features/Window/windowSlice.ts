@@ -42,7 +42,7 @@ export const initialState: WindowsState = {
 			isOpen: false,
 		},
 	],
-	status: 'idle',
+	status: Status.Idle,
 };
 
 export const fetchUserWindows = createAsyncThunk(
@@ -141,11 +141,11 @@ export const windowSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchUserWindows.pending, (state) => {
-			state.status = 'loading';
+			state.status = Status.Loading;
 		}),
 			builder.addCase(fetchUserWindows.fulfilled, (state, action) => {
 				state.windows = action.payload;
-				state.status = 'succeeded';
+				state.status = Status.Succeeded;
 			});
 	},
 });

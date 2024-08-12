@@ -1,4 +1,9 @@
-export type Status = 'idle' | 'loading' | 'succeeded' | 'failed';
+export enum Status {
+	Idle = 'idle',
+	Loading = 'loading',
+	Succeeded = 'succeeded',
+	Failed = 'failed',
+}
 
 type ErrorResponse = {
 	error: string;

@@ -66,15 +66,13 @@ export default function Folder({ containerRef }: FolderProps) {
 	}
 
 	async function handleDrop(event: DragEvent<HTMLElement>) {
-		console.log('droppedFile');
 		event.preventDefault();
 		setCanDrop('idle');
 		if (canDrop === 'cannot') {
 			return;
 		}
-		console.log('handleDrop');
-		const droppedFile = event.dataTransfer.files;
-		dispatch(uploadSong({ file: droppedFile[0] }));
+		const droppedFiles = event.dataTransfer.files;
+		dispatch(uploadSong({ files: droppedFiles }));
 	}
 
 	return (

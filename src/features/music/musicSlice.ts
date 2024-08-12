@@ -47,8 +47,35 @@ export const fetchUserPlaylist = createAsyncThunk(
 
 export const uploadSong = createAsyncThunk(
 	'music/uploadSong',
-	async ({ file }: { file: File }, { rejectWithValue, dispatch }) => {
+	async (
+		{ files }: { files: FileList },
+		{ rejectWithValue, getState, dispatch }
+	) => {
 		const toastId = Date.now().toString();
+		const state = getState() as RootState;
+		const userPlaylist = state.music.userPlaylist;
+		const file = files[0];
+		let rejectMessage = '';
+		if (files.length > 1) {
+			rejectMessage = 'Multiple file uploads are not supported at the moment';
+		} else if (userPlaylist.length + 1 > 10) {
+			rejectMessage =
+				'Each user is limited to 10 songs. Please remove some songs before uploading new ones.';
+		} else if (file.size > 10000000) {
+			rejectMessage =
+				'Your file is too large. Please ensure the file size is within the 10MB limit.';
+		}
+		if (rejectMessage) {
+			dispatch(
+				addToast({
+					id: toastId,
+					message: rejectMessage,
+					type: 'info',
+				})
+			);
+			return rejectWithValue(rejectMessage);
+		}
+
 		dispatch(
 			addToast({ id: toastId, message: 'Uploading music...', type: 'loading' })
 		);

@@ -31,8 +31,8 @@ export const initialState: MusicState = {
 	userPlaylist: [],
 	activePlaylist: 'system',
 	currentSongIndex: 0,
-	uploadStatus: 'idle',
-	fetchStatus: 'idle',
+	uploadStatus: Status.Idle,
+	fetchStatus: Status.Idle,
 	errorMessage: null,
 };
 
@@ -148,19 +148,19 @@ export const musicSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(uploadSong.pending, (state) => {
-				state.uploadStatus = 'loading';
+				state.uploadStatus = Status.Loading;
 				state.errorMessage = null;
 			})
 			.addCase(uploadSong.fulfilled, (state, action: PayloadAction<Song>) => {
 				state.userPlaylist.push(action.payload);
-				state.uploadStatus = 'succeeded';
+				state.uploadStatus = Status.Succeeded;
 			})
 			.addCase(uploadSong.rejected, (state, action) => {
-				state.uploadStatus = 'failed';
+				state.uploadStatus = Status.Failed;
 				state.errorMessage = action.payload as string;
 			})
 			.addCase(fetchUserPlaylist.pending, (state) => {
-				state.fetchStatus = 'loading';
+				state.fetchStatus = Status.Loading;
 				state.errorMessage = null;
 			})
 			.addCase(

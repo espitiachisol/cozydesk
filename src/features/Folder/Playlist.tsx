@@ -1,10 +1,9 @@
 import { useAppSelector } from '../../app/hook';
 import { PlaylistType } from '../music/type';
-import {
-	selectFetchStatus,
-	selectPlaylistIdsByType,
-} from '../music/musicSlice';
+import { selectPlaylistIdsByType } from '../music/musicSlice';
 import Song from './Song';
+import { selectUser } from '../auth/authSlice';
+import styles from './Folder.module.css';
 
 type PlaylistProps = {
 	playlistType: PlaylistType;
@@ -19,19 +18,25 @@ export default function Playlist({
 	handleClickContextMenu,
 	handleClickFile,
 }: PlaylistProps) {
-	const fetchStatus = useAppSelector(selectFetchStatus);
+	const user = useAppSelector(selectUser);
 	const playlistIds = useAppSelector(selectPlaylistIdsByType(playlistType));
 
-	if (playlistType !== 'system' && fetchStatus === 'loading') {
-		return <div>Loading...</div>;
-	}
-
-	if (playlistType !== 'system' && fetchStatus === 'failed') {
-		return <div>Error</div>;
+	if (playlistType !== 'system' && !user) {
+		return (
+			<p className={styles.folderMessage}>
+				{' '}
+				☝️ Please sign in or sign up first.
+			</p>
+		);
 	}
 
 	if (playlistIds.length < 1) {
-		return <div>No playlist</div>;
+		return (
+			<p className={styles.folderMessage}>
+				{' '}
+				☝️ No songs available. Please drag and drop files into this window.
+			</p>
+		);
 	}
 
 	return playlistIds.map((id) => (

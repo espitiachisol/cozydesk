@@ -9,6 +9,7 @@ import {
 import {
 	getUserWindows,
 	saveWindowInfoToFirestore,
+	updateWindowIsOpenStatus,
 } from '../../services/window';
 import { Status } from '../../common/type/type';
 import debounce from '../../utils/debounce';
@@ -59,6 +60,17 @@ const debounceSaveWindowInfo = debounce(async function (
 ) {
 	return await saveWindowInfoToFirestore(windowInfo);
 }, 3000);
+
+export const closeWindowAsync = createAsyncThunk(
+	'window/closeWindow',
+	async (payload: { id: string }, { dispatch, rejectWithValue }) => {
+		dispatch(closeWindow(payload));
+		const result = await updateWindowIsOpenStatus(payload.id, false);
+		if ('error' in result) {
+			return rejectWithValue(result.error);
+		}
+	}
+);
 
 export const moveWindow = createAsyncThunk(
 	'window/moveWindow',

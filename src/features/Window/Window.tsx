@@ -9,7 +9,7 @@ import {
 import styles from './Window.module.css';
 import {
 	bringToFront,
-	closeWindow,
+	closeWindowAsync,
 	getWindowById,
 	moveWindow,
 } from './windowSlice';
@@ -145,7 +145,7 @@ function Header({ children, className }: HeaderProps) {
 	const dispatch = useAppDispatch();
 	const handleButtonMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
 		e.stopPropagation();
-		dispatch(closeWindow({ id }));
+		dispatch(closeWindowAsync({ id }));
 	};
 	return (
 		<header

@@ -10,6 +10,7 @@ import {
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
 } from '../../features/window/constants';
+import { addToast } from '../../features/toaster/toasterSlice';
 
 function Body() {
 	const containerRef = useRef<HTMLElement | null>(null);
@@ -45,11 +46,29 @@ function Body() {
 					<img src="/icons/desktop-musicPlayer.png" draggable={false} />
 					Music Player
 				</button>
-				<button onClick={() => {}}>
+				<button
+					onClick={() => {
+						dispatch(
+							addToast({
+								message: 'The feature is not yet complete. Please stay tuned.',
+								type: 'info',
+							})
+						);
+					}}
+				>
 					<img src="/icons/desktop-todo.png" draggable={false} />
 					Todo
 				</button>
-				<button onClick={() => {}}>
+				<button
+					onClick={() => {
+						dispatch(
+							addToast({
+								message: 'The feature is not yet complete. Please stay tuned.',
+								type: 'info',
+							})
+						);
+					}}
+				>
 					<img src="/icons/desktop-pomodoro.png" draggable={false} />
 					Pomodoro
 				</button>

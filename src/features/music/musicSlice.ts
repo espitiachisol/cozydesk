@@ -5,7 +5,7 @@ import {
 	createSelector,
 } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
-import { systemPlaylist } from '../../data/music';
+import { systemPlaylist } from './systemPlaylist';
 import {
 	deleteSongFromFirestore,
 	deleteSongFromStorage,

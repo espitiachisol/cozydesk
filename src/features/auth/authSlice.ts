@@ -8,7 +8,8 @@ import {
 import { RootState } from '../../app/store';
 import { addToast } from '../toaster/toasterSlice';
 import { Status } from '../../common/type/type';
-import { fetchUserWindows } from '../window/windowSlice';
+import { fetchUserWindows, openWindow } from '../window/windowSlice';
+import { SYSTEM_WINDOW_ENTRY } from '../window/constants';
 
 interface UserState {
 	user: User | null;
@@ -41,6 +42,7 @@ export const signUp = createAsyncThunk<
 	dispatch(
 		addToast({ message: 'Sign up successful', type: 'success', duration: 3000 })
 	);
+	dispatch(openWindow({ id: SYSTEM_WINDOW_ENTRY }));
 	return result.response;
 });
 

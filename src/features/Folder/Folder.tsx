@@ -2,23 +2,29 @@ import { useEffect, useState, MouseEvent, DragEvent } from 'react';
 import Window from '../window/Window';
 import styles from './Folder.module.css';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
-import { useAppDispatch } from '../../app/hook';
-import { fetchUserPlaylist, uploadSong } from '../music/musicSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hook';
+import {
+	fetchUserPlaylist,
+	selectUploadStatus,
+	uploadSong,
+} from '../music/musicSlice';
 import Playlist from './Playlist';
 import { PlaylistType } from '../music/type';
 import { SYSTEM_WINDOW_FOLDER } from '../window/constants';
+import { Status } from '../../common/type/type';
 
 type FolderProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
 };
 export default function Folder({ containerRef }: FolderProps) {
 	const dispatch = useAppDispatch();
+	const uploadStatus = useAppSelector(selectUploadStatus);
 	const [tab, setTab] = useState<PlaylistType>('system');
 	const [selectedItems, setSelectedItems] = useState<string[]>([]);
 	const [canDrop, setCanDrop] = useState<'idle' | 'cannot' | 'can'>('idle');
 
 	useEffect(() => {
-		dispatch(fetchUserPlaylist());
+		void dispatch(fetchUserPlaylist());
 	}, [dispatch]);
 
 	function handleClickFile(e: MouseEvent<HTMLButtonElement>) {
@@ -53,26 +59,25 @@ export default function Folder({ containerRef }: FolderProps) {
 	}
 
 	function handleDragOver(event: DragEvent<HTMLElement>) {
-		console.log('handleDragOver');
 		event.preventDefault();
 		if (tab === 'system') setCanDrop('cannot');
+		else if (uploadStatus === Status.Loading) setCanDrop('cannot');
 		else if (canDrop !== 'can') setCanDrop('can');
 	}
 
 	function handleDragLeave(event: DragEvent<HTMLElement>) {
-		console.log('handleDragLeave');
 		event.preventDefault();
 		if (canDrop !== 'idle') setCanDrop('idle');
 	}
 
-	async function handleDrop(event: DragEvent<HTMLElement>) {
+	function handleDrop(event: DragEvent<HTMLElement>) {
 		event.preventDefault();
 		setCanDrop('idle');
 		if (canDrop === 'cannot') {
 			return;
 		}
 		const droppedFiles = event.dataTransfer.files;
-		dispatch(uploadSong({ files: droppedFiles }));
+		void dispatch(uploadSong({ files: droppedFiles }));
 	}
 
 	return (

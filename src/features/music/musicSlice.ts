@@ -22,7 +22,7 @@ interface MusicState {
 	systemPlaylist: SystemSong[];
 	userPlaylist: Song[];
 	activePlaylist: PlaylistType;
-	currentSongIndex: number;
+	currentSongId: string;
 	uploadStatus: Status;
 	fetchStatus: Status;
 	deleteStatus: Status;
@@ -34,7 +34,7 @@ export const initialState: MusicState = {
 	systemPlaylist: systemPlaylist,
 	userPlaylist: [],
 	activePlaylist: 'system',
-	currentSongIndex: 0,
+	currentSongId: systemPlaylist[0].id,
 	uploadStatus: Status.Idle,
 	fetchStatus: Status.Idle,
 	deleteStatus: Status.Idle,
@@ -62,11 +62,9 @@ export const deleteSong = createAsyncThunk(
 			(w) => w.id === SYSTEM_WINDOW_MUSIC_PLAYER
 		)?.isOpen;
 
-		const isCurrentSongOnMusicPayer =
-			music.activePlaylist === 'user' &&
-			music.userPlaylist[music.currentSongIndex]?.id === songId;
+		const isCurrentSongPlaying = music.currentSongId === songId;
 
-		if (isMusicPlayerOpen && isCurrentSongOnMusicPayer) {
+		if (isMusicPlayerOpen && isCurrentSongPlaying) {
 			const rejectMessage = 'Cannot delete the song that is currently playing.';
 			dispatch(
 				addToast({
@@ -216,10 +214,14 @@ export const musicSlice = createSlice({
 				state.activePlaylist === 'system'
 					? state.systemPlaylist
 					: state.userPlaylist;
-			if (state.currentSongIndex < playlist.length - 1) {
-				state.currentSongIndex += 1;
+
+			const currentSongIndex = playlist.findIndex(
+				(song) => song.id === state.currentSongId
+			);
+			if (currentSongIndex !== -1 && currentSongIndex < playlist.length - 1) {
+				state.currentSongId = playlist[currentSongIndex + 1].id;
 			} else {
-				state.currentSongIndex = 0; // Loop back to the start
+				state.currentSongId = playlist[0].id; // Loop back to the start
 			}
 		},
 		playPreviousSong: (state) => {
@@ -227,10 +229,13 @@ export const musicSlice = createSlice({
 				state.activePlaylist === 'system'
 					? state.systemPlaylist
 					: state.userPlaylist;
-			if (state.currentSongIndex > 0) {
-				state.currentSongIndex -= 1;
+			const currentSongIndex = playlist.findIndex(
+				(song) => song.id === state.currentSongId
+			);
+			if (currentSongIndex > 0) {
+				state.currentSongId = playlist[currentSongIndex - 1].id;
 			} else {
-				state.currentSongIndex = playlist.length - 1; // Loop to the end
+				state.currentSongId = playlist[playlist.length - 1].id; // Loop to the end
 			}
 		},
 		palySong(state, action: PayloadAction<PlaySongPayload>) {
@@ -240,8 +245,9 @@ export const musicSlice = createSlice({
 				state.activePlaylist === 'system'
 					? state.systemPlaylist
 					: state.userPlaylist;
-			const songIndex = playlist.findIndex((song) => song.id === songId);
-			if (songIndex !== -1) state.currentSongIndex = songIndex;
+			if (playlist.find((song) => song.id === songId)) {
+				state.currentSongId = songId;
+			}
 		},
 		resetMusicSlice: () => {
 			return initialState;
@@ -296,8 +302,13 @@ export const musicSlice = createSlice({
 export const { playNextSong, playPreviousSong, palySong, resetMusicSlice } =
 	musicSlice.actions;
 
-export const selectCurrentSongIndex = (state: RootState) =>
-	state.music.currentSongIndex;
+export const selectCurrentSong = (state: RootState) => {
+	const playlist =
+		state.music.activePlaylist === 'system'
+			? state.music.systemPlaylist
+			: state.music.userPlaylist;
+	return playlist.find((song) => song.id === state.music.currentSongId);
+};
 export const selectActivePlaylist = (state: RootState) =>
 	state.music.activePlaylist === 'system'
 		? state.music.systemPlaylist

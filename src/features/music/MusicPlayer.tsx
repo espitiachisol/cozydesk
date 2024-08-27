@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import {
-	selectCurrentSongIndex,
-	selectActivePlaylist,
 	playNextSong,
 	playPreviousSong,
+	selectCurrentSong,
 } from './musicSlice';
 import Window from '../window/Window';
 import CassetteTape from './CassetteTape';
@@ -30,15 +29,20 @@ type MusicPlayerProps = {
 
 export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	const dispatch = useAppDispatch();
-	const currentSongIndex = useAppSelector(selectCurrentSongIndex);
-	const playlist = useAppSelector(selectActivePlaylist);
+	const currentSong = useAppSelector(selectCurrentSong);
 	const control = useRef<HTMLAudioElement>(null);
 
 	const [progress, setProgress] = useState(0);
 	const [duration, setDuration] = useState(0);
 	const [loopOneSong, setLoopOneSong] = useState(false);
-	const [isPlaying, setIsPlaying] = useState(true);
+	const [isPlaying, setIsPlaying] = useState(false);
 	const [volume, setVolume] = useState(1);
+
+	// Automatically play the new song when switching tracks, if the player is currently playing.
+	useEffect(() => {
+		if (!isPlaying || !control.current) return;
+		void control.current.play();
+	}, [currentSong, isPlaying]);
 
 	useEffect(() => {
 		if (!control.current) return;
@@ -48,7 +52,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 	function handlePlaySong() {
 		if (!control.current) return;
 		setIsPlaying(true);
-		control.current.play();
+		void control.current.play();
 	}
 
 	function handleStopSong() {
@@ -87,16 +91,16 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 			<section className={styles.musicControlSection}>
 				<audio
 					ref={control}
-					src={playlist[currentSongIndex]?.downloadURL}
+					src={currentSong.downloadURL}
 					onCanPlay={(e) => {
 						const { currentTime, duration } = e.target as HTMLAudioElement;
 						setProgress(currentTime);
 						setDuration(duration);
-						handlePlaySong();
 					}}
 					onEnded={() => {
 						if (loopOneSong && control.current) {
 							control.current.load();
+							void control.current.play();
 						} else {
 							handleNextSong();
 						}
@@ -124,7 +128,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					className={styles.songDetail}
 					onMouseDown={(e) => e.stopPropagation()}
 				>
-					<h1>{playlist[currentSongIndex]?.name}</h1>
+					<h1>{currentSong.name}</h1>
 				</article>
 				<fieldset
 					className={styles.actionButtons}
@@ -179,7 +183,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 				<CassetteTape
 					isPlaying={isPlaying}
 					progress={(progress * 100) / duration}
-					image={playlist[currentSongIndex].imageURL}
+					image={currentSong.imageURL}
 				/>
 			</Window.Header>
 		</Window>

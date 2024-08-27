@@ -1,5 +1,5 @@
 export interface Song {
-	id?: string;
+	id: string;
 	bucket: string;
 	fullPath: string;
 	name: string;
@@ -15,19 +15,6 @@ export interface Song {
 export interface SystemSong {
 	id: string;
 	name: string;
-	downloadURL: string;
-	imageURL: string;
-	iconURL: string;
-}
-export interface Song {
-	id?: string;
-	bucket: string;
-	fullPath: string;
-	name: string;
-	contentType: string;
-	size: number;
-	md5Hash: string;
-	timeCreated: string;
 	downloadURL: string;
 	imageURL: string;
 	iconURL: string;

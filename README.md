@@ -2,6 +2,13 @@
 
 This project is a WebApp designed to simulate the experience of a desktop environment, with all functionalities developed around this core concept.
 
+> I am currently refactoring the project; this is the second version of CozyDesk. Some features have been completed in this version. For a complete set of features, please refer to the [original project](https://cozydesk-861ed.web.app/).
+
+## Test account
+
+- Account: test@gmail.com
+- Password: 123456
+
 ## Table of Contents
 
 - [Features](#features)
@@ -12,9 +19,11 @@ This project is a WebApp designed to simulate the experience of a desktop enviro
 - [Feature-Based Project Structure](#feature-based-project-structure)
 
 
-
 ## Features
 ### Desktop Windows
+
+![window](/public/readme/window.gif)
+
 Key Techniques: Debouncing, Compound Pattern, Context API
 
 - Customizable Draggable Area:
@@ -25,13 +34,21 @@ Utilized the **Compound Pattern**, allowing for the customization of draggable a
 - Integrated a **debounce strategy** to enhance performance, ensuring that window positions are updated only after the drag operation is completed, thereby reducing unnecessary server requests.
 
 ### Music Player and Playlist
+
+![drop file](/public/readme/dropfile.gif)
+
 Key Techniques: Audio Player from scratch, Drag-and-Drop File Upload, Contextual Menu Component
+
 - Developed a fully functional music player from scratch, providing essential playback controls, including play, pause, stop, next, previous, and loop features.
 - Enabled users to upload their music files by simply dragging and dropping them into the designated folder, automatically adding them to their personal playlist.
 - The Contextual Menu component displays an overlay menu when users right-click on a target element, enabling context-specific actions. It’s built using the Compound Pattern for flexibility and ease of use.
 
 
 ### Toaster Notifications
+
+
+![toaster](/public/readme/toaster.gif)
+
 Key Techniques: Promise Toast, Queue Data Structure
 
 - Developed a Toaster component to display various types of notifications (success, error, info, promise) using a **queue data structure**. This ensures that notifications are managed efficiently and displayed in the correct order.

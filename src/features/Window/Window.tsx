@@ -158,9 +158,6 @@ function Header({ children, className }: HeaderProps) {
 						x
 					</button>
 				</li>
-				<li>
-					<button className={styles.minus}>&minus;</button>
-				</li>
 			</ul>
 			{children}
 		</header>

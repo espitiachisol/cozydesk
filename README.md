@@ -1,30 +1,91 @@
-# React + TypeScript + Vite
+# CozyDesk (Desktop-Simulated WebApp)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a WebApp designed to simulate the experience of a desktop environment, with all functionalities developed around this core concept.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Features](#features)
+  - [Desktop Windows](#desktop-windows)
+  - [Music Player and Playlist](#music-player-and-playlist)
+   - [Toaster Notifications](#toaster-notifications)
+- [Frontend Technique](#frontend-technique)
+- [Feature-Based Project Structure](#feature-based-project-structure)
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-- Configure the top-level `parserOptions` property like this:
+## Features
+### Desktop Windows
+Key Techniques: Debouncing, Compound Pattern, Context API
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- Customizable Draggable Area:
+Utilized the **Compound Pattern**, allowing for the customization of draggable areas within the window component.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Implemented boundary constraints by passing a container ref, ensuring windows stay within defined boundaries.
+
+- Integrated a **debounce strategy** to enhance performance, ensuring that window positions are updated only after the drag operation is completed, thereby reducing unnecessary server requests.
+
+### Music Player and Playlist
+Key Techniques: Audio Player from scratch, Drag-and-Drop File Upload, Contextual Menu Component
+- Developed a fully functional music player from scratch, providing essential playback controls, including play, pause, stop, next, previous, and loop features.
+- Enabled users to upload their music files by simply dragging and dropping them into the designated folder, automatically adding them to their personal playlist.
+- The Contextual Menu component displays an overlay menu when users right-click on a target element, enabling context-specific actions. It’s built using the Compound Pattern for flexibility and ease of use.
+
+
+### Toaster Notifications
+Key Techniques: Promise Toast, Queue Data Structure
+
+- Developed a Toaster component to display various types of notifications (success, error, info, promise) using a **queue data structure**. This ensures that notifications are managed efficiently and displayed in the correct order.
+
+- Implemented support for promise-based toasts, allowing notifications to update dynamically based on the resolution or rejection of a promise.
+
+## Frontend Technique
+### React(Functional component)
+![react component](/public/readme/react-component.png)
+
+### Redux Toolkit
+- Managing global state and asynchronous requests efficiently with createAsyncThunk.
+
+### TypeScript
+- Ensuring type safety and improving code quality across the entire project.
+
+### CSS Modules
+- Using CSS Modules for scoped and maintainable styles, along with native CSS features like **nesting** and **@layer** for better structure and organization.
+
+### Semantic HTML
+Implementing semantic HTML elements to improve accessibility and code readability.
+
+### Development Tools
+- Vite
+- Prettier and ESLint
+    Integrated Prettier and ESLint for consistent code formatting and quality assurance.
+
+### Cloud Services
+- Firebase(Authentication, Cloud Storage, Firestore)
+
+## Feature-Based Project Structure
+
+    ├── app
+    │   │   ├── hook.ts
+    │   │   └── store.ts
+    │   ├── assets
+    │   ├── common
+    │   ├── components
+    │   │   ├── Contextmenu
+    │   │   └── Menu
+    │   ├── features
+    │   │   ├── folder
+    │   │   ├── music
+    │   │   ├── toaster
+    │   │   └── window
+    │   │       ├── Window.module.css
+    │   │       ├── Window.tsx
+    │   │       ├── constants.ts
+    │   │       ├── type.ts
+    │   │       └── windowSlice.ts
+    │   ├── layout
+    │   └── services
+    │       ├── auth.ts
+    │       ├── core.ts
+    │       ├── music.ts
+    │       └── window.ts
+    └── README.md

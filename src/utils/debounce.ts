@@ -5,6 +5,6 @@ export default function debounce(
 	let timeoutID: ReturnType<typeof setTimeout> | null = null;
 	return function (...args: any[]) {
 		clearTimeout(timeoutID ?? undefined);
-		timeoutID = setTimeout(() => callback.apply(this, args), wait);
+		timeoutID = setTimeout(() => callback(...args), wait);
 	};
 }

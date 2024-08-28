@@ -1,5 +1,5 @@
 .AppBody{
-  background-image: url(background-texture.png);
+  background-image: url(/background-texture.png);
   background-color: white;
   grid-area: body;
 

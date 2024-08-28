@@ -41,7 +41,7 @@
     block-size: 160px;
     position: absolute;
     top: 28px;
-    background-image: url('images/reel.png');
+    background-image: url('/images/reel.png');
     background-repeat: no-repeat;
     background-position: center;
     animation: rotate 3s linear infinite;

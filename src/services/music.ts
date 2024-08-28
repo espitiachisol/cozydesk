@@ -42,8 +42,8 @@ export async function saveSongToFirestore(
 		const songDocRef = await addDoc(songsCollectionRef, song);
 		return {
 			response: {
-				id: songDocRef.id,
 				...song,
+				id: songDocRef.id,
 			},
 		};
 	} catch (error) {

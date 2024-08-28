@@ -91,7 +91,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 			<section className={styles.musicControlSection}>
 				<audio
 					ref={control}
-					src={currentSong.downloadURL}
+					src={currentSong?.downloadURL}
 					onCanPlay={(e) => {
 						const { currentTime, duration } = e.target as HTMLAudioElement;
 						setProgress(currentTime);
@@ -128,7 +128,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					className={styles.songDetail}
 					onMouseDown={(e) => e.stopPropagation()}
 				>
-					<h1>{currentSong.name}</h1>
+					<h1>{currentSong?.name}</h1>
 				</article>
 				<fieldset
 					className={styles.actionButtons}
@@ -183,7 +183,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 				<CassetteTape
 					isPlaying={isPlaying}
 					progress={(progress * 100) / duration}
-					image={currentSong.imageURL}
+					image={currentSong?.imageURL}
 				/>
 			</Window.Header>
 		</Window>

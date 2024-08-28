@@ -11,7 +11,7 @@ const toastIcons = {
 	loading: <Spinner />,
 };
 
-export default function Toast({ id }) {
+export default function Toast({ id }: { id: string }) {
 	const dispatch = useAppDispatch();
 	const toast = useAppSelector(selectToastById(id));
 	useEffect(() => {

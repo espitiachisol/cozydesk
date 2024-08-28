@@ -167,6 +167,7 @@ export const uploadSong = createAsyncThunk(
 
 		const imageId = `${Math.floor(Math.random() * 5 + 1)}`;
 		const song: Song = {
+			id: `${Date.now()}`,
 			bucket: metadata.bucket,
 			fullPath: metadata.fullPath,
 			name: metadata.name,

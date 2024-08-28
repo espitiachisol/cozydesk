@@ -134,7 +134,7 @@ function List({ id, children }: ListProps) {
 }
 
 type ButtonProps = PropsWithChildren<{
-	onClick: () => void;
+	onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }>;
 function Button({ children, onClick }: ButtonProps) {
 	const context = useContextMenu();

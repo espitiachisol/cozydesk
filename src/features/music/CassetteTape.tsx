@@ -3,7 +3,7 @@ import styles from './CassetteTape.module.css';
 type CassetteTapeProps = {
 	isPlaying: boolean;
 	progress: number;
-	image: string;
+	image?: string;
 };
 
 export default function CassetteTape({

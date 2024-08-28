@@ -60,13 +60,13 @@ export const signIn = createAsyncThunk<
 	dispatch(
 		addToast({ message: 'Sign in successful', type: 'success', duration: 3000 })
 	);
-	dispatch(fetchUserWindows());
+	void dispatch(fetchUserWindows());
 	return result.response;
 });
 
-export const signOut = createAsyncThunk(
+export const signOut = createAsyncThunk<string, void, { rejectValue: string }>(
 	'auth/signOut',
-	async (res, { rejectWithValue, dispatch }) => {
+	async (_, { rejectWithValue, dispatch }) => {
 		const result = await signOutService();
 		if ('error' in result) {
 			dispatch(addToast({ message: result.error, type: 'error' }));

@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
 import { deleteSong, palySong, selectSongById } from '../music/musicSlice';
+import { Song as SongType } from '../music/type';
 import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window/constants';
 import { openWindow } from '../window/windowSlice';
 import styles from './Song.module.css';
@@ -22,7 +23,9 @@ export default function Song({
 	const song = useAppSelector(selectSongById(playlistType, songId));
 	if (!song) return null;
 
-	const { iconURL, name, id, fullPath } = song;
+	const { iconURL, name, id } = song;
+	const isUserSong = playlistType === 'user';
+	const fullPath = isUserSong ? (song as SongType).fullPath : undefined;
 
 	return (
 		<>
@@ -44,10 +47,10 @@ export default function Song({
 				>
 					Play
 				</Contextmenu.Button>
-				{playlistType === 'user' && (
+				{isUserSong && fullPath && (
 					<Contextmenu.Button
 						onClick={() => {
-							dispatch(deleteSong({ songId: id, songPath: fullPath }));
+							void dispatch(deleteSong({ songId: id, songPath: fullPath }));
 						}}
 					>
 						Delete

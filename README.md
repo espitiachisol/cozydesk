@@ -78,6 +78,8 @@ Implementing semantic HTML elements to improve accessibility and code readabilit
 
 ### Cloud Services
 - Firebase(Authentication, Cloud Storage, Firestore)
+- Automated deployment to Firebase Hosting using GitHub Actions.
+
 
 ## Feature-Based Project Structure
 

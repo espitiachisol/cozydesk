@@ -20,6 +20,7 @@ function App(): JSX.Element {
 	useEffect(() => {
 		const unsubscribe = subscribeAuthStateChanged((user: User | null) => {
 			if (user) {
+				console.log('test')
 				dispatch(userSignedIn(user));
 				dispatch(fetchUserWindows());
 			} else {

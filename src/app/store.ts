@@ -5,7 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import windowReducer, {
 	initialState as windowInitialState,
-} from '../features/window_temp/windowSlice';
+} from '../features/window/windowSlice';
 import musicReducer, {
 	initialState as musicInitialState,
 } from '../features/music/musicSlice';

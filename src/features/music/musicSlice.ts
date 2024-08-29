@@ -16,7 +16,7 @@ import {
 import { Status } from '../../common/type/type';
 import { PlaylistItem, PlaylistType, Song, SystemSong } from './type';
 import { addToast, updateToastMessage } from '../toaster/toasterSlice';
-import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window_temp/constants';
+import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window/constants';
 
 interface MusicState {
 	systemPlaylist: SystemSong[];

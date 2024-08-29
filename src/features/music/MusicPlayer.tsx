@@ -5,7 +5,7 @@ import {
 	playPreviousSong,
 	selectCurrentSong,
 } from './musicSlice';
-import Window from '../window_temp/Window';
+import Window from '../window/Window';
 import CassetteTape from './CassetteTape';
 import { formatTime } from '../../utils/time';
 import IconPre from '../../assets/icons/icon-pre.svg?react';
@@ -17,11 +17,11 @@ import IconFolder from '../../assets/icons/icon-folder.svg?react';
 import IconMute from '../../assets/icons/icon-mute.svg?react';
 import IconSound from '../../assets/icons/icon-sound.svg?react';
 import styles from './MusicPlayer.module.css';
-import { openWindow } from '../window_temp/windowSlice';
+import { openWindow } from '../window/windowSlice';
 import {
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
-} from '../window_temp/constants';
+} from '../window/constants';
 
 type MusicPlayerProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import Window from '../window_temp/Window';
+import Window from '../window/Window';
 import styles from './SignIn.module.css';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import { useAppSelector } from '../../app/hook';
 import { selectUser } from './authSlice';
-import { SYSTEM_WINDOW_ENTRY } from '../window_temp/constants';
+import { SYSTEM_WINDOW_ENTRY } from '../window/constants';
 type SignInProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
 };

@@ -12,6 +12,7 @@ import {
 	selectWindowsStatus,
 } from './features/window/windowSlice';
 import styles from './App.module.css';
+import { Status } from './common/type/type';
 
 function App(): JSX.Element {
 	const dispatch = useAppDispatch();
@@ -21,7 +22,7 @@ function App(): JSX.Element {
 		const unsubscribe = subscribeAuthStateChanged((user: User | null) => {
 			if (user) {
 				dispatch(userSignedIn(user));
-				dispatch(fetchUserWindows());
+				void dispatch(fetchUserWindows());
 			} else {
 				console.log('Not Sign In');
 			}
@@ -36,7 +37,7 @@ function App(): JSX.Element {
 		<>
 			<Header />
 			<Body />
-			{windowStatus === 'loading' && (
+			{windowStatus === Status.Loading && (
 				<section className={styles.AppLoader}>
 					<AnimatedLogo />
 					<p className={styles.loading}>Loading . . .</p>

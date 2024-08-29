@@ -6,8 +6,8 @@ import {
 	SYSTEM_WINDOW_ENTRY,
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
-} from '../../features/window/constants';
-import { openWindow } from '../../features/window/windowSlice';
+} from '../../features/window_temp/constants';
+import { openWindow } from '../../features/window_temp/windowSlice';
 
 import CurrentDateTime from './CurrentDateTime';
 import styles from './Header.module.css';

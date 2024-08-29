@@ -10,7 +10,7 @@ import AnimatedLogo from './assets/icons/animated-logo.svg?react';
 import {
 	fetchUserWindows,
 	selectWindowsStatus,
-} from './features/window/windowSlice';
+} from './features/window_temp/windowSlice';
 import styles from './App.module.css';
 
 function App(): JSX.Element {

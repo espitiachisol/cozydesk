@@ -8,8 +8,8 @@ import {
 import { RootState } from '../../app/store';
 import { addToast } from '../toaster/toasterSlice';
 import { Status } from '../../common/type/type';
-import { fetchUserWindows, openWindow } from '../window/windowSlice';
-import { SYSTEM_WINDOW_ENTRY } from '../window/constants';
+import { fetchUserWindows, openWindow } from '../window_temp/windowSlice';
+import { SYSTEM_WINDOW_ENTRY } from '../window_temp/constants';
 
 interface UserState {
 	user: User | null;

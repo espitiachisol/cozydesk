@@ -8,7 +8,7 @@ import {
 import { ApiResponse } from '../common/type/type';
 import { auth, db } from './core';
 import { handleError } from '../utils/errorHandler';
-import { WindowInfo } from '../features/window/type';
+import { WindowInfo } from '../features/window_temp/type';
 
 export async function updateWindowIsOpenStatus(
 	windowId: string,

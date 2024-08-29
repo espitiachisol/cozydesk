@@ -1,5 +1,5 @@
 import { useEffect, useState, MouseEvent, DragEvent } from 'react';
-import Window from '../window/Window';
+import Window from '../window_temp/Window';
 import styles from './Folder.module.css';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
@@ -10,7 +10,7 @@ import {
 } from '../music/musicSlice';
 import Playlist from './Playlist';
 import { PlaylistType } from '../music/type';
-import { SYSTEM_WINDOW_FOLDER } from '../window/constants';
+import { SYSTEM_WINDOW_FOLDER } from '../window_temp/constants';
 import { Status } from '../../common/type/type';
 
 type FolderProps = {

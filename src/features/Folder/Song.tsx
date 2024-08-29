@@ -2,8 +2,8 @@ import { useAppDispatch, useAppSelector } from '../../app/hook';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
 import { deleteSong, palySong, selectSongById } from '../music/musicSlice';
 import { Song as SongType } from '../music/type';
-import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window/constants';
-import { openWindow } from '../window/windowSlice';
+import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window_temp/constants';
+import { openWindow } from '../window_temp/windowSlice';
 import styles from './Song.module.css';
 type FileProps = {
 	playlistType: 'system' | 'user';

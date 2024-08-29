@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import styles from './Body.module.css';
 import { useAppSelector, useAppDispatch } from '../../app/hook';
-import { openWindow, getWindows } from '../../features/window/windowSlice';
+import { openWindow, getWindows } from '../../features/window_temp/windowSlice';
 import MusicPlayer from '../../features/music/MusicPlayer';
 import Folder from '../../features/folder/Folder';
 import SignIn from '../../features/auth/SignIn';
@@ -9,7 +9,7 @@ import {
 	SYSTEM_WINDOW_ENTRY,
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
-} from '../../features/window/constants';
+} from '../../features/window_temp/constants';
 import { addToast } from '../../features/toaster/toasterSlice';
 
 function Body() {

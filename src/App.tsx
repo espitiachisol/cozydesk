@@ -9,6 +9,7 @@ import Toaster from './features/toaster/Toaster';
 import AnimatedLogo from './assets/icons/animated-logo.svg?react';
 import {
 	fetchUserWindows,
+	resetStatusToIdle,
 	selectWindowsStatus,
 } from './features/window/windowSlice';
 import styles from './App.module.css';
@@ -23,8 +24,8 @@ function App(): JSX.Element {
 			if (user) {
 				dispatch(userSignedIn(user));
 				void dispatch(fetchUserWindows());
-			} else {
-				console.log('Not Sign In');
+			} else if (!user) {
+				dispatch(resetStatusToIdle());
 			}
 		});
 

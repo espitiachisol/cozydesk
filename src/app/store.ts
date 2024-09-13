@@ -16,6 +16,7 @@ import authReducer, {
 import toasterReducer, {
 	initialState as toasterInitialState,
 } from '../features/toaster/toasterSlice';
+import { Status } from '../common/type/type';
 
 const appReducer = combineReducers({
 	window: windowReducer,
@@ -23,7 +24,6 @@ const appReducer = combineReducers({
 	auth: authReducer,
 	toaster: toasterReducer,
 });
-
 // Root reducer to reset specific slices on sign out
 const rootReducer = (
 	state: ReturnType<typeof appReducer> | undefined,
@@ -31,7 +31,7 @@ const rootReducer = (
 ) => {
 	if (signOut.fulfilled.match(action)) {
 		return {
-			window: windowInitialState,
+			window: { ...windowInitialState, status: Status.Idle },
 			music: musicInitialState,
 			auth: { ...authInitialState, loading: false },
 			toaster: state?.toaster || toasterInitialState, // Keep toaster state unchanged

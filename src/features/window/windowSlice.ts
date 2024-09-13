@@ -43,7 +43,7 @@ export const initialState: WindowsState = {
 			isOpen: false,
 		},
 	],
-	status: Status.Idle,
+	status: Status.Loading,
 };
 
 export const fetchUserWindows = createAsyncThunk(
@@ -138,8 +138,8 @@ export const windowSlice = createSlice({
 				currentWindow.zIndex = maxZIndex + 1;
 			}
 		},
-		resetWindowSlice: () => {
-			return initialState;
+		resetStatusToIdle: (state) => {
+			state.status = Status.Idle;
 		},
 	},
 	extraReducers: (builder) => {
@@ -157,7 +157,7 @@ export const {
 	openWindow,
 	closeWindow,
 	bringToFront,
-	resetWindowSlice,
+	resetStatusToIdle,
 	updateWindowPosition,
 } = windowSlice.actions;
 

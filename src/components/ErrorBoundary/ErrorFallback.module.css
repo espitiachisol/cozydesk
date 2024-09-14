@@ -1,0 +1,27 @@
+.errorFallback{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+  z-index: 100000;
+  flex-direction: column;
+  padding-inline: 1rem;
+  text-align: center;
+
+  .errorIcon {
+    inline-size: 8rem;
+    block-size: 8rem;
+  }
+  .errorFallbackTitle{
+    color: var(--color-dark--1);
+    margin-block-end: .5rem;
+  }
+  .errorFallbackContent{
+    color: var(--color-dark--1);
+  }
+}

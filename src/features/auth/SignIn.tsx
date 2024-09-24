@@ -42,7 +42,7 @@ export default function SignIn({ containerRef }: SignInProps) {
 				className={styles.image}
 				draggable={false}
 			/>
-			<Window.Header className={styles.folderDraggable} />
+			<Window.DragArea />
 		</Window>
 	);
 }

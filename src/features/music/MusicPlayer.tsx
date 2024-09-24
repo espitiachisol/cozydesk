@@ -179,13 +179,13 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					}}
 				/>
 			</section>
-			<Window.Header className={styles.MusicPlayerHeader}>
+			<Window.DragArea>
 				<CassetteTape
 					isPlaying={isPlaying}
 					progress={(progress * 100) / duration}
 					image={currentSong?.imageURL}
 				/>
-			</Window.Header>
+			</Window.DragArea>
 		</Window>
 	);
 }

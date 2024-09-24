@@ -224,14 +224,4 @@
     }
 
   }
-
-  .MusicPlayerHeader {
-    background-color: transparent;
-    border-radius: .625rem .625rem 0 0;
-    position: absolute;
-    inline-size: 100%;
-    block-size: 40px;
-    top: 0;
-    left: 0;
-  }
 }

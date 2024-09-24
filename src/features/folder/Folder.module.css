@@ -9,17 +9,6 @@
   border: 1px var(--color-grey--100) solid;
   box-shadow: rgba(25, 21, 33, 0.05) 2px 4px 15px, rgba(25, 21, 33, .2) 0px 5px 9px -3px;
 
-  .folderDraggable {
-    /* grid-area: header; */
-    background-color: transparent;
-    border-radius: .625rem .625rem 0 0;
-    position: absolute;
-    inline-size: 100%;
-    block-size: 40px;
-    top: 0;
-    left: 0;
-  }
-
   .sidebar {
     grid-area: sidebar;
     background-color: var(--color-white--100-transparent-low);

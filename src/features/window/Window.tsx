@@ -123,52 +123,51 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 		dispatch(bringToFront({ id }));
 	}
 
+	function handleButtonMouseDown(e: React.MouseEvent<Element, MouseEvent>) {
+		e.stopPropagation();
+		dispatch(closeWindowAsync({ id }));
+	}
+
 	return (
 		<WindowContext.Provider value={{ handleMouseDown, id }}>
 			<article
-				className={className}
+				className={`${styles.window} ${className}`}
 				ref={dragRef}
 				onMouseDown={handleBringToFront}
 				style={{ position: 'absolute' }}
 			>
+				<ul className={styles.actions}>
+					<li>
+						<button
+							className={styles.cross}
+							onMouseDown={handleButtonMouseDown}
+						>
+							x
+						</button>
+					</li>
+				</ul>
 				{children}
 			</article>
 		</WindowContext.Provider>
 	);
 }
 
-type HeaderProps = PropsWithChildren<{
+type DragAreaProps = PropsWithChildren<{
 	className?: string;
 }>;
-function Header({ children, className }: HeaderProps) {
-	const { handleMouseDown, id } = useWindow();
-	const dispatch = useAppDispatch();
-	const handleButtonMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
-		e.stopPropagation();
-		dispatch(closeWindowAsync({ id }));
-	};
+
+function DragArea({ children, className }: DragAreaProps) {
+	const { handleMouseDown } = useWindow();
 	return (
-		<header
-			className={`${styles.header} ${className}`}
+		<section
+			className={`${styles.dragArea} ${className}`}
 			onMouseDown={handleMouseDown}
 		>
-			<ul className={styles.actions}>
-				<li>
-					<button className={styles.cross} onMouseDown={handleButtonMouseDown}>
-						x
-					</button>
-				</li>
-			</ul>
 			{children}
-		</header>
+		</section>
 	);
 }
 
-function Body({ children }: PropsWithChildren) {
-	return <section>{children}</section>;
-}
-
-Window.Header = Header;
-Window.Body = Body;
+Window.DragArea = DragArea;
 
 export default Window;

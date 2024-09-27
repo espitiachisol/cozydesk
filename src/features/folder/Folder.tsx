@@ -138,7 +138,7 @@ export default function Folder({ containerRef }: FolderProps) {
 				</Contextmenu>
 			</section>
 
-			<Window.Header className={styles.folderDraggable} />
+			<Window.DragArea />
 		</Window>
 	);
 }

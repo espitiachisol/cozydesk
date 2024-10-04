@@ -9,14 +9,14 @@ type FileProps = {
 	playlistType: 'system' | 'user';
 	songId: string;
 	selected: boolean;
-	onClickToggle(event: React.MouseEvent<HTMLButtonElement>): void;
+	onClickFile(event: React.MouseEvent<HTMLButtonElement>): void;
 	onClickContextMenu(event: React.MouseEvent<HTMLButtonElement>): void;
 };
 export default function Song({
 	playlistType,
 	songId,
 	selected,
-	onClickToggle,
+	onClickFile,
 	onClickContextMenu,
 }: FileProps) {
 	const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ export default function Song({
 			<Contextmenu.Toggle
 				onClickContextMenu={onClickContextMenu}
 				id={id}
-				onClickToggle={onClickToggle}
+				onClickToggle={onClickFile}
 				className={`${styles.song} ${selected ? styles.selected : ''}`}
 			>
 				<img src={iconURL} draggable={false} alt={name} />

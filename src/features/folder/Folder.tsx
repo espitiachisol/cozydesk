@@ -119,22 +119,13 @@ export default function Folder({ containerRef }: FolderProps) {
 				onDragLeave={handleDragLeave}
 			>
 				<Contextmenu>
-					{tab === 'system' && (
-						<Playlist
-							playlistType="system"
-							selectedItems={selectedItems}
-							handleClickContextMenu={handleClickContextMenu}
-							handleClickFile={handleClickFile}
-						/>
-					)}
-					{tab === 'user' && (
-						<Playlist
-							playlistType="user"
-							selectedItems={selectedItems}
-							handleClickContextMenu={handleClickContextMenu}
-							handleClickFile={handleClickFile}
-						/>
-					)}
+					<Playlist
+						key={tab}
+						playlistType={tab}
+						selectedItems={selectedItems}
+						onClickContextMenu={handleClickContextMenu}
+						onClickFile={handleClickFile}
+					/>
 				</Contextmenu>
 			</section>
 

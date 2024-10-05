@@ -88,7 +88,7 @@ export default function Folder({ containerRef }: FolderProps) {
 		>
 			<nav className={styles.sidebar}>
 				<h2 className={styles.title}>Music</h2>
-				<ul onMouseDown={(e) => e.stopPropagation()}>
+				<ul>
 					<li>
 						<button
 							id="system"

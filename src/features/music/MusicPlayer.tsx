@@ -112,10 +112,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 						setDuration(duration);
 					}}
 				/>
-				<section
-					className={styles.progress}
-					onMouseDown={(e) => e.stopPropagation()}
-				>
+				<section className={styles.progress}>
 					<progress onClick={handleProgress} value={progress} max={duration} />
 					<time dateTime={formatTime(progress, 'Hh Mm Ss')}>
 						{formatTime(progress, 'HH:MM:SS')}
@@ -124,16 +121,10 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 						{formatTime(duration, 'HH:MM:SS')}
 					</time>
 				</section>
-				<article
-					className={styles.songDetail}
-					onMouseDown={(e) => e.stopPropagation()}
-				>
+				<article className={styles.songDetail}>
 					<h1>{currentSong?.name}</h1>
 				</article>
-				<fieldset
-					className={styles.actionButtons}
-					onMouseDown={(e) => e.stopPropagation()}
-				>
+				<fieldset className={styles.actionButtons}>
 					<button onClick={handlePreviousSong}>
 						<IconPre />
 					</button>
@@ -167,7 +158,6 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 				{volume === 0 && <IconMute className={styles.volumeImage} />}
 				{volume !== 0 && <IconSound className={styles.volumeImage} />}
 				<input
-					onMouseDown={(e) => e.stopPropagation()}
 					className={styles.volumeSlider}
 					type="range"
 					min="0"

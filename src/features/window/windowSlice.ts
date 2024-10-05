@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
 import { WindowInfo } from './type';
-import {
-	SYSTEM_WINDOW_ENTRY,
-	SYSTEM_WINDOW_FOLDER,
-	SYSTEM_WINDOW_MUSIC_PLAYER,
-} from './constants';
+import { SYSTEM_WINDOW_ENTRY } from './constants';
 import {
 	getUserWindows,
 	saveWindowInfoToFirestore,
@@ -23,24 +19,12 @@ export const initialState: WindowsState = {
 	windows: [
 		{
 			id: SYSTEM_WINDOW_ENTRY,
-			zIndex: 2,
+			zIndex: 0,
 			position: {
 				x: window.innerWidth / 2 - 265,
 				y: window.innerHeight / 2 - 300,
 			},
 			isOpen: true,
-		},
-		{
-			id: SYSTEM_WINDOW_MUSIC_PLAYER,
-			zIndex: 1,
-			position: { x: 100, y: 100 },
-			isOpen: false,
-		},
-		{
-			id: SYSTEM_WINDOW_FOLDER,
-			zIndex: 0,
-			position: { x: 200, y: 200 },
-			isOpen: false,
 		},
 	],
 	status: Status.Loading,
@@ -85,6 +69,10 @@ export const moveWindow = createAsyncThunk(
 	}
 );
 
+const getMaxZIndex = (windows: WindowInfo[]) => {
+	return Math.max(...windows.map((w) => w.zIndex));
+};
+
 export const windowSlice = createSlice({
 	name: 'window',
 	initialState,
@@ -93,21 +81,24 @@ export const windowSlice = createSlice({
 			const existingWindow = state.windows.find(
 				(window) => window.id === action.payload.id
 			);
-			const windowsIndex = state.windows.map((w) => w.zIndex);
-			const maxZIndex = windowsIndex.length > 0 ? Math.max(...windowsIndex) : 0;
+			const maxZIndex = getMaxZIndex(state.windows);
 			if (!existingWindow) {
 				state.windows.push({
 					id: action.payload.id,
 					zIndex: maxZIndex + 1,
-					position: { x: 100, y: 100 },
+					position: {
+						x: window.innerWidth / 2 - 265,
+						y: window.innerHeight / 2 - 300,
+					},
 					isOpen: true,
 				});
 				return;
 			}
 
 			if (!existingWindow.isOpen) existingWindow.isOpen = true;
-			if (existingWindow.zIndex < maxZIndex)
+			if (existingWindow.zIndex < maxZIndex) {
 				existingWindow.zIndex = maxZIndex + 1;
+			}
 		},
 		closeWindow: (state, action: PayloadAction<{ id: string }>) => {
 			const existingWindow = state.windows.find(
@@ -115,6 +106,7 @@ export const windowSlice = createSlice({
 			);
 			if (existingWindow) {
 				existingWindow.isOpen = false;
+				existingWindow.zIndex = 0;
 			}
 		},
 		updateWindowPosition: (
@@ -133,7 +125,7 @@ export const windowSlice = createSlice({
 				(window) => window.id === action.payload.id
 			);
 			if (!currentWindow) return;
-			const maxZIndex = Math.max(...state.windows.map((w) => w.zIndex));
+			const maxZIndex = getMaxZIndex(state.windows);
 			if (currentWindow.zIndex < maxZIndex) {
 				currentWindow.zIndex = maxZIndex + 1;
 			}

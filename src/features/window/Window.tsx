@@ -15,7 +15,7 @@ import {
 } from './windowSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 interface WindowContextType {
-	handleMouseDown: (e: React.MouseEvent) => void;
+	handleDragStart: (e: React.MouseEvent) => void;
 	id: string;
 }
 interface Position {
@@ -107,7 +107,7 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 		};
 	}, [id, dispatch, isDragging, previousPositionRef]);
 
-	function handleMouseDown(e: React.MouseEvent<Element, MouseEvent>) {
+	function handleDragStart(e: React.MouseEvent<Element, MouseEvent>) {
 		if (!dragRef.current) return;
 		setIsDragging(true);
 		const { clientX, clientY } = e;
@@ -118,18 +118,19 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 		});
 	}
 
-	function handleBringToFront() {
+	function handleBringToFront(e: React.MouseEvent<Element, MouseEvent>) {
+		e.stopPropagation();
 		if (!dragRef.current) return;
 		dispatch(bringToFront({ id }));
 	}
 
-	function handleButtonMouseDown(e: React.MouseEvent<Element, MouseEvent>) {
+	function handleCloseWindow(e: React.MouseEvent<Element, MouseEvent>) {
 		e.stopPropagation();
 		dispatch(closeWindowAsync({ id }));
 	}
 
 	return (
-		<WindowContext.Provider value={{ handleMouseDown, id }}>
+		<WindowContext.Provider value={{ handleDragStart, id }}>
 			<article
 				className={`${styles.window} ${className}`}
 				ref={dragRef}
@@ -138,10 +139,7 @@ function Window({ id, children, className, containerRef }: WindowProps) {
 			>
 				<ul className={styles.actions}>
 					<li>
-						<button
-							className={styles.cross}
-							onMouseDown={handleButtonMouseDown}
-						>
+						<button className={styles.cross} onClick={handleCloseWindow}>
 							x
 						</button>
 					</li>
@@ -157,11 +155,11 @@ type DragAreaProps = PropsWithChildren<{
 }>;
 
 function DragArea({ children, className }: DragAreaProps) {
-	const { handleMouseDown } = useWindow();
+	const { handleDragStart } = useWindow();
 	return (
 		<section
 			className={`${styles.dragArea} ${className}`}
-			onMouseDown={handleMouseDown}
+			onMouseDown={handleDragStart}
 		>
 			{children}
 		</section>

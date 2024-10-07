@@ -2,11 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
 import { WindowInfo } from './type';
 import { SYSTEM_WINDOW_ENTRY } from './constants';
-import {
-	getUserWindows,
-	saveWindowInfoToFirestore,
-	updateWindowIsOpenStatus,
-} from '../../services/window';
+import windowService from '../../services/window';
 import { Status } from '../../common/type/type';
 import debounce from '../../utils/debounce';
 interface WindowsState {
@@ -33,19 +29,53 @@ export const initialState: WindowsState = {
 export const fetchUserWindows = createAsyncThunk(
 	'windows/fetchUserWindows',
 	async (_, { rejectWithValue }) => {
-		const result = await getUserWindows();
+		const result = await windowService.getWindows();
 		if ('error' in result) return rejectWithValue(result.error);
 		return result.response;
 	}
 );
 
-const debounceSaveWindowInfo = debounce(saveWindowInfoToFirestore, 3000);
+const debounceUpdateWindow = debounce(windowService.updateWindow, 3000);
 
 export const closeWindowAsync = createAsyncThunk(
 	'window/closeWindow',
 	async (payload: { id: string }, { dispatch, rejectWithValue }) => {
 		dispatch(closeWindow(payload));
-		const result = await updateWindowIsOpenStatus(payload.id, false);
+		const result = await windowService.closeWindow(payload.id);
+		if ('error' in result) {
+			return rejectWithValue(result.error);
+		}
+	}
+);
+
+export const openWindowAsync = createAsyncThunk(
+	'window/openWindow',
+	async (payload: { id: string }, { dispatch, getState, rejectWithValue }) => {
+		const state = getState() as RootState;
+		const { windows } = state.window;
+		const existingWindow = windows.find((window) => window.id === payload.id);
+		const maxZIndex = getMaxZIndex(windows);
+		const nextZIndex = maxZIndex + 1;
+		let result;
+		if (!existingWindow) {
+			const newWindow = {
+				id: payload.id,
+				zIndex: nextZIndex,
+				position: {
+					x: window.innerWidth / 2 - 265,
+					y: window.innerHeight / 2 - 300,
+				},
+				isOpen: true,
+			};
+			dispatch(openNewWindow(newWindow));
+			result = await windowService.createWindow(newWindow);
+		} else {
+			dispatch(openWindow({ id: payload.id, nextZIndex }));
+			result = await windowService.updateWindow(payload.id, {
+				zIndex: nextZIndex,
+				isOpen: true,
+			});
+		}
 		if ('error' in result) {
 			return rejectWithValue(result.error);
 		}
@@ -64,40 +94,34 @@ export const moveWindow = createAsyncThunk(
 			(window) => window.id === payload.id
 		);
 		if (!windowInfo) return rejectWithValue('Window not found');
-		const updatedWindowInfo = { ...windowInfo, position: payload.position };
-		debounceSaveWindowInfo(updatedWindowInfo);
+		debounceUpdateWindow(payload.id, {
+			position: payload.position,
+			zIndex: windowInfo.zIndex,
+		});
 	}
 );
 
 const getMaxZIndex = (windows: WindowInfo[]) => {
-	return Math.max(...windows.map((w) => w.zIndex));
+	return windows.length > 0 ? Math.max(...windows.map((w) => w.zIndex)) : 0;
 };
 
 export const windowSlice = createSlice({
 	name: 'window',
 	initialState,
 	reducers: {
-		openWindow: (state, action: PayloadAction<{ id: string }>) => {
+		openNewWindow: (state, action: PayloadAction<WindowInfo>) => {
+			state.windows.push(action.payload);
+		},
+		openWindow: (
+			state,
+			action: PayloadAction<{ id: string; nextZIndex: number }>
+		) => {
 			const existingWindow = state.windows.find(
 				(window) => window.id === action.payload.id
 			);
-			const maxZIndex = getMaxZIndex(state.windows);
-			if (!existingWindow) {
-				state.windows.push({
-					id: action.payload.id,
-					zIndex: maxZIndex + 1,
-					position: {
-						x: window.innerWidth / 2 - 265,
-						y: window.innerHeight / 2 - 300,
-					},
-					isOpen: true,
-				});
-				return;
-			}
-
-			if (!existingWindow.isOpen) existingWindow.isOpen = true;
-			if (existingWindow.zIndex < maxZIndex) {
-				existingWindow.zIndex = maxZIndex + 1;
+			if (existingWindow) {
+				existingWindow.isOpen = true;
+				existingWindow.zIndex = action.payload.nextZIndex;
 			}
 		},
 		closeWindow: (state, action: PayloadAction<{ id: string }>) => {
@@ -145,13 +169,10 @@ export const windowSlice = createSlice({
 	},
 });
 
-export const {
-	openWindow,
-	closeWindow,
-	bringToFront,
-	resetStatusToIdle,
-	updateWindowPosition,
-} = windowSlice.actions;
+export const { bringToFront, resetStatusToIdle, updateWindowPosition } =
+	windowSlice.actions;
+
+const { closeWindow, openNewWindow, openWindow } = windowSlice.actions;
 
 export const getWindowById = (id: string) => (state: RootState) =>
 	state.window.windows.find((w) => w.id === id);

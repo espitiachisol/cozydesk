@@ -3,7 +3,7 @@ import Contextmenu from '../../components/Contextmenu/ContextMenu';
 import { deleteSong, palySong, selectSongById } from '../music/musicSlice';
 import { Song as SongType } from '../music/type';
 import { SYSTEM_WINDOW_MUSIC_PLAYER } from '../window/constants';
-import { openWindow } from '../window/windowSlice';
+import { openWindowAsync } from '../window/windowSlice';
 import styles from './Song.module.css';
 type FileProps = {
 	playlistType: 'system' | 'user';
@@ -42,7 +42,7 @@ export default function Song({
 				<Contextmenu.Button
 					onClick={() => {
 						dispatch(palySong({ playlistType, songId: id }));
-						dispatch(openWindow({ id: SYSTEM_WINDOW_MUSIC_PLAYER }));
+						dispatch(openWindowAsync({ id: SYSTEM_WINDOW_MUSIC_PLAYER }));
 					}}
 				>
 					Play

@@ -17,7 +17,7 @@ import IconFolder from '../../assets/icons/icon-folder.svg?react';
 import IconMute from '../../assets/icons/icon-mute.svg?react';
 import IconSound from '../../assets/icons/icon-sound.svg?react';
 import styles from './MusicPlayer.module.css';
-import { openWindow } from '../window/windowSlice';
+import { openWindowAsync } from '../window/windowSlice';
 import {
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
@@ -149,7 +149,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					</button>
 					<button
 						onClick={() => {
-							dispatch(openWindow({ id: SYSTEM_WINDOW_FOLDER }));
+							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_FOLDER }));
 						}}
 					>
 						<IconFolder />

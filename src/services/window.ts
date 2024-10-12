@@ -10,15 +10,22 @@ import { auth, db } from './core';
 import { handleError } from '../utils/errorHandler';
 import { WindowInfo } from '../features/window/type';
 
-export async function updateWindowIsOpenStatus(
-	windowId: string,
-	isOpen: boolean
-): Promise<ApiResponse<void>> {
+interface UpdateWindowFields {
+	zIndex?: number;
+	position?: { x: number; y: number };
+	isOpen?: boolean;
+}
+
+function getWindowDocRef(windowId: string) {
+	const user = auth.currentUser;
+	if (!user) throw new Error('User not signed in');
+	return doc(db, 'users', user.uid, 'windows', windowId);
+}
+
+async function closeWindow(windowId: string): Promise<ApiResponse<void>> {
 	try {
-		const user = auth.currentUser;
-		if (!user) throw new Error('User not signed in');
-		const windowDocRef = doc(db, 'users', user.uid, 'windows', windowId);
-		await updateDoc(windowDocRef, { isOpen: isOpen });
+		const windowDocRef = getWindowDocRef(windowId);
+		await updateDoc(windowDocRef, { isOpen: false, zIndex: 0 });
 		return {
 			response: undefined,
 		};
@@ -27,14 +34,26 @@ export async function updateWindowIsOpenStatus(
 	}
 }
 
-export async function saveWindowInfoToFirestore(
+async function updateWindow(
+	windowId: string,
+	updateField: UpdateWindowFields
+): Promise<ApiResponse<void>> {
+	try {
+		const windowDocRef = getWindowDocRef(windowId);
+		await updateDoc(windowDocRef, { ...updateField });
+		return {
+			response: undefined,
+		};
+	} catch (error) {
+		return { error: handleError(error) };
+	}
+}
+
+export async function createWindow(
 	windowInfo: WindowInfo
 ): Promise<ApiResponse<void>> {
 	try {
-		const user = auth.currentUser;
-		console.log('Save!');
-		if (!user) throw new Error('User not signed in');
-		const windowDocRef = doc(db, 'users', user.uid, 'windows', windowInfo.id);
+		const windowDocRef = getWindowDocRef(windowInfo.id);
 		await setDoc(windowDocRef, windowInfo);
 		return {
 			response: undefined,
@@ -44,7 +63,7 @@ export async function saveWindowInfoToFirestore(
 	}
 }
 
-export async function getUserWindows(): Promise<ApiResponse<WindowInfo[]>> {
+export async function getWindows(): Promise<ApiResponse<WindowInfo[]>> {
 	try {
 		const user = auth.currentUser;
 		if (!user) throw new Error('User not signed in');
@@ -62,3 +81,10 @@ export async function getUserWindows(): Promise<ApiResponse<WindowInfo[]>> {
 		return { error: handleError(error) };
 	}
 }
+
+export default {
+	closeWindow,
+	updateWindow,
+	createWindow,
+	getWindows,
+};

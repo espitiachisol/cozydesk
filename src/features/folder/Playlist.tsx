@@ -8,15 +8,15 @@ import styles from './Folder.module.css';
 type PlaylistProps = {
 	playlistType: PlaylistType;
 	selectedItems: string[];
-	handleClickContextMenu: (e: React.MouseEvent<HTMLButtonElement>) => void;
-	handleClickFile: (e: React.MouseEvent<HTMLButtonElement>) => void;
+	onClickContextMenu: (e: React.MouseEvent<HTMLButtonElement>) => void;
+	onClickFile: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export default function Playlist({
 	playlistType,
 	selectedItems,
-	handleClickContextMenu,
-	handleClickFile,
+	onClickContextMenu,
+	onClickFile,
 }: PlaylistProps) {
 	const user = useAppSelector(selectUser);
 	const playlistIds = useAppSelector(selectPlaylistIdsByType(playlistType));
@@ -45,8 +45,8 @@ export default function Playlist({
 			playlistType={playlistType}
 			songId={id}
 			selected={selectedItems.includes(id)}
-			onClickContextMenu={handleClickContextMenu}
-			onClickToggle={handleClickFile}
+			onClickContextMenu={onClickContextMenu}
+			onClickFile={onClickFile}
 		/>
 	));
 }

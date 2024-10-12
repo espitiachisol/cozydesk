@@ -7,7 +7,7 @@ import {
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
 } from '../../features/window/constants';
-import { openWindow } from '../../features/window/windowSlice';
+import { openWindowAsync } from '../../features/window/windowSlice';
 
 import CurrentDateTime from './CurrentDateTime';
 import styles from './Header.module.css';
@@ -28,7 +28,9 @@ function Header(): JSX.Element {
 				</Menu.Toggle>
 				<Menu.List id="cozydesk">
 					<Menu.Button
-						onClick={() => dispatch(openWindow({ id: SYSTEM_WINDOW_ENTRY }))}
+						onClick={() =>
+							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_ENTRY }))
+						}
 					>
 						{user ? 'Entry' : 'Sign In'}
 					</Menu.Button>
@@ -47,13 +49,15 @@ function Header(): JSX.Element {
 				<Menu.Toggle id="app">App</Menu.Toggle>
 				<Menu.List id="app">
 					<Menu.Button
-						onClick={() => dispatch(openWindow({ id: SYSTEM_WINDOW_FOLDER }))}
+						onClick={() =>
+							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_FOLDER }))
+						}
 					>
 						Folder
 					</Menu.Button>
 					<Menu.Button
 						onClick={() =>
-							dispatch(openWindow({ id: SYSTEM_WINDOW_MUSIC_PLAYER }))
+							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_MUSIC_PLAYER }))
 						}
 					>
 						Music Player

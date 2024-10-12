@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import styles from './Body.module.css';
 import { useAppSelector, useAppDispatch } from '../../app/hook';
-import { openWindow, getWindows } from '../../features/window/windowSlice';
+import { openWindowAsync, getWindows } from '../../features/window/windowSlice';
 import MusicPlayer from '../../features/music/MusicPlayer';
 import Folder from '../../features/folder/Folder';
 import SignIn from '../../features/auth/SignIn';
@@ -33,14 +33,16 @@ function Body() {
 			{isEntryOpen && <SignIn containerRef={containerRef} />}
 			<fieldset className={styles.AppIconsLayout}>
 				<button
-					onClick={() => dispatch(openWindow({ id: SYSTEM_WINDOW_FOLDER }))}
+					onClick={() =>
+						dispatch(openWindowAsync({ id: SYSTEM_WINDOW_FOLDER }))
+					}
 				>
 					<img src="/icons/desktop-folder.png" draggable={false} />
 					Folder
 				</button>
 				<button
 					onClick={() =>
-						dispatch(openWindow({ id: SYSTEM_WINDOW_MUSIC_PLAYER }))
+						dispatch(openWindowAsync({ id: SYSTEM_WINDOW_MUSIC_PLAYER }))
 					}
 				>
 					<img src="/icons/desktop-musicPlayer.png" draggable={false} />

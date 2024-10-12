@@ -1,5 +1,14 @@
 .window{
   position: relative;
+  &.resize::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    cursor: nwse-resize;
+  }
   .actions{
     position: absolute;
     top: 0;

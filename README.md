@@ -24,14 +24,16 @@ This project is a WebApp designed to simulate the experience of a desktop enviro
 
 ![window](/public/readme/window.gif)
 
-Key Techniques: Debouncing, Compound Pattern, Context API
+Key Techniques: Compound Pattern, Custom Hooks, Context API, Debouncing
+
+- Dragging and Resizing: 
+  - Developed custom hooks (`useWindowDrag` and `useWindowResize`) to manage dragging and resizing behaviors.
+  - Implemented boundary constraints by passing a container ref, ensuring windows stay within defined boundaries during both dragging and resizing operations.
 
 - Customizable Draggable Area:
 Utilized the **Compound Pattern**, allowing for the customization of draggable areas within the window component.
 
-- Implemented boundary constraints by passing a container ref, ensuring windows stay within defined boundaries.
-
-- Integrated a **debounce strategy** to enhance performance, ensuring that window positions are updated only after the drag operation is completed, thereby reducing unnecessary server requests.
+- Integrated a **debounce strategy** to enhance performance, ensuring that window position/size are updated only after the drag operation is completed, thereby reducing unnecessary server requests.
 
 ### Music Player and Playlist
 

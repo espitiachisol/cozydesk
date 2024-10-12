@@ -17,6 +17,7 @@
 
   .musicControlSection {
     inline-size: 400px;
+    block-size: 120px;
     margin-top: 248px;
     background-color: var(--color-dark--1);
     border-radius: 0 0 .625rem .625rem;

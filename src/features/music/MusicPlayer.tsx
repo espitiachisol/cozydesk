@@ -5,7 +5,7 @@ import {
 	playPreviousSong,
 	selectCurrentSong,
 } from './musicSlice';
-import Window from '../window/Window';
+import Window from '../../components/Window/Window';
 import CassetteTape from './CassetteTape';
 import { formatTime } from '../../utils/time';
 import IconPre from '../../assets/icons/icon-pre.svg?react';
@@ -17,7 +17,14 @@ import IconFolder from '../../assets/icons/icon-folder.svg?react';
 import IconMute from '../../assets/icons/icon-mute.svg?react';
 import IconSound from '../../assets/icons/icon-sound.svg?react';
 import styles from './MusicPlayer.module.css';
-import { openWindow } from '../window/windowSlice';
+import {
+	bringToFront,
+	closeWindowAsync,
+	getWindowById,
+	moveWindow,
+	openWindowAsync,
+	resizeWindow,
+} from '../window/windowSlice';
 import {
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
@@ -28,8 +35,10 @@ type MusicPlayerProps = {
 };
 
 export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
+	const id = SYSTEM_WINDOW_MUSIC_PLAYER;
 	const dispatch = useAppDispatch();
 	const currentSong = useAppSelector(selectCurrentSong);
+	const window = useAppSelector(getWindowById(id));
 	const control = useRef<HTMLAudioElement>(null);
 
 	const [progress, setProgress] = useState(0);
@@ -48,6 +57,8 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 		if (!control.current) return;
 		control.current.volume = volume;
 	}, [volume]);
+
+	if (!window) return null;
 
 	function handlePlaySong() {
 		if (!control.current) return;
@@ -82,11 +93,34 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 		control.current.currentTime = currentTime;
 	};
 
+	const handleResize = (size: { width: number; height: number }) => {
+		void dispatch(resizeWindow({ id, size }));
+	};
+
+	const handleMove = (position: { x: number; y: number }) => {
+		void dispatch(moveWindow({ id, position }));
+	};
+
+	const handleBringToFront = () => {
+		dispatch(bringToFront({ id }));
+	};
+
+	const handleClose = () => {
+		void dispatch(closeWindowAsync({ id }));
+	};
+
 	return (
 		<Window
 			containerRef={containerRef}
 			className={styles.musicPlayer}
-			id={SYSTEM_WINDOW_MUSIC_PLAYER}
+			position={window.position}
+			size={window.size}
+			zIndex={window.zIndex}
+			onResize={handleResize}
+			onMove={handleMove}
+			onBringToFront={handleBringToFront}
+			onClose={handleClose}
+			isResizable={false}
 		>
 			<section className={styles.musicControlSection}>
 				<audio
@@ -112,10 +146,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 						setDuration(duration);
 					}}
 				/>
-				<section
-					className={styles.progress}
-					onMouseDown={(e) => e.stopPropagation()}
-				>
+				<section className={styles.progress}>
 					<progress onClick={handleProgress} value={progress} max={duration} />
 					<time dateTime={formatTime(progress, 'Hh Mm Ss')}>
 						{formatTime(progress, 'HH:MM:SS')}
@@ -124,16 +155,10 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 						{formatTime(duration, 'HH:MM:SS')}
 					</time>
 				</section>
-				<article
-					className={styles.songDetail}
-					onMouseDown={(e) => e.stopPropagation()}
-				>
+				<article className={styles.songDetail}>
 					<h1>{currentSong?.name}</h1>
 				</article>
-				<fieldset
-					className={styles.actionButtons}
-					onMouseDown={(e) => e.stopPropagation()}
-				>
+				<fieldset className={styles.actionButtons}>
 					<button onClick={handlePreviousSong}>
 						<IconPre />
 					</button>
@@ -158,7 +183,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					</button>
 					<button
 						onClick={() => {
-							dispatch(openWindow({ id: SYSTEM_WINDOW_FOLDER }));
+							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_FOLDER }));
 						}}
 					>
 						<IconFolder />
@@ -167,7 +192,6 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 				{volume === 0 && <IconMute className={styles.volumeImage} />}
 				{volume !== 0 && <IconSound className={styles.volumeImage} />}
 				<input
-					onMouseDown={(e) => e.stopPropagation()}
 					className={styles.volumeSlider}
 					type="range"
 					min="0"

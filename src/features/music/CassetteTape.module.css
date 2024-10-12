@@ -20,7 +20,7 @@
 
 .cassetteTape {
   inline-size: 400px;
-  block-size: 255.8px;
+  block-size: 256px;
   overflow: hidden;
   border-radius: 10px;
   position: relative;

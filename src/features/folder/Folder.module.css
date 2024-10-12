@@ -4,15 +4,14 @@
   border-radius: .625rem;
   grid-template-areas: "sidebar toolbar"
     "sidebar folder";
-  grid-template-columns: 160px 520px;
-  grid-template-rows: 40px 400px;
+  grid-template-columns: 160px auto;
+  grid-template-rows: 40px auto;
   border: 1px var(--color-grey--100) solid;
   box-shadow: rgba(25, 21, 33, 0.05) 2px 4px 15px, rgba(25, 21, 33, .2) 0px 5px 9px -3px;
 
   .sidebar {
     grid-area: sidebar;
     background-color: var(--color-white--100-transparent-low);
-
     border-radius: .625rem 0 0 .625rem;
     padding-inline: 1rem;
     padding-block-start: 2.2rem;
@@ -58,14 +57,18 @@
     grid-area: folder;
     background-color: var(--color-white--100);
     border-radius: 0 0 .625rem 0;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 5rem);
     padding-inline: 1.5rem;
     padding-block: 1rem;
     gap: 1.5rem 2rem;
     align-content: flex-start;
     overflow: auto;
     position: relative;
+    &::-webkit-scrollbar-track {
+      background: transparent; /* Color of the scrollbar track */
+    }
+    scrollbar-color: var(--color-grey--200) transparent; 
 
     &.cannot {
       cursor: not-allowed;

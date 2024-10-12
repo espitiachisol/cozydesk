@@ -1,5 +1,5 @@
 import { useEffect, useState, MouseEvent, DragEvent } from 'react';
-import Window from '../window/Window';
+import Window from '../../components/Window/Window';
 import styles from './Folder.module.css';
 import Contextmenu from '../../components/Contextmenu/ContextMenu';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
@@ -12,6 +12,13 @@ import Playlist from './Playlist';
 import { PlaylistType } from '../music/type';
 import { SYSTEM_WINDOW_FOLDER } from '../window/constants';
 import { Status } from '../../common/type/type';
+import {
+	bringToFront,
+	closeWindowAsync,
+	getWindowById,
+	moveWindow,
+	resizeWindow,
+} from '../window/windowSlice';
 
 type FolderProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
@@ -19,6 +26,8 @@ type FolderProps = {
 export default function Folder({ containerRef }: FolderProps) {
 	const dispatch = useAppDispatch();
 	const uploadStatus = useAppSelector(selectUploadStatus);
+	const id = SYSTEM_WINDOW_FOLDER;
+	const window = useAppSelector(getWindowById(id));
 	const [tab, setTab] = useState<PlaylistType>('system');
 	const [selectedItems, setSelectedItems] = useState<string[]>([]);
 	const [canDrop, setCanDrop] = useState<'idle' | 'cannot' | 'can'>('idle');
@@ -26,6 +35,8 @@ export default function Folder({ containerRef }: FolderProps) {
 	useEffect(() => {
 		void dispatch(fetchUserPlaylist());
 	}, [dispatch]);
+
+	if (!window) return null;
 
 	function handleClickFile(e: MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
@@ -80,11 +91,33 @@ export default function Folder({ containerRef }: FolderProps) {
 		void dispatch(uploadSong({ files: droppedFiles }));
 	}
 
+	const handleResize = (size: { width: number; height: number }) => {
+		void dispatch(resizeWindow({ id, size }));
+	};
+
+	const handleMove = (position: { x: number; y: number }) => {
+		void dispatch(moveWindow({ id, position }));
+	};
+
+	const handleBringToFront = () => {
+		dispatch(bringToFront({ id }));
+	};
+
+	const handleClose = () => {
+		void dispatch(closeWindowAsync({ id }));
+	};
+
 	return (
 		<Window
 			containerRef={containerRef}
-			id={SYSTEM_WINDOW_FOLDER}
 			className={styles.folderLayout}
+			position={window.position}
+			size={window.size}
+			zIndex={window.zIndex}
+			onResize={handleResize}
+			onMove={handleMove}
+			onBringToFront={handleBringToFront}
+			onClose={handleClose}
 		>
 			<nav className={styles.sidebar}>
 				<h2 className={styles.title}>Music</h2>

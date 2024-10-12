@@ -80,6 +80,9 @@
 
     .folderMessage{
       color: var(--color-dark--2);
+      position: absolute;
+      top: 1rem;
+      left: 1.5rem;
       margin-inline: 0;
       margin-block: 0;
     }

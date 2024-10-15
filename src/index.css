@@ -42,10 +42,9 @@
 }
 
 :root{
-  --color-primary: rgb(27, 101, 149);
-  --color-primary-transparent-low: rgba(27, 101, 149, 0.85);
-  --color-primary-transparent-high: rgba(27, 101, 149, 0.15);
-  --color-primary-800: rgb(9, 46, 71);
+  --color-primary: #222525;
+  --color-primary-transparent-low: #222525d9;
+  --color-primary-transparent-high: #22252526;
 
   --color-white-transparent-high: rgba(255, 255, 255, 0.15);
   --color-white-transparent-low: rgba(255, 255, 255, 0.85);

@@ -62,12 +62,10 @@ export default function Dock() {
 	];
 
 	return (
-		<nav className={styles.dockWrapper}>
-			<fieldset className={styles.dock}>
-				{dockButtons.map((button, index) => (
-					<DockButton key={index} {...button} />
-				))}
-			</fieldset>
+		<nav className={styles.dock}>
+			{dockButtons.map((button, index) => (
+				<DockButton key={index} {...button} />
+			))}
 		</nav>
 	);
 }

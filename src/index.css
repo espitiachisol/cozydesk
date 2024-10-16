@@ -48,8 +48,9 @@
 
   --color-white-transparent-high: rgba(255, 255, 255, 0.15);
   --color-white-transparent-low: rgba(255, 255, 255, 0.85);
-  
+
   --color-secondary: #fed996;
+  --color-tertiary: #1b6595;
   --color-red: rgb(237, 106, 94);
   --color-success: #3f8752;
 

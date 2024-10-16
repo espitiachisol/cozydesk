@@ -7,8 +7,8 @@ import { WindowConfig } from './type';
 
 export const windowConfigs: { [key: string]: WindowConfig } = {
 	[SYSTEM_WINDOW_ENTRY]: {
-		width: 530,
-		height: 382,
+		width: 260,
+		height: 400,
 	},
 	[SYSTEM_WINDOW_MUSIC_PLAYER]: {
 		width: 400,

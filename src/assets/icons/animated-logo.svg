@@ -19,7 +19,7 @@
     100% { transform: translate(0, 0) rotate(0deg); }
 }
 .logo-cls-1 {
-  fill:#1b6595;
+  fill:#222525;
   animation: moveAround 1.5s infinite alternate ease-in;
 }
 .logo-cls-2 {

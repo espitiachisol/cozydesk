@@ -50,6 +50,11 @@ export default function Dock() {
 				void dispatch(openWindowAsync({ id: SYSTEM_WINDOW_MUSIC_PLAYER })),
 		},
 		{
+			icon: '/icons/desktop-quote.png',
+			tooltip: 'Quote',
+			onClick: handleIncompleteFeature,
+		},
+		{
 			icon: '/icons/desktop-pomodoro.png',
 			tooltip: 'Pomodoro',
 			onClick: handleIncompleteFeature,

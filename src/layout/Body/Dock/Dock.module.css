@@ -1,0 +1,70 @@
+
+.dock{
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  
+  background-color: #9d9d9d61;
+  backdrop-filter: blur(.5rem);
+  border-radius: 1.5rem;
+  padding-inline: .6rem;
+  padding-block: .8rem;
+  margin-block-end: .5rem;
+  display: flex;
+  gap: 1rem;
+  
+
+  .dockButton{
+    background: none;
+    border: none;
+    cursor: pointer;
+    inline-size: 4rem;
+    block-size: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    &:hover {
+      .tooltip {
+        opacity: 1;
+      }
+    }
+    .dockIcon {
+      block-size: 100%;
+      inline-size: 100%;
+    }
+    
+    .tooltip {
+      position: absolute;
+      top: -2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--color-primary-transparent-low);
+      color: white;
+      padding-inline: .5rem;
+      padding-block: .25rem;
+      border-radius: .25rem;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+      pointer-events: none;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: .25rem;
+        border-style: solid;
+        border-color: var(--color-primary-transparent-low) transparent transparent transparent;
+      }
+    }
+  
+
+  }
+
+
+}

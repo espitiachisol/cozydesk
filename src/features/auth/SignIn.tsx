@@ -4,7 +4,6 @@ import styles from './SignIn.module.css';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
-import { selectUser } from './authSlice';
 import { SYSTEM_WINDOW_ENTRY } from '../window/constants';
 import {
 	bringToFront,
@@ -21,7 +20,6 @@ export default function SignIn({ containerRef }: SignInProps) {
 	const id = SYSTEM_WINDOW_ENTRY;
 	const dispatch = useAppDispatch();
 	const window = useAppSelector(getWindowById(id));
-	const user = useAppSelector(selectUser);
 	const [isSignIn, setIsSignIn] = useState(true);
 
 	if (!window) return null;
@@ -59,25 +57,8 @@ export default function SignIn({ containerRef }: SignInProps) {
 			onClose={handleClose}
 			isResizable={false}
 		>
-			<h1 className={styles.title}>Welcome to CozyDesk</h1>
-			{user && (
-				<>
-					<h2 className={styles.subtitle}>Begin your journey to focus now</h2>
-					<p className={styles.welcomeMessage}>
-						CozyDesk offers a music player, Pomodoro timer, and inspirational
-						quotes. <br />
-						More features will be added based on the developer's mood.
-					</p>
-					<p> ^_^</p>
-				</>
-			)}
-			{!user && isSignIn && <SignInForm onSwitch={handleSwitch} />}
-			{!user && !isSignIn && <SignUpForm onSwitch={handleSwitch} />}
-			<img
-				src="/images/sign-in-background.jpg"
-				className={styles.image}
-				draggable={false}
-			/>
+			{isSignIn && <SignInForm onSwitch={handleSwitch} />}
+			{!isSignIn && <SignUpForm onSwitch={handleSwitch} />}
 			<Window.DragArea />
 		</Window>
 	);

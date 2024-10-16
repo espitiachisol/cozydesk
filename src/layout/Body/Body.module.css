@@ -1,29 +1,21 @@
 .AppBody{
-  background-image: url(/background-texture.png);
+  background-image: url(/background-texture.png), url(https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?q=80&w=2803&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  /* background-image: url(/background-texture.png), url(https://images.unsplash.com/photo-1575330739287-90c6a473f9a9?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D); */
+  /* background-image: url(/background-texture.png), url(https://images.unsplash.com/photo-1687392946860-5231d4b3c604?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D); */
+  /* background-image: url(/background-texture.png), url(https://images.unsplash.com/photo-1550684848-86a5d8727436?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D); */
+  /* background-image: url(/background-texture.png), url(https://plus.unsplash.com/premium_photo-1667113478917-475119cbbca7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D); */
+  /* background-image: url(/background-/texture.png), url(https://images.unsplash.com/photo-1604079628040-94301bb21b91?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D); */
+  /* background-image: url(/background-texture.png), url(https://plus.unsplash.com/premium_photo-1676654935937-109c7936b8ff?q=80&w=2971&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D); */
+  background-position: 
+    top left,
+    center bottom;
+  background-repeat: 
+    repeat,
+    no-repeat;
+  background-size: 
+    auto,
+    cover;
+
   background-color: white;
   grid-area: body;
-
-  .AppIconsLayout{
-    display: grid;
-    justify-items: end;
-    padding-inline: 1rem;
-    padding-block: 1rem;
-    gap: 1.6rem 2rem;
-
-
-    button{
-      border: none;
-      background-color: transparent;
-      inline-size: 5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: .8rem;
-      font-weight: 500;
-      color: var(--color-dark--1);
-      img{
-        inline-size: 90%;
-      }
-    }
-  }
 }

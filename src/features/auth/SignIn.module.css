@@ -1,110 +1,104 @@
 .SignInLayout {
-  position: relative;
-  display: grid;
   border-radius: .625rem;
-  grid-template-areas: "title image"
-    "subtitle image"
-    "form image"
-    "aside image";
-  align-items: center;
-  padding-inline: 1rem;
-  padding-block: 1rem;
-  grid-template-columns: 200px 280px;
-  grid-template-rows: 100px 30px 130px 40px;
-  gap: 1rem;
   backdrop-filter: blur(.25rem);
   border: 1px var(--color-grey--100) solid;
   background-color: var(--color-white--100-transparent-low);
   box-shadow: rgba(25, 21, 33, 0.05) 2px 4px 15px, rgba(25, 21, 33, .2) 0px 5px 9px -3px;
-  color: var(--color-primary-800);
-
-  .title {
-    grid-area: title;
-    margin-block: 0;
-    color: var(--color-primary-800);
-    font-size: 1.6rem;
-    /* margin-block: auto 0; */
-  }
-
-
-  p.welcomeMessage {
-    margin-block: 0rem;
-    font-size: .9rem;
-    line-height: 1.25rem;
-  }
-
-  .subtitle {
-    grid-area: subtitle;
-    margin-block: 0;
-    color: var(--color-primary-800);
-    font-size: 1.2rem;
-  }
+  color: var(--color-primary);
 
   .form {
-    grid-area: form;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    align-self: flex-start;
-    gap: .5rem;
+    padding-inline: 1rem;
+    padding-block: 2rem 1rem;
+    gap: .9rem;
 
-    input {
-      block-size: 2rem;
-      border-radius: .25rem;
-      border: 1px white solid;
-      padding-inline: .5rem;
-      background-color: white;
 
-      &:focus {
-        outline-color: var(--color-primary);
+    .title {
+      margin-block: 0;
+      color: var(--color-primary);
+      font-size: 1.6rem;
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .logo {
+      height: 2rem;
+      margin-inline: auto;
+    }
+
+    .subtitle {
+      margin-block: 0;
+      color: var(--color-primary);
+      font-size: 1.2rem;
+    }
+
+    .inputs {
+      display: flex;
+      width: 100%;
+      gap: .5rem;
+      flex-direction: column;
+
+      input {
+        block-size: 2rem;
+        border-radius: .25rem;
+        border: 1px white solid;
+        padding-inline: .5rem;
+        background-color: white;
+
+        &:focus {
+          outline-color: var(--color-primary);
+        }
+
+        &.error {
+          outline: auto;
+          outline-color: var(--color-red);
+        }
       }
-
-      &.error {
-        outline: auto;
-        outline-color: var(--color-red);
-      }
     }
 
-    button {
-      border-radius: .25rem;
-      padding-inline: .5rem;
-      padding-block: .25rem;
-      block-size: 2rem;
-      margin-block: 0;
-      margin-inline: 0;
-      background-color: var(--color-primary);
-      border: 1px solid var(--color-primary);
-      color: white;
-    }
-
-    .errorMessage {
-      color: var(--color-red);
-      font-size: .8rem;
-      font-weight: 600;
-      margin-block: 0;
-    }
-  }
-
-  .aside {
-    grid-area: aside;
-    font-size: .8rem;
-    color: var(--color-dark--4);
-
-    p {
-      margin-block: 0;
+    .buttonWrapper {
+      display: flex;
+      flex-basis: 4.2rem;
+      flex-direction: column;
+      gap: .25rem;
 
       button {
-        border: none;
+        border-radius: .25rem;
+        padding-inline: .5rem;
+        padding-block: .25rem;
+        block-size: 2rem;
+        margin-block: 0;
+        margin-inline: 0;
+        background-color: var(--color-primary);
+        border: 1px solid var(--color-primary);
+        color: white;
+      }
+
+      .errorMessage {
+        color: var(--color-red);
+        font-size: .8rem;
         font-weight: 600;
-        color: var(--color-primary-800);
+        margin-block: 0;
       }
     }
 
-  }
+    .aside {
+      font-size: .8rem;
+      color: var(--color-dark--4);
 
-  .image {
-    grid-area: image;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
+      p {
+        margin-block: 0;
+
+        button {
+          border: none;
+          font-weight: 600;
+          color: var(--color-primary);
+          background-color: transparent;
+        }
+      }
+
+    }
   }
 }

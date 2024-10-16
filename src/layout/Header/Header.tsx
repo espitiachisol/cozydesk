@@ -27,20 +27,21 @@ function Header(): JSX.Element {
 					Cozydesk
 				</Menu.Toggle>
 				<Menu.List id="cozydesk">
-					<Menu.Button
-						onClick={() =>
-							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_ENTRY }))
-						}
-					>
-						{user ? 'Entry' : 'Sign In'}
-					</Menu.Button>
-					{user && (
+					{user ? (
 						<Menu.Button
 							onClick={() => {
-								dispatch(signOut());
+								void dispatch(signOut());
 							}}
 						>
 							Sign out
+						</Menu.Button>
+					) : (
+						<Menu.Button
+							onClick={() =>
+								void dispatch(openWindowAsync({ id: SYSTEM_WINDOW_ENTRY }))
+							}
+						>
+							Sign In
 						</Menu.Button>
 					)}
 					{/* <Menu.Button onClick={() => {}}>Setting</Menu.Button>
@@ -50,14 +51,14 @@ function Header(): JSX.Element {
 				<Menu.List id="app">
 					<Menu.Button
 						onClick={() =>
-							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_FOLDER }))
+							void dispatch(openWindowAsync({ id: SYSTEM_WINDOW_FOLDER }))
 						}
 					>
 						Folder
 					</Menu.Button>
 					<Menu.Button
 						onClick={() =>
-							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_MUSIC_PLAYER }))
+							void dispatch(openWindowAsync({ id: SYSTEM_WINDOW_MUSIC_PLAYER }))
 						}
 					>
 						Music Player

@@ -18,8 +18,8 @@ export const initialState: WindowsState = {
 			id: SYSTEM_WINDOW_ENTRY,
 			zIndex: 0,
 			position: {
-				x: window.innerWidth / 2 - 265,
-				y: window.innerHeight / 2 - 300,
+				x: window.innerWidth / 2 - 130,
+				y: window.innerHeight / 2 - 260,
 			},
 			size: {
 				width: windowConfigs[SYSTEM_WINDOW_ENTRY].width,
@@ -86,8 +86,8 @@ export const openWindowAsync = createAsyncThunk(
 				id: payload.id,
 				zIndex: nextZIndex,
 				position: {
-					x: window.innerWidth / 2 - 265,
-					y: window.innerHeight / 2 - 300,
+					x: window.innerWidth / 2 - windowConfigs[payload.id].width / 2,
+					y: window.innerHeight / 2 - windowConfigs[payload.id].height / 2,
 				},
 				size: {
 					width: windowConfigs[payload.id].width,

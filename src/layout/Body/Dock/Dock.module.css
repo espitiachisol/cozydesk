@@ -9,8 +9,8 @@
   background-color: #9d9d9d61;
   backdrop-filter: blur(.5rem);
   border-radius: 1.5rem;
-  padding-inline: .6rem;
-  padding-block: .8rem;
+  padding-inline: .8rem;
+  padding-block: .6rem;
   margin-block-end: .5rem;
   display: flex;
   gap: 1rem;

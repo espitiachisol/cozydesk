@@ -239,7 +239,7 @@ export const musicSlice = createSlice({
 				state.currentSongId = playlist[playlist.length - 1].id; // Loop to the end
 			}
 		},
-		palySong(state, action: PayloadAction<PlaySongPayload>) {
+		playSong(state, action: PayloadAction<PlaySongPayload>) {
 			const { playlistType, songId } = action.payload;
 			state.activePlaylist = playlistType;
 			const playlist =
@@ -300,7 +300,7 @@ export const musicSlice = createSlice({
 	},
 });
 
-export const { playNextSong, playPreviousSong, palySong, resetMusicSlice } =
+export const { playNextSong, playPreviousSong, playSong, resetMusicSlice } =
 	musicSlice.actions;
 
 export const selectCurrentSong = (state: RootState) => {

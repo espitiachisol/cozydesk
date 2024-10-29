@@ -27,6 +27,8 @@ type WindowProps = PropsWithChildren<{
 	onMove: (position: { x: number; y: number }) => void;
 	onBringToFront: () => void;
 	onClose: () => void;
+	onDragOver?: (e: React.DragEvent<HTMLElement>) => void;
+	onDrop?: (e: React.DragEvent<HTMLElement>) => void;
 }>;
 
 function Window({
@@ -41,6 +43,8 @@ function Window({
 	onMove,
 	onBringToFront,
 	onClose,
+	onDragOver,
+	onDrop,
 }: WindowProps) {
 	const windowRef = useRef<HTMLElement>(null);
 
@@ -87,6 +91,8 @@ function Window({
 				ref={windowRef}
 				onMouseDown={handleMouseDown}
 				style={windowStyle}
+				onDragOver={onDragOver}
+				onDrop={onDrop}
 			>
 				<ul className={styles.actions}>
 					<li>

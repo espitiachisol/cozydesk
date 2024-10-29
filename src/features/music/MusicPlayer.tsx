@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hook';
 import {
 	playNextSong,
 	playPreviousSong,
+	playSong,
 	selectCurrentSong,
 } from './musicSlice';
 import Window from '../../components/Window/Window';
@@ -29,6 +30,7 @@ import {
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
 } from '../window/constants';
+import { isValidDragData } from './type';
 
 type MusicPlayerProps = {
 	containerRef?: React.MutableRefObject<HTMLElement | null>;
@@ -93,6 +95,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 		control.current.currentTime = currentTime;
 	};
 
+	// Window control
 	const handleResize = (size: { width: number; height: number }) => {
 		void dispatch(resizeWindow({ id, size }));
 	};
@@ -109,6 +112,32 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 		void dispatch(closeWindowAsync({ id }));
 	};
 
+	// Drop actions
+	const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
+		e.preventDefault();
+		e.dataTransfer.dropEffect = 'copy';
+	};
+
+	const handleDrop = (e: React.DragEvent<HTMLElement>) => {
+		e.preventDefault();
+		const data = e.dataTransfer.getData('text/plain');
+		try {
+			const parsedData = JSON.parse(data) as unknown;
+			if (isValidDragData(parsedData)) {
+				dispatch(
+					playSong({
+						playlistType: parsedData.playlistType,
+						songId: parsedData.songId,
+					})
+				);
+			} else {
+				console.error('Invalid drag data format');
+			}
+		} catch (error) {
+			console.error('Invalid drag data', error);
+		}
+	};
+
 	return (
 		<Window
 			containerRef={containerRef}
@@ -121,6 +150,8 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 			onBringToFront={handleBringToFront}
 			onClose={handleClose}
 			isResizable={false}
+			onDragOver={handleDragOver}
+			onDrop={handleDrop}
 		>
 			<section className={styles.musicControlSection}>
 				<audio
@@ -183,7 +214,7 @@ export default function MusicPlayer({ containerRef }: MusicPlayerProps) {
 					</button>
 					<button
 						onClick={() => {
-							dispatch(openWindowAsync({ id: SYSTEM_WINDOW_FOLDER }));
+							void dispatch(openWindowAsync({ id: SYSTEM_WINDOW_FOLDER }));
 						}}
 					>
 						<IconFolder />

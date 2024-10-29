@@ -22,3 +22,17 @@ export interface SystemSong {
 
 export type PlaylistType = 'system' | 'user';
 export type PlaylistItem = SystemSong | Song;
+
+export interface DragData {
+	playlistType: PlaylistType;
+	songId: string;
+}
+
+export function isValidDragData(data: unknown): data is DragData {
+	return (
+		typeof data === 'object' &&
+		data !== null &&
+		'playlistType' in data &&
+		'songId' in data
+	);
+}

@@ -43,6 +43,7 @@ export default function AuthForm({
 		<form className={styles.form} onSubmit={handleSubmit}>
 			<img
 				className={styles.logo}
+				draggable={false}
 				src="/flat-logo.svg"
 				alt="The cozydesk logo"
 			/>

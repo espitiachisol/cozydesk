@@ -54,6 +54,7 @@ type ToggleProps = PropsWithChildren<{
 	className: string;
 	onClickToggle(event: React.MouseEvent<HTMLButtonElement>): void;
 	onClickContextMenu?(event: React.MouseEvent<HTMLButtonElement>): void;
+	onDragStart?: (e: React.DragEvent<HTMLButtonElement>) => void;
 }>;
 function Toggle({
 	id,
@@ -61,6 +62,7 @@ function Toggle({
 	onClickToggle,
 	className,
 	onClickContextMenu,
+	onDragStart,
 }: ToggleProps) {
 	const context = useContextMenu();
 	if (!context) {
@@ -89,6 +91,8 @@ function Toggle({
 			id={id}
 			className={className}
 			onClick={handleClick}
+			draggable={!!onDragStart}
+			onDragStart={onDragStart}
 			onMouseDown={(e) => e.stopPropagation()}
 		>
 			{children}

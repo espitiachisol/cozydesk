@@ -172,12 +172,11 @@
   }
 
   .tapeShell {
-    backdrop-filter: blur(.1rem);
 
     path {
       &:first-child {
-
-        fill: var(--color-white-transparent-high);
+        backdrop-filter: blur(.1rem);
+        fill: var(--color-white--100-transparent-low);
       }
 
       &:last-child {

@@ -45,12 +45,10 @@ Key Techniques: Audio Player from scratch, Drag-and-Drop File Upload, Contextual
 - Enabled users to upload their music files by simply dragging and dropping them into the designated folder, automatically adding them to their personal playlist.
 - The Contextual Menu component displays an overlay menu when users right-click on a target element, enabling context-specific actions. It’s built using the Compound Pattern for flexibility and ease of use.
 
+### Others
+![others file](/public/readme/others.gif)
 
 ### Toaster Notifications
-
-
-![toaster](/public/readme/toaster.gif)
-
 Key Techniques: Promise Toast, Queue Data Structure
 
 - Developed a Toaster component to display various types of notifications (success, error, info, promise) using a **queue data structure**. This ensures that notifications are managed efficiently and displayed in the correct order.

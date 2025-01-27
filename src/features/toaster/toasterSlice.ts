@@ -3,10 +3,15 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
 type ToastType = 'success' | 'error' | 'info' | 'loading';
+
+export enum ToastMessageKey {
+	POMODORO_SET_TIMER_TIP = 'POMODORO_SET_TIMER_TIP',
+}
 interface Toast {
 	id: string;
-	message: string;
 	type: ToastType;
+	message?: string;
+	messageKey?: ToastMessageKey;
 	duration?: number;
 	visible?: boolean;
 	showClose?: boolean;
@@ -14,8 +19,9 @@ interface Toast {
 
 interface AddToast {
 	id?: string;
-	message: string;
 	type: ToastType;
+	message?: string;
+	messageKey?: ToastMessageKey;
 	duration?: number;
 	visible?: boolean;
 	showClose?: boolean;
@@ -46,6 +52,10 @@ const toasterSlice = createSlice({
 				visible: true,
 			};
 			if (action.payload.id) {
+				const toast = state.toasts.find(
+					(toast) => toast.id === action.payload.id
+				);
+				if (toast) return;
 				newToast.id = action.payload.id;
 			}
 			state.toasts.push(newToast);

@@ -6,6 +6,7 @@ import {
 	SYSTEM_WINDOW_ENTRY,
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
+	SYSTEM_WINDOW_POMODORO,
 } from '../../features/window/constants';
 import { openWindowAsync } from '../../features/window/windowSlice';
 
@@ -78,13 +79,7 @@ function Header(): JSX.Element {
 					</Menu.Button>
 					<Menu.Button
 						onClick={() => {
-							dispatch(
-								addToast({
-									message:
-										'The feature is not yet complete. Please stay tuned.',
-									type: 'info',
-								})
-							);
+							void dispatch(openWindowAsync({ id: SYSTEM_WINDOW_POMODORO }));
 						}}
 					>
 						Pomodoro

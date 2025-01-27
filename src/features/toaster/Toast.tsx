@@ -1,7 +1,12 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import styles from './Toaster.module.css';
-import { dismissToast, removeToast, selectToastById } from './toasterSlice';
+import {
+	dismissToast,
+	removeToast,
+	selectToastById,
+	ToastMessageKey,
+} from './toasterSlice';
 import Spinner from '../../assets/icons/icon-spinner.svg?react';
 
 const toastIcons = {
@@ -26,6 +31,20 @@ export default function Toast({ id }: { id: string }) {
 		}
 	}, [toast, dispatch]);
 
+	const getMessage = () => {
+		switch (toast?.messageKey) {
+			case ToastMessageKey.POMODORO_SET_TIMER_TIP:
+				return (
+					<span>
+						Press <kbd>Command</kbd>+<kbd>Option</kbd>on Mac or
+						<kbd>Ctrl</kbd>+<kbd>Alt</kbd> on Windows/Linux to set the timer.
+					</span>
+				);
+			default:
+				return toast?.message;
+		}
+	};
+
 	if (!toast) return null;
 	return (
 		<section
@@ -34,7 +53,7 @@ export default function Toast({ id }: { id: string }) {
 			}`}
 		>
 			<i>{toastIcons[toast.type]}</i>
-			<p>{toast.message}</p>
+			<p>{getMessage()}</p>
 			{toast.showClose && (
 				<button
 					className={styles.close}

@@ -1,47 +1,59 @@
-@layer reset{
-  *{
+@layer reset {
+  * {
     box-sizing: border-box;
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
   }
-  body{
+
+  body {
     margin-inline: 0;
     margin-block: 0;
   }
-  ul{
+
+  ul {
     margin-inline: 0;
     margin-block: 0;
     padding-inline: 0;
     padding-block: 0;
   }
-  li{
+
+  li {
     list-style: none;
   }
-  a, a:visited, a:hover{
+
+  a,
+  a:visited,
+  a:hover {
     text-decoration: none;
   }
-  menu{
+
+  menu {
     margin-inline: 0;
     margin-block: 0;
     padding-inline: 0;
     padding-block: 0;
   }
-  fieldset{
+
+  fieldset {
     margin-inline: 0;
     margin-block: 0;
     padding-inline: 0;
     padding-block: 0;
     border: none;
   }
-  button{
+
+  button {
     padding-inline: 0;
     padding-block: 0;
     cursor: pointer;
   }
 }
 
-:root{
+:root {
   --color-primary: #222525;
   --color-primary-transparent-low: #222525d9;
   --color-primary-transparent-high: #22252526;
@@ -69,12 +81,29 @@
   --shadow-lg: 0 2.4rem 3.2rem rgba(0, 0, 0, 0.12);
 }
 
-#root{
+#root {
   display: grid;
   grid-template-areas: "header"
-              "body";
+    "body";
   grid-template-rows: 40px calc(100dvh - 40px);
   font-size: 16px;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
+kbd {
+  background-color: #eee;
+  border-radius: 0.25rem;
+  border: 1px solid #b4b4b4;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.2),
+    0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
+  color: #333;
+  display: inline-block;
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1;
+  padding-inline: 0.25rem;
+  padding-block: 0.25rem;
+  margin-inline: 0.2rem;
+  white-space: nowrap;
+}

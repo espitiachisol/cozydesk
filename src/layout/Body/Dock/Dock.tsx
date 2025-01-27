@@ -3,6 +3,7 @@ import { addToast } from '../../../features/toaster/toasterSlice';
 import {
 	SYSTEM_WINDOW_FOLDER,
 	SYSTEM_WINDOW_MUSIC_PLAYER,
+	SYSTEM_WINDOW_POMODORO,
 } from '../../../features/window/constants';
 import { openWindowAsync } from '../../../features/window/windowSlice';
 import styles from './Dock.module.css';
@@ -57,7 +58,8 @@ export default function Dock() {
 		{
 			icon: '/icons/desktop-pomodoro.png',
 			tooltip: 'Pomodoro',
-			onClick: handleIncompleteFeature,
+			onClick: () =>
+				void dispatch(openWindowAsync({ id: SYSTEM_WINDOW_POMODORO })),
 		},
 		{
 			icon: '/icons/desktop-todo.png',
